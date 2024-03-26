@@ -130,7 +130,7 @@
     <ClCompile Include="Arg.cpp" />
     <ClCompile Include="BoolArg.cpp" />
     <ClCompile Include="EmptyArg.cpp" />
-    <ClCompile Include="task_1_arg_parse.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arg.hpp" />
