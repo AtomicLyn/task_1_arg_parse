@@ -1,3 +1,5 @@
 ﻿  Arg.cpp
 E:\C++\Projects\task_1_arg_parse\task_1_arg_parse\Arg.cpp(45,22): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+  EmptyArg.cpp
+  Создание кода...
   task_1_arg_parse.vcxproj -> E:\C++\Projects\task_1_arg_parse\x64\Debug\task_1_arg_parse.exe
