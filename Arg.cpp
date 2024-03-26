@@ -71,3 +71,7 @@ bool Arg::TryParseOption(const char* arg) {
 const char* Arg::GetDescription() {
 	return description;
 }
+
+ArgumentType Arg::GetType() {
+	return type;
+}

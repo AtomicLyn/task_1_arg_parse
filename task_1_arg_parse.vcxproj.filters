@@ -36,6 +36,9 @@
     <ClCompile Include="ArgParser.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="ArgumentType.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EmptyArg.hpp">

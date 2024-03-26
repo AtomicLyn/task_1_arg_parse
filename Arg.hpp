@@ -1,9 +1,13 @@
 #pragma once
 
+#include "ArgumentType.hpp"
+
 namespace args_parse {
 
 	class Arg {
 	protected:
+		ArgumentType type;
+
 		char option;
 		const char* longOption;
 		const char* description;
@@ -13,7 +17,7 @@ namespace args_parse {
 	public:
 		Arg(const char option, const char* longOption, const char* description = "");
 		const char* GetDescription();
-		virtual bool IsDefined(const char* arg) = 0;
+		ArgumentType GetType();
 		virtual bool TryParse(const char* arg) = 0;
 	};
 

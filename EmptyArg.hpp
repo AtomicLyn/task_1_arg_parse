@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Arg.hpp"
+#include "ArgumentType.hpp"
 
 namespace args_parse {
 

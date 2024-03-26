@@ -2,15 +2,12 @@
 
 using namespace args_parse;
 
-StringArg::StringArg(const char option, const char* longOption, const char* description) : Arg(option, longOption, description) {};
+StringArg::StringArg(const char option, const char* longOption, const char* description) : Arg(option, longOption, description) {
+	type = ArgumentType::String;
+};
 
-bool StringArg::IsDefined(const char* arg) {
-	if (TryParseOption(arg)) {
-
-		return true;
-	}
-
-	return false;
+std::string StringArg::GetValue() {
+	return value;
 }
 
 bool StringArg::TryParse(const char* arg) {
@@ -23,6 +20,3 @@ bool StringArg::TryParse(const char* arg) {
 	return false;
 }
 
-std::string StringArg::GetValue() {
-	return value;
-}

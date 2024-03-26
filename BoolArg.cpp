@@ -4,7 +4,9 @@
 
 using namespace args_parse;
 
-BoolArg::BoolArg(const char option, const char* longOption, const char* description) : Arg(option, longOption, description) {};
+BoolArg::BoolArg(const char option, const char* longOption, const char* description) : Arg(option, longOption, description) {
+	type = ArgumentType::Bool;
+};
 
 bool BoolArg::IsDefined(const char* arg) {
 	if (TryParseOption(arg)) {

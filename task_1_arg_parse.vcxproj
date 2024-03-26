@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClCompile Include="Arg.cpp" />
     <ClCompile Include="ArgParser.cpp" />
+    <ClCompile Include="ArgumentType.hpp" />
     <ClCompile Include="BoolArg.cpp" />
     <ClCompile Include="EmptyArg.cpp" />
     <ClCompile Include="IntArg.cpp" />
