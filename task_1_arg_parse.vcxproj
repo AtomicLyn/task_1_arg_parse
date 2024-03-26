@@ -130,12 +130,14 @@
     <ClCompile Include="Arg.cpp" />
     <ClCompile Include="BoolArg.cpp" />
     <ClCompile Include="EmptyArg.cpp" />
+    <ClCompile Include="IntArg.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arg.hpp" />
     <ClInclude Include="BoolArg.hpp" />
     <ClInclude Include="EmptyArg.hpp" />
+    <ClInclude Include="IntArg.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

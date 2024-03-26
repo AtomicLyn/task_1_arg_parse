@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include "BoolArg.hpp"
+#include "Arg.hpp"
 
 using namespace args_parse;
 

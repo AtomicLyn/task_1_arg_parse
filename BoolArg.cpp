@@ -1,5 +1,4 @@
 #include "BoolArg.hpp"
-#include <cstring>
 #include <cctype>
 #include <cstdlib>
 
