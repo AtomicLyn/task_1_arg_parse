@@ -18,10 +18,10 @@ int main(int argc, const char **argv)
 
     ArgParser parser;
 
-    EmptyArg emptyCheck('f', "fast", "instructing the parser to work faster (it tries very hard)");
-    BoolArg boolCheck('l', "lock", "closes the user's access to the argument value (joke, it doesn't work anyway)");
-    IntArg intCheck('w', "warnings", "warns the user about sudden errors during parsing(did you believe it ? )");
-    StringArg stringCheck('o', "output", "specifying a file for output values");
+    EmptyArg emptyCheck('f', "fast");
+    BoolArg boolCheck('l', "lock");
+    IntArg intCheck('w', "warnings");
+    StringArg stringCheck('o', "output");
 
     parser.Add(&emptyCheck);
     parser.Add(&boolCheck);
