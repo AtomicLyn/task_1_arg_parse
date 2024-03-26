@@ -5,9 +5,9 @@
 
 using namespace args_parse;
 
-constexpr int optionSize = 1;
+constexpr auto optionSize = 1;
 
-Arg::Arg(const char* option, const char* longOption, const char* description) {
+Arg::Arg(const char option, const char* longOption, const char* description) {
 	this->option = option;
 	this->longOption = longOption;
 	this->description = description;
@@ -19,7 +19,7 @@ bool Arg::TryParseOption(const char* arg) {
 	auto argWithoutDash = arg + 1;
 
 	if (*argWithoutDash != '-') {
-		if (strncmp(option, argWithoutDash, optionSize) == 0) {
+		if (strncmp(&option, argWithoutDash, optionSize) == 0) {
 			auto argWithoutOption = argWithoutDash + 1;
 
 			if (*argWithoutOption == '=') {
@@ -51,13 +51,9 @@ bool Arg::TryParseOption(const char* arg) {
 				if (*argWithoutOption == '=') {
 					auto argWithoutOptionAndEq = argWithoutOption + 1;
 
-					if (strlen(argWithoutOptionAndEq) != 0) {
-						operands = argWithoutOptionAndEq;
+					operands = argWithoutOptionAndEq;
 
-						return true;
-					}
-
-					return false;
+					return true;
 				}
 
 				return false;

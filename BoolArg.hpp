@@ -8,7 +8,7 @@ namespace args_parse {
 	private:
 		bool value = false;
 	public: 
-		BoolArg(const char* option, const char* longOption, const char* description = "");
+		BoolArg(const char option, const char* longOption, const char* description = "");
 		bool GetValue();
 		bool TryParse(const char* option) override;
 	};

@@ -8,7 +8,7 @@ namespace args_parse {
 	private:
 		int value = -1;
 	public:
-		IntArg(const char* option, const char* longOption, const char* description = "");
+		IntArg(const char option, const char* longOption, const char* description = "");
 		int GetValue();
 		bool TryParse(const char* arg) override;
 	};

@@ -4,7 +4,7 @@
 
 using namespace args_parse;
 
-IntArg::IntArg(const char* option, const char* longOption, const char* description) : Arg(option, longOption, description) {};
+IntArg::IntArg(const char option, const char* longOption, const char* description) : Arg(option, longOption, description) {};
 
 bool IntArg::TryParse(const char* arg) {
 	if (TryParseOption(arg)) {
