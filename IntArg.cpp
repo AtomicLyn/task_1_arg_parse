@@ -6,6 +6,19 @@ using namespace args_parse;
 
 IntArg::IntArg(const char option, const char* longOption, const char* description) : Arg(option, longOption, description) {};
 
+bool IntArg::IsDefined(const char* arg) {
+	if (TryParseOption(arg)) {
+
+		if (std::isdigit(*operands)) {
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
 bool IntArg::TryParse(const char* arg) {
 	if (TryParseOption(arg)) {
 

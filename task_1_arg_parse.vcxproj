@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Arg.cpp" />
+    <ClCompile Include="ArgParser.cpp" />
     <ClCompile Include="BoolArg.cpp" />
     <ClCompile Include="EmptyArg.cpp" />
     <ClCompile Include="IntArg.cpp" />
@@ -136,6 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arg.hpp" />
+    <ClInclude Include="ArgParser.hpp" />
     <ClInclude Include="BoolArg.hpp" />
     <ClInclude Include="EmptyArg.hpp" />
     <ClInclude Include="IntArg.hpp" />
