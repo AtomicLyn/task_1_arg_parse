@@ -5,6 +5,8 @@
 
 using namespace args_parse;
 
+constexpr int optionSize = 1;
+
 Arg::Arg(const char* option, const char* longOption, const char* description) {
 	this->option = option;
 	this->longOption = longOption;
@@ -12,28 +14,59 @@ Arg::Arg(const char* option, const char* longOption, const char* description) {
 }
 
 bool Arg::TryParseOption(const char* arg) {
-	int optionSize = strlen(option);
-	int longOptionSize = strlen(longOption);
+	if (*arg != '-') return false;
 
-	if (strncmp(option, arg, optionSize) == 0) {
-		operands = arg + optionSize;
+	const char* argWithoutDash = arg + 1;
 
-		return true;
-	}
-	else if (strncmp(longOption, arg, longOptionSize) == 0) {
-		const char* argWithoutOption = arg + longOptionSize;
+	if (*argWithoutDash != '-') {
+		if (strncmp(option, argWithoutDash, optionSize) == 0) {
+			const char* argWithoutOption = argWithoutDash + 1;
 
-		if (strlen(argWithoutOption) != 0) {
 			if (*argWithoutOption == '=') {
-				operands = argWithoutOption + 1;
+				const char* argWithoutOptionAndEq = argWithoutOption + 1;
 
-				return true;
+				if (strlen(argWithoutOptionAndEq) != 0) {
+					operands = argWithoutOptionAndEq;
+
+					return true;
+				}
+
+				return false;
 			}
 
-			return false;
-		}
+			operands = argWithoutOption;
 
-		return true;
+			return true;
+		}
+	}
+	else {
+		++argWithoutDash;
+
+		int longOptionSize = strlen(longOption);
+
+		if (strncmp(longOption, argWithoutDash, longOptionSize) == 0) {
+			const char* argWithoutOption = argWithoutDash + longOptionSize;
+
+			if (strlen(argWithoutOption) != 0) {
+				if (*argWithoutOption == '=') {
+					const char* argWithoutOptionAndEq = argWithoutOption + 1;
+
+					if (strlen(argWithoutOptionAndEq) != 0) {
+						operands = argWithoutOptionAndEq;
+
+						return true;
+					}
+
+					return false;
+				}
+
+				return false;
+			}
+
+			operands = argWithoutOption;
+
+			return true;
+		}
 	}
 
 	return false;

@@ -11,7 +11,7 @@ int main(int argc, const char **argv)
         std::cout << argv[i] << std::endl;
     }
 
-    EmptyArg check("-c", "--check");
+    EmptyArg check("c", "check");
     for (auto i = 1; i < argc; i++) {
         std::cout << std::boolalpha << check.TryParse(argv[i]) << std::endl;
     }
