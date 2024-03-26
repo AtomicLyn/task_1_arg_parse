@@ -18,6 +18,7 @@ namespace args_parse {
 		Arg(const char option, const char* longOption, const char* description = "");
 		const char* GetDescription();
 		ArgumentType GetType();
+		virtual bool IsDefined(const char* arg) = 0;
 		virtual bool TryParse(const char* arg) = 0;
 	};
 

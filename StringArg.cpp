@@ -10,6 +10,16 @@ std::string StringArg::GetValue() {
 	return value;
 }
 
+bool StringArg::IsDefined(const char* arg) {
+	if (TryParseOption(arg)) {
+
+		return true;
+	}
+
+	return false;
+}
+
+
 bool StringArg::TryParse(const char* arg) {
 	if (TryParseOption(arg)) {
 		value = std::string(operands);

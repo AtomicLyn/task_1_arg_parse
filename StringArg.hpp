@@ -11,6 +11,7 @@ namespace args_parse {
 	public:
 		StringArg(const char option, const char* longOption, const char* description = "");
 		std::string GetValue();
+		bool IsDefined(const char* arg) override;
 		bool TryParse(const char* option) override;
 	};
 

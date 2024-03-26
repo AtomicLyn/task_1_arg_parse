@@ -29,11 +29,29 @@ int main(int argc, const char **argv)
     parser.Add(&stringCheck);
 
     if (parser.TryParse(argc, argv)) {
-        std::cout << "Try to parse: true";
+        std::cout << "Try to parse: True" << std::endl;
+        std::cout << "Arguments:" << std::endl;
         for (auto argument : parser.GetArguments()) {
-            std::cout << argument->GetDescription() << std::endl;
+            switch (argument->GetType()) {
+            case ArgumentType::Empty:
+                std::cout << "Empty argument" << std::endl;
+                break;
+            case ArgumentType::Bool:
+                std::cout << "Bool argument: " << std::boolalpha << ((BoolArg*)argument)->GetValue() << std::endl;
+                break;
+            case ArgumentType::Int:
+                std::cout << "Int argument: " << ((IntArg*)argument)->GetValue() << std::endl;
+                break;
+            case ArgumentType::String:
+                std::cout << "String argument: " << ((StringArg*)argument)->GetValue() << std::endl;
+                break;
+            default:
+                std::cout << "Undefined argument!" << std::endl;
+            }
         }
     }
+    else
+        std::cout << "Try to parse: False" << std::endl;
 
     
     /*EmptyArg emptyCheck('c', "check");
