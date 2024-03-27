@@ -3,8 +3,9 @@
 #include "ArgumentType.hpp"
 
 namespace args_parse {
+	
 	/**
-	* @brief Базовый абстрактный класс для всех аргументов
+	* @brief Р‘Р°Р·РѕРІС‹Р№ Р°Р±СЃС‚СЂР°РєС‚РЅС‹Р№ РєР»Р°СЃСЃ РґР»СЏ РІСЃРµС… Р°СЂРіСѓРјРµРЅС‚РѕРІ
 	*/
 	class Arg {
 	protected:

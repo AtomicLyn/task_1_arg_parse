@@ -5,9 +5,10 @@
 
 namespace args_parse {
 	/**
-	* @brief Класс пустого аргумента
-	* Аргумент не содержит ничего, кроме опции
+	* @brief РљР»Р°СЃСЃ РїСѓСЃС‚РѕРіРѕ Р°СЂРіСѓРјРµРЅС‚Р°
+	* РђСЂРіСѓРјРµРЅС‚ РЅРµ СЃРѕРґРµСЂР¶РёС‚ РЅРёС‡РµРіРѕ, РєСЂРѕРјРµ РѕРїС†РёРё
 	*/
+
 	class EmptyArg : public Arg {
 	public:
 		EmptyArg(const char option, const char* longOption, const char* description = "");
