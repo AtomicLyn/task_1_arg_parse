@@ -8,13 +8,14 @@ BoolArg::BoolArg(const char option, const char* longOption, const char* descript
 	type = ArgumentType::Bool;
 };
 
-bool BoolArg::IsDefined(const char* arg) {
+bool BoolArg::TryParse(const char* arg) {
 	if (TryParseOption(arg)) {
 
 		if (std::isdigit(*operands)) {
 			auto num = atoi(operands);
 
 			if (num == 0 || num == 1) {
+				value = num == 1;
 
 				return true;
 			}
@@ -24,8 +25,8 @@ bool BoolArg::IsDefined(const char* arg) {
 	return false;
 }
 
-bool BoolArg::TryParse(const char* arg) {
-	if (TryParseOption(arg)) {
+bool BoolArg::TryParseLong(const char* arg) {
+	if (TryParseLongOption(arg)) {
 
 		if (std::isdigit(*operands)) {
 			auto num = atoi(operands);

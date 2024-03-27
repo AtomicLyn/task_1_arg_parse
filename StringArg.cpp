@@ -10,8 +10,10 @@ std::string StringArg::GetValue() {
 	return value;
 }
 
-bool StringArg::IsDefined(const char* arg) {
+
+bool StringArg::TryParse(const char* arg) {
 	if (TryParseOption(arg)) {
+		value = std::string(operands);
 
 		return true;
 	}
@@ -19,9 +21,8 @@ bool StringArg::IsDefined(const char* arg) {
 	return false;
 }
 
-
-bool StringArg::TryParse(const char* arg) {
-	if (TryParseOption(arg)) {
+bool StringArg::TryParseLong(const char* arg) {
+	if (TryParseLongOption(arg)) {
 		value = std::string(operands);
 
 		return true;

@@ -14,12 +14,14 @@ namespace args_parse {
 		const char* operands = "";
 
 		bool TryParseOption(const char* arg);
+		bool TryParseLongOption(const char* arg);
 	public:
 		Arg(const char option, const char* longOption, const char* description = "");
+		virtual ~Arg();
 		const char* GetDescription();
 		ArgumentType GetType();
-		virtual bool IsDefined(const char* arg) = 0;
 		virtual bool TryParse(const char* arg) = 0;
+		virtual bool TryParseLong(const char* arg) = 0;
 	};
 
 }

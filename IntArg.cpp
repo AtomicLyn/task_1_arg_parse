@@ -8,10 +8,12 @@ IntArg::IntArg(const char option, const char* longOption, const char* descriptio
 	type = ArgumentType::Int;
 };
 
-bool IntArg::IsDefined(const char* arg) {
+
+bool IntArg::TryParse(const char* arg) {
 	if (TryParseOption(arg)) {
 
 		if (std::isdigit(*operands)) {
+			value = atoi(operands);
 
 			return true;
 		}
@@ -20,9 +22,8 @@ bool IntArg::IsDefined(const char* arg) {
 	return false;
 }
 
-
-bool IntArg::TryParse(const char* arg) {
-	if (TryParseOption(arg)) {
+bool IntArg::TryParseLong(const char* arg) {
+	if (TryParseLongOption(arg)) {
 
 		if (std::isdigit(*operands)) {
 			value = atoi(operands);
