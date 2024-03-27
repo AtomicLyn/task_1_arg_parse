@@ -5,38 +5,8 @@
 
 using namespace args_parse;
 
-constexpr auto optionSize = 1;
-
-Arg::Arg(const char option, const char* longOption, const char* description) {
-	this->option = option;
-	this->longOption = longOption;
-	this->description = description;
-}
-
-Arg::~Arg() {}
-
-char Arg::GetOption() {
-	return option;
-}
-
-const char* Arg::GetLongOption() {
-	return longOption;
-}
-
-const char* Arg::GetDescription() {
-	return description;
-}
-
-ArgumentType Arg::GetType() {
-	return type;
-}
-
-bool Arg::IsDefined() {
-	return isDefined;
-}
-
 bool Arg::ParseOption(const char* argWithoutDash) {
-	if (strncmp(&option, argWithoutDash, optionSize) == 0) {
+	if (option == *argWithoutDash) {
 		auto argWithoutOption = argWithoutDash + 1;
 
 		if (*argWithoutOption == '=') {
@@ -80,4 +50,34 @@ bool Arg::ParseLongOption(const char* argWithoutDash) {
 
 	return false;
 }
+
+Arg::Arg(const char option, const char* longOption, const char* description) {
+	this->option = option;
+	this->longOption = longOption;
+	this->description = description;
+}
+
+Arg::~Arg() {}
+
+char Arg::GetOption() {
+	return option;
+}
+
+const char* Arg::GetLongOption() {
+	return longOption;
+}
+
+const char* Arg::GetDescription() {
+	return description;
+}
+
+ArgumentType Arg::GetType() {
+	return type;
+}
+
+bool Arg::IsDefined() {
+	return isDefined;
+}
+
+
 

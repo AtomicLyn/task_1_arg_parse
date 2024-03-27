@@ -8,6 +8,10 @@ BoolArg::BoolArg(const char option, const char* longOption, const char* descript
 	type = ArgumentType::Bool;
 };
 
+bool BoolArg::GetValue() {
+	return value;
+}
+
 bool BoolArg::Parse(const char* arg) {
 	if (ParseOption(arg)) {
 
@@ -40,8 +44,4 @@ bool BoolArg::ParseLong(const char* arg) {
 	}
 
 	return false;
-}
-
-bool BoolArg::GetValue() {
-	return value;
 }

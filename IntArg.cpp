@@ -8,6 +8,9 @@ IntArg::IntArg(const char option, const char* longOption, const char* descriptio
 	type = ArgumentType::Int;
 };
 
+int IntArg::GetValue() {
+	return value;
+}
 
 bool IntArg::Parse(const char* arg) {
 	if (ParseOption(arg)) {
@@ -33,8 +36,4 @@ bool IntArg::ParseLong(const char* arg) {
 	}
 
 	return false;
-}
-
-int IntArg::GetValue() {
-	return value;
 }

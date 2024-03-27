@@ -8,6 +8,9 @@ MultiIntArg::MultiIntArg(const char option, const char* longOption, const char* 
 	type = ArgumentType::MultiInt;
 };
 
+std::vector<int> MultiIntArg::GetValues() {
+	return values;
+}
 
 bool MultiIntArg::Parse(const char* arg) {
 	if (ParseOption(arg)) {
@@ -33,8 +36,4 @@ bool MultiIntArg::ParseLong(const char* arg) {
 	}
 
 	return false;
-}
-
-std::vector<int> MultiIntArg::GetValues() {
-	return values;
 }

@@ -8,6 +8,10 @@ MultiBoolArg::MultiBoolArg(const char option, const char* longOption, const char
 	type = ArgumentType::MultiBool;
 };
 
+std::vector<bool> MultiBoolArg::GetValues() {
+	return values;
+}
+
 bool MultiBoolArg::Parse(const char* arg) {
 	if (ParseOption(arg)) {
 
@@ -40,8 +44,4 @@ bool MultiBoolArg::ParseLong(const char* arg) {
 	}
 
 	return false;
-}
-
-std::vector<bool> MultiBoolArg::GetValues() {
-	return values;
 }

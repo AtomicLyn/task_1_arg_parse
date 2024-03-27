@@ -4,11 +4,12 @@
   BoolArg.cpp
   EmptyArg.cpp
   IntArg.cpp
+  main.cpp
   MultiBoolArg.cpp
   MultiBoolArg.hpp
   MultiIntArg.cpp
   MultiStringArg.cpp
   StringArg.cpp
-  main.cpp
   Создание кода...
+x64\Debug\MultiBoolArg.obj : warning LNK4042: объект указан более одного раза; лишние не учитываются
   task_1_arg_parse.vcxproj -> E:\C++\Projects\task_1_arg_parse\x64\Debug\task_1_arg_parse.exe

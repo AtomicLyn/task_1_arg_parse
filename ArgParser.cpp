@@ -5,7 +5,7 @@
 using namespace args_parse;
 
 void ArgParser::Add(Arg* argument) {
-	variants.push_back(argument);
+	arguments.push_back(argument);
 }
 
 bool ArgParser::Parse(const int argc, const char** argv) {
@@ -26,9 +26,9 @@ bool ArgParser::Parse(const int argc, const char** argv) {
 		if (*currentArgument.c_str() == '-' && *(currentArgument.c_str() + 1) == '-') {
 			const char* argumentWithoutDash = currentArgument.c_str() + 2;
 
-			for (auto j = 0; j < variants.size(); j++) {
+			for (auto j = 0; j < arguments.size(); j++) {
 
-				if (variants[j]->ParseLong(argumentWithoutDash)) {
+				if (arguments[j]->ParseLong(argumentWithoutDash)) {
 					argumentDefined = true;
 					break;
 				}
@@ -37,22 +37,22 @@ bool ArgParser::Parse(const int argc, const char** argv) {
 		else if (*currentArgument.c_str() == '-') {
 			const char* argumentWithoutDash = currentArgument.c_str() + 1;
 
-			for (auto j = 0; j < variants.size(); j++) {
+			for (auto j = 0; j < arguments.size(); j++) {
 
-				if (variants[j]->Parse(argumentWithoutDash)) {
+				if (arguments[j]->Parse(argumentWithoutDash)) {
 					argumentDefined = true;
 
-					if (variants[j]->GetType() == ArgumentType::Empty && std::strlen(argumentWithoutDash) > 1) {
+					if (arguments[j]->GetType() == ArgumentType::Empty && std::strlen(argumentWithoutDash) > 1) {
 						const char* currentOption = argumentWithoutDash + 1;
 
 						for (; std::strlen(currentOption) != 0; currentOption++) {
 							argumentDefined = false;
 
-							for (auto k = 0; k < variants.size(); k++) {
+							for (auto k = 0; k < arguments.size(); k++) {
 
-								if (variants[k]->GetType() == ArgumentType::Empty) {
+								if (arguments[k]->GetType() == ArgumentType::Empty) {
 									
-									if (variants[k]->Parse(currentOption)) {
+									if (arguments[k]->Parse(currentOption)) {
 										argumentDefined = true;
 										break;
 									}
@@ -74,13 +74,13 @@ bool ArgParser::Parse(const int argc, const char** argv) {
 std::string ArgParser::GetHelp() {
 	std::string result = "";
 
-	for (auto variant : variants) {
+	for (auto argument : arguments) {
 		result += "-";
-		result += variant->GetOption();
+		result += argument->GetOption();
 		result += " --";
-		result += variant->GetLongOption();
+		result += argument->GetLongOption();
 		result += " | ";
-		result += variant->GetDescription();
+		result += argument->GetDescription();
 		result += "\n";
 	}
 
