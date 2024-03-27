@@ -134,6 +134,10 @@
     <ClCompile Include="EmptyArg.cpp" />
     <ClCompile Include="IntArg.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MultiBoolArg.cpp" />
+    <ClCompile Include="MultiBoolArg.hpp" />
+    <ClCompile Include="MultiIntArg.cpp" />
+    <ClCompile Include="MultiStringArg.cpp" />
     <ClCompile Include="StringArg.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +146,8 @@
     <ClInclude Include="BoolArg.hpp" />
     <ClInclude Include="EmptyArg.hpp" />
     <ClInclude Include="IntArg.hpp" />
+    <ClInclude Include="MultiIntArg.hpp" />
+    <ClInclude Include="MultiStringArg.hpp" />
     <ClInclude Include="StringArg.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

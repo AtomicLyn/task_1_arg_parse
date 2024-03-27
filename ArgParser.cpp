@@ -4,9 +4,6 @@
 
 using namespace args_parse;
 
-std::vector<Arg*> ArgParser::variants;
-std::vector<Arg*> ArgParser::arguments;
-
 void ArgParser::Add(Arg* argument) {
 	variants.push_back(argument);
 }
@@ -74,6 +71,21 @@ bool ArgParser::Parse(const int argc, const char** argv) {
 	return true;
 }
 
+std::string ArgParser::GetHelp() {
+	std::string result = "";
+
+	for (auto variant : variants) {
+		result += "-";
+		result += variant->GetOption();
+		result += " --";
+		result += variant->GetLongOption();
+		result += " | ";
+		result += variant->GetDescription();
+		result += "\n";
+	}
+
+	return result;
+}
 
 std::vector<Arg*> ArgParser::GetArguments() {
 	return arguments;

@@ -8,7 +8,8 @@ EmptyArg::EmptyArg(const char option, const char* longOption, const char* descri
 };
 
 bool EmptyArg::Parse(const char* arg) {
-	if (isDefined = ParseOption(arg)) {
+
+	if (ParseOption(arg)) {
 		return isDefined = true;
 	}
 
@@ -16,7 +17,8 @@ bool EmptyArg::Parse(const char* arg) {
 }
 
 bool EmptyArg::ParseLong(const char* arg) {
-	if (isDefined = ParseOption(arg)) {
+
+	if (ParseOption(arg)) {
 		return isDefined = true;
 	}
 
