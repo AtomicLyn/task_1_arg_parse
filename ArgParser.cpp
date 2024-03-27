@@ -86,7 +86,3 @@ std::string ArgParser::GetHelp() {
 
 	return result;
 }
-
-std::vector<Arg*> ArgParser::GetArguments() {
-	return arguments;
-}

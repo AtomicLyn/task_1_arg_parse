@@ -5,7 +5,7 @@
 using namespace args_parse;
 
 MultiBoolArg::MultiBoolArg(const char option, const char* longOption, const char* description) : Arg(option, longOption, description) {
-	type = ArgumentType::Bool;
+	type = ArgumentType::MultiBool;
 };
 
 bool MultiBoolArg::Parse(const char* arg) {

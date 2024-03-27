@@ -9,25 +9,28 @@
 #include "ArgParser.hpp"
 
 using namespace args_parse;
+using namespace std;
 
 int main(int argc, const char **argv)
 { 
-    std::cout << "args: " << std::endl;
+    cout << "args: " << endl;
     for (auto i = 1; i < argc; i++) {
-        std::cout << argv[i] << " ";
+        cout << argv[i] << " ";
     }
-    std::cout << std::endl << std::endl;
+    cout << endl << endl;
 
     ArgParser parser;
 
-    EmptyArg help('h', "help");
-    EmptyArg fast('f', "fast");
+    EmptyArg help('h', "help", "Get some help");
+    EmptyArg fast('f', "fast", "Gotta go fast");
     EmptyArg sleep('s', "sleep");
-    EmptyArg megafast('m', "megafast");
+    EmptyArg megafast('m', "megafast", "Gotta go megafast");
     BoolArg lock('l', "lock");
     IntArg warnings('w', "warnings");
     StringArg name('n', "name");
     MultiStringArg output('o', "output");
+    MultiIntArg codes('c', "codes");
+    MultiBoolArg authorizes('a', "authorizes");
 
     parser.Add(&help);
     parser.Add(&fast);
@@ -37,45 +40,61 @@ int main(int argc, const char **argv)
     parser.Add(&warnings);
     parser.Add(&name);
     parser.Add(&output);
+    parser.Add(&codes);
+    parser.Add(&authorizes);
 
-    std::cout << "Try to parse: ";
+    cout << "Try to parse: ";
     if (parser.Parse(argc, argv)) {
-        std::cout << "True" << std::endl << std::endl;
+        cout << "True" << endl << endl;
 
         if (help.IsDefined()) {
-            std::cout << parser.GetHelp() << std::endl;
+            cout << parser.GetHelp() << endl;
         }
 
-        std::cout << "Arguments:" << std::endl;
+        cout << "Arguments:" << endl;
 
         if (fast.IsDefined()) {
-            std::cout << "Empty argument: " << fast.GetOption() << "/" << fast.GetLongOption() << " " << std::endl;
+            cout << "Empty argument: " << fast.GetOption() << "/" << fast.GetLongOption() << " " << endl;
         }
         if (sleep.IsDefined()) {
-            std::cout << "Empty argument: " << sleep.GetOption() << "/" << sleep.GetLongOption() << " " << std::endl;
+            cout << "Empty argument: " << sleep.GetOption() << "/" << sleep.GetLongOption() << " " << endl;
         }
         if (megafast.IsDefined()) {
-            std::cout << "Empty argument: " << megafast.GetOption() << "/" << megafast.GetLongOption() << " " << std::endl;
+            cout << "Empty argument: " << megafast.GetOption() << "/" << megafast.GetLongOption() << " " << endl;
         }
         if (lock.IsDefined()) {
-            std::cout << "Bool argument: " << std::boolalpha << lock.GetOption() << "/" << lock.GetLongOption() << " " << lock.GetValue() << std::endl;
+            cout << "Bool argument: " << boolalpha << lock.GetOption() << "/" << lock.GetLongOption() << " " << lock.GetValue() << endl;
         }
         if (warnings.IsDefined()) {
-            std::cout << "Int argument: " << warnings.GetOption() << "/" << warnings.GetLongOption() << " " << warnings.GetValue() << std::endl;
+            cout << "Int argument: " << warnings.GetOption() << "/" << warnings.GetLongOption() << " " << warnings.GetValue() << endl;
         }
         if (name.IsDefined()) {
-            std::cout << "String argument: " << name.GetOption() << "/" << name.GetLongOption() << " " << name.GetValue() << std::endl;
+            cout << "String argument: " << name.GetOption() << "/" << name.GetLongOption() << " " << name.GetValue() << endl;
         }
         if (output.IsDefined()) {
-            std::cout << "String argument: " << output.GetOption() << "/" << output.GetLongOption() << " ";
+            cout << "String argument: " << output.GetOption() << "/" << output.GetLongOption() << " ";
             for (auto value : output.GetValues()) {
-                std::cout << value << ", ";
+                cout << value << ", ";
             }
-            std::cout << std::endl;
+            cout << endl;
+        }
+        if (codes.IsDefined()) {
+            cout << "String argument: " << codes.GetOption() << "/" << codes.GetLongOption() << " ";
+            for (auto value : codes.GetValues()) {
+                cout << value << ", ";
+            }
+            cout << endl;
+        }
+        if (authorizes.IsDefined()) {
+            cout << "String argument: " << authorizes.GetOption() << "/" << authorizes.GetLongOption() << " ";
+            for (auto value : authorizes.GetValues()) {
+                cout << value << ", ";
+            }
+            cout << endl;
         }
     }
     else
-        std::cout << "False" << std::endl;
+        cout << "False" << endl;
 
     return 0;
 }

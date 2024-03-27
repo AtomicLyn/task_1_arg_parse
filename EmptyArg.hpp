@@ -4,7 +4,6 @@
 #include "ArgumentType.hpp"
 
 namespace args_parse {
-
 	class EmptyArg : public Arg {
 	public:
 		EmptyArg(const char option, const char* longOption, const char* description = "");

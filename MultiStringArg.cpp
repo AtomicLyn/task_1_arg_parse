@@ -3,7 +3,7 @@
 using namespace args_parse;
 
 MultiStringArg::MultiStringArg(const char option, const char* longOption, const char* description) : Arg(option, longOption, description) {
-	type = ArgumentType::String;
+	type = ArgumentType::MultiString;
 };
 
 std::vector<std::string> MultiStringArg::GetValues() {

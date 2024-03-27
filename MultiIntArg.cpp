@@ -5,7 +5,7 @@
 using namespace args_parse;
 
 MultiIntArg::MultiIntArg(const char option, const char* longOption, const char* description) : Arg(option, longOption, description) {
-	type = ArgumentType::Int;
+	type = ArgumentType::MultiInt;
 };
 
 
