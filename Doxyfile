@@ -959,7 +959,7 @@ INPUT                  = src
 # See also: INPUT_FILE_ENCODING
 # The default value is: UTF-8.
 
-INPUT_ENCODING         = CP1251
+INPUT_ENCODING         = UTF-8
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses The INPUT_FILE_ENCODING tag can be used to specify
