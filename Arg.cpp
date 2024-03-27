@@ -15,7 +15,27 @@ Arg::Arg(const char option, const char* longOption, const char* description) {
 
 Arg::~Arg() {}
 
-bool Arg::TryParseOption(const char* argWithoutDash) {
+char Arg::GetOption() {
+	return option;
+}
+
+const char* Arg::GetLongOption() {
+	return longOption;
+}
+
+const char* Arg::GetDescription() {
+	return description;
+}
+
+ArgumentType Arg::GetType() {
+	return type;
+}
+
+bool Arg::IsDefined() {
+	return isDefined;
+}
+
+bool Arg::ParseOption(const char* argWithoutDash) {
 	if (strncmp(&option, argWithoutDash, optionSize) == 0) {
 		auto argWithoutOption = argWithoutDash + 1;
 
@@ -39,22 +59,18 @@ bool Arg::TryParseOption(const char* argWithoutDash) {
 	return false;
 }
 
-bool Arg::TryParseLongOption(const char* argWithoutDash) {
+bool Arg::ParseLongOption(const char* argWithoutDash) {
 	auto longOptionSize = strlen(longOption);
 
 	if (strncmp(longOption, argWithoutDash, longOptionSize) == 0) {
 		auto argWithoutOption = argWithoutDash + longOptionSize;
 
-		if (strlen(argWithoutOption) != 0) {
-			if (*argWithoutOption == '=') {
-				auto argWithoutOptionAndEq = argWithoutOption + 1;
+		if (*argWithoutOption == '=') {
+			auto argWithoutOptionAndEq = argWithoutOption + 1;
 
-				operands = argWithoutOptionAndEq;
+			operands = argWithoutOptionAndEq;
 
-				return true;
-			}
-
-			return false;
+			return true;
 		}
 
 		operands = argWithoutOption;
@@ -65,10 +81,3 @@ bool Arg::TryParseLongOption(const char* argWithoutDash) {
 	return false;
 }
 
-const char* Arg::GetDescription() {
-	return description;
-}
-
-ArgumentType Arg::GetType() {
-	return type;
-}

@@ -11,7 +11,7 @@ void ArgParser::Add(Arg* argument) {
 	variants.push_back(argument);
 }
 
-bool ArgParser::TryParse(const int argc, const char** argv) {
+bool ArgParser::Parse(const int argc, const char** argv) {
 	for (auto i = 1; i < argc; i++) {
 		std::string argument(argv[i]);
 
@@ -24,38 +24,56 @@ bool ArgParser::TryParse(const int argc, const char** argv) {
 
 		const std::string currentArgument(argument);
 
-
 		bool argumentDefined = false;
 
-		for (auto j = 0; j < variants.size(); j++) {
+		if (*currentArgument.c_str() == '-' && *(currentArgument.c_str() + 1) == '-') {
+			const char* argumentWithoutDash = currentArgument.c_str() + 2;
 
-			if (*currentArgument.c_str() == '-' && *(currentArgument.c_str() + 1) == '-') {
-				const char* argumentWithoutDash = currentArgument.c_str() + 2;
+			for (auto j = 0; j < variants.size(); j++) {
 
-				if (variants[j]->TryParseLong(argumentWithoutDash)) {
-					arguments.push_back(variants[j]);
-					variants.erase(variants.begin() + j);
-
+				if (variants[j]->ParseLong(argumentWithoutDash)) {
 					argumentDefined = true;
+					break;
 				}
 			}
-			else if (*currentArgument.c_str() == '-') {
-				const char* argumentWithoutDash = currentArgument.c_str() + 1;
+		}
+		else if (*currentArgument.c_str() == '-') {
+			const char* argumentWithoutDash = currentArgument.c_str() + 1;
 
-				if (variants[j]->TryParse(argumentWithoutDash)) {
-					arguments.push_back(variants[j]);
-					variants.erase(variants.begin() + j);
+			for (auto j = 0; j < variants.size(); j++) {
 
+				if (variants[j]->Parse(argumentWithoutDash)) {
 					argumentDefined = true;
+
+					if (variants[j]->GetType() == ArgumentType::Empty && std::strlen(argumentWithoutDash) > 1) {
+						const char* currentOption = argumentWithoutDash + 1;
+
+						for (; std::strlen(currentOption) != 0; currentOption++) {
+							argumentDefined = false;
+
+							for (auto k = 0; k < variants.size(); k++) {
+
+								if (variants[k]->GetType() == ArgumentType::Empty) {
+									
+									if (variants[k]->Parse(currentOption)) {
+										argumentDefined = true;
+										break;
+									}
+								}
+							}
+						}
+					}
+
+					break;
 				}
 			}
-
 		}
 
 		if (!argumentDefined) return false;
 	}
 	return true;
 }
+
 
 std::vector<Arg*> ArgParser::GetArguments() {
 	return arguments;

@@ -9,26 +9,26 @@ IntArg::IntArg(const char option, const char* longOption, const char* descriptio
 };
 
 
-bool IntArg::TryParse(const char* arg) {
-	if (TryParseOption(arg)) {
+bool IntArg::Parse(const char* arg) {
+	if (ParseOption(arg)) {
 
 		if (std::isdigit(*operands)) {
 			value = atoi(operands);
 
-			return true;
+			return isDefined = true;
 		}
 	}
 
 	return false;
 }
 
-bool IntArg::TryParseLong(const char* arg) {
-	if (TryParseLongOption(arg)) {
+bool IntArg::ParseLong(const char* arg) {
+	if (ParseLongOption(arg)) {
 
 		if (std::isdigit(*operands)) {
 			value = atoi(operands);
 
-			return true;
+			return isDefined = true;
 		}
 	}
 

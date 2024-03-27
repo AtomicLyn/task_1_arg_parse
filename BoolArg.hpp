@@ -10,8 +10,8 @@ namespace args_parse {
 	public: 
 		BoolArg(const char option, const char* longOption, const char* description = "");
 		bool GetValue();
-		bool TryParse(const char* option) override;
-		bool TryParseLong(const char* option) override;
+		bool Parse(const char* option) override;
+		bool ParseLong(const char* option) override;
 	};
 
 }

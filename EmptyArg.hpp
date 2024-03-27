@@ -8,8 +8,8 @@ namespace args_parse {
 	class EmptyArg : public Arg {
 	public:
 		EmptyArg(const char option, const char* longOption, const char* description = "");
-		bool TryParse(const char* arg) override;
-		bool TryParseLong(const char* arg) override;
+		bool Parse(const char* arg) override;
+		bool ParseLong(const char* arg) override;
 	};
 
 }

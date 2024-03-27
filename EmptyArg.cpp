@@ -7,11 +7,19 @@ EmptyArg::EmptyArg(const char option, const char* longOption, const char* descri
 	type = ArgumentType::Empty;
 };
 
-bool EmptyArg::TryParse(const char* arg) {
-	return TryParseOption(arg) && strlen(operands) == 0;
+bool EmptyArg::Parse(const char* arg) {
+	if (isDefined = ParseOption(arg)) {
+		return isDefined = true;
+	}
+
+	return false;
 }
 
-bool EmptyArg::TryParseLong(const char* arg) {
-	return TryParseLongOption(arg) && strlen(operands) == 0;
+bool EmptyArg::ParseLong(const char* arg) {
+	if (isDefined = ParseOption(arg)) {
+		return isDefined = true;
+	}
+
+	return false;
 }
 

@@ -11,21 +11,21 @@ std::string StringArg::GetValue() {
 }
 
 
-bool StringArg::TryParse(const char* arg) {
-	if (TryParseOption(arg)) {
+bool StringArg::Parse(const char* arg) {
+	if (ParseOption(arg)) {
 		value = std::string(operands);
 
-		return true;
+		return isDefined = true;
 	}
 
 	return false;
 }
 
-bool StringArg::TryParseLong(const char* arg) {
-	if (TryParseLongOption(arg)) {
+bool StringArg::ParseLong(const char* arg) {
+	if (ParseLongOption(arg)) {
 		value = std::string(operands);
 
-		return true;
+		return isDefined = true;
 	}
 
 	return false;

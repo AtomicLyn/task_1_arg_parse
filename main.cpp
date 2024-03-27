@@ -9,45 +9,48 @@ using namespace args_parse;
 
 int main(int argc, const char **argv)
 { 
-    std::cout << "quantity: " << argc << std::endl;
     std::cout << "args: " << std::endl;
     for (auto i = 1; i < argc; i++) {
         std::cout << argv[i] << " ";
     }
-    std::cout << std::endl;
+    std::cout << std::endl << std::endl;
 
     ArgParser parser;
 
-    EmptyArg emptyCheck('f', "fast");
-    BoolArg boolCheck('l', "lock");
-    IntArg intCheck('w', "warnings");
-    StringArg stringCheck('o', "output");
+    EmptyArg fast('f', "fast");
+    EmptyArg sleep('s', "sleep");
+    EmptyArg megafast('m', "megafast");
+    BoolArg lock('l', "lock");
+    IntArg warnings('w', "warnings");
+    StringArg output('o', "output");
 
-    parser.Add(&emptyCheck);
-    parser.Add(&boolCheck);
-    parser.Add(&intCheck);
-    parser.Add(&stringCheck);
+    parser.Add(&fast);
+    parser.Add(&sleep);
+    parser.Add(&megafast);
+    parser.Add(&lock);
+    parser.Add(&warnings);
+    parser.Add(&output);
 
-    if (parser.TryParse(argc, argv)) {
-        std::cout << "Try to parse: True" << std::endl;
+    if (parser.Parse(argc, argv)) {
+        std::cout << "Try to parse: True" << std::endl << std::endl;
         std::cout << "Arguments:" << std::endl;
-        for (auto argument : parser.GetArguments()) {
-            switch (argument->GetType()) {
-            case ArgumentType::Empty:
-                std::cout << "Empty argument" << std::endl;
-                break;
-            case ArgumentType::Bool:
-                std::cout << "Bool argument: " << std::boolalpha << ((BoolArg*)argument)->GetValue() << std::endl;
-                break;
-            case ArgumentType::Int:
-                std::cout << "Int argument: " << ((IntArg*)argument)->GetValue() << std::endl;
-                break;
-            case ArgumentType::String:
-                std::cout << "String argument: " << ((StringArg*)argument)->GetValue() << std::endl;
-                break;
-            default:
-                std::cout << "Undefined argument!" << std::endl;
-            }
+        if (fast.IsDefined()) {
+            std::cout << "Empty argument: " << fast.GetOption() << "/" << fast.GetLongOption() << " " << std::endl;
+        }
+        if (sleep.IsDefined()) {
+            std::cout << "Empty argument: " << sleep.GetOption() << "/" << sleep.GetLongOption() << " " << std::endl;
+        }
+        if (megafast.IsDefined()) {
+            std::cout << "Empty argument: " << megafast.GetOption() << "/" << megafast.GetLongOption() << " " << std::endl;
+        }
+        if (lock.IsDefined()) {
+            std::cout << "Bool argument: " << std::boolalpha << lock.GetOption() << "/" << lock.GetLongOption() << " " << lock.GetValue() << std::endl;
+        }
+        if (warnings.IsDefined()) {
+            std::cout << "Int argument: " << warnings.GetOption() << "/" << warnings.GetLongOption() << " " << warnings.GetValue() << std::endl;
+        }
+        if (output.IsDefined()) {
+            std::cout << "String argument: " << output.GetOption() << "/" << output.GetLongOption() << " " << output.GetValue() << std::endl;
         }
     }
     else

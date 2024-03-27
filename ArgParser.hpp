@@ -10,7 +10,7 @@ namespace args_parse {
 		static std::vector<Arg*> arguments;
 	public:
 		void Add(Arg* argument);
-		bool TryParse(const int argc, const char** argv);
+		bool Parse(const int argc, const char** argv);
 		std::vector<Arg*> GetArguments();
 	};
 }
