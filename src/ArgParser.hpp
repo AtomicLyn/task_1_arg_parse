@@ -18,11 +18,11 @@ namespace args_parse {
 	*/
 
 	class ArgParser {
-	private:
 		std::vector<Arg*> arguments;
+		const bool ParseSubsequence(const char* argumentWithoutDash);
 	public:
 		void Add(Arg* argument);
 		bool Parse(const int argc, const char** argv);
-		std::string GetHelp();
+		const std::string GetHelp() const;
 	};
 }

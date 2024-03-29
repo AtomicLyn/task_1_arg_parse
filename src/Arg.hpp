@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ArgumentType.hpp"
+#include <string>
 
 namespace args_parse {
 	
@@ -12,21 +13,21 @@ namespace args_parse {
 		ArgumentType type;
 
 		char option;
-		const char* longOption;
-		const char* description;
+		const std::string longOption;
+		const std::string description;
 		const char* operands = "";
 		bool isDefined = false;
 
-		bool ParseOption(const char* arg);
-		bool ParseLongOption(const char* arg);
+		bool ParseOption(std::string_view arg);
+		bool ParseLongOption(std::string_view arg);
 	public:
-		Arg(const char option, const char* longOption, const char* description = "");
+		Arg(const char option, const std::string longOption, std::string description = "");
 		virtual ~Arg();
-		char GetOption();
-		const char* GetLongOption();
-		const char* GetDescription();
-		ArgumentType GetType();
-		bool IsDefined();
+		const char GetOption();
+		const std::string GetLongOption();
+		const std::string GetDescription();
+		const ArgumentType GetType();
+		const bool IsDefined();
 		virtual bool Parse(const char* arg) = 0;
 		virtual bool ParseLong(const char* arg) = 0;
 		

@@ -1,81 +1,83 @@
 #include "Arg.hpp"
-#include <cstring>
-#include <cctype>
-#include <cstdlib>
+#include <string>
 
 using namespace args_parse;
 
-bool Arg::ParseOption(const char* argWithoutDash) {
-	if (option == *argWithoutDash) {
-		auto argWithoutOption = argWithoutDash + 1;
+bool Arg::ParseOption(std::string_view argWithoutDash) {
+	if (argWithoutDash[0] == option) {
 
-		if (*argWithoutOption == '=') {
-			auto argWithoutOptionAndEq = argWithoutOption + 1;
+		if (argWithoutDash.size() > 1) {
+			std::string_view argWithoutOption(&argWithoutDash[1]);
 
-			if (strlen(argWithoutOptionAndEq) != 0) {
-				operands = argWithoutOptionAndEq;
+			if (argWithoutOption[0] == '=') {
+
+				if (argWithoutOption.size() > 1) {
+					std::string_view argWithoutOptionAndEq(&argWithoutOption[1]);
+
+					operands = argWithoutOptionAndEq.data();
+
+					return true;
+				}
+
+				return false;
+			}
+
+			operands = argWithoutOption.data();
+		}
+
+		return true;
+	}
+
+	return false;
+}
+
+bool Arg::ParseLongOption(std::string_view argWithoutDash) {
+	const auto longOptionSize = longOption.size();
+
+	if (argWithoutDash.find(longOption) == 0) {
+		if (argWithoutDash.size() > longOptionSize) {
+			std::string_view argWithoutOption(&argWithoutDash[longOptionSize]);
+
+			if (argWithoutOption[0] == '=') {
+				std::string_view argWithoutOptionAndEq(&argWithoutOption[1]);
+
+				operands = argWithoutOptionAndEq.data();
 
 				return true;
 			}
-
+			
 			return false;
 		}
 
-		operands = argWithoutOption;
-
 		return true;
 	}
 
 	return false;
 }
 
-bool Arg::ParseLongOption(const char* argWithoutDash) {
-	auto longOptionSize = strlen(longOption);
-
-	if (strncmp(longOption, argWithoutDash, longOptionSize) == 0) {
-		auto argWithoutOption = argWithoutDash + longOptionSize;
-
-		if (*argWithoutOption == '=') {
-			auto argWithoutOptionAndEq = argWithoutOption + 1;
-
-			operands = argWithoutOptionAndEq;
-
-			return true;
-		}
-
-		operands = argWithoutOption;
-
-		return true;
-	}
-
-	return false;
-}
-
-Arg::Arg(const char option, const char* longOption, const char* description) {
+Arg::Arg(const char option, std::string longOption, std::string description) : longOption{ longOption }, description{ description } {
 	this->option = option;
-	this->longOption = longOption;
-	this->description = description;
 }
 
 Arg::~Arg() {}
 
-char Arg::GetOption() {
+const char Arg::GetOption() {
 	return option;
 }
 
-const char* Arg::GetLongOption() {
+const std::string Arg::GetLongOption() {
 	return longOption;
 }
 
-const char* Arg::GetDescription() {
+const std::string Arg::GetDescription() {
 	return description;
 }
 
-ArgumentType Arg::GetType() {
+const ArgumentType Arg::GetType() {
 	return type;
 }
 
-bool Arg::IsDefined() {
+const bool Arg::IsDefined() {
 	return isDefined;
 }
 

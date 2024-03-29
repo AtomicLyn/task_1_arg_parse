@@ -8,6 +8,28 @@ void ArgParser::Add(Arg* argument) {
 	arguments.push_back(argument);
 }
 
+const bool ArgParser::ParseSubsequence(const char* argumentWithoutDash) {
+	const char* currentOption = argumentWithoutDash + 1;
+	bool argumentDefined = false;
+
+	for (; std::strlen(currentOption) != 0; currentOption++) {
+		argumentDefined = false;
+
+		for (auto argument : arguments) {
+
+			if (argument->GetType() == ArgumentType::Empty) {
+
+				if (argument->Parse(currentOption)) {
+					argumentDefined = true;
+					break;
+				}
+			}
+		}
+	}
+
+	return argumentDefined;
+}
+
 bool ArgParser::Parse(const int argc, const char** argv) {
 	for (auto i = 1; i < argc; i++) {
 		std::string argument(argv[i]);
@@ -19,49 +41,36 @@ bool ArgParser::Parse(const int argc, const char** argv) {
 			}
 		}
 
-		const std::string currentArgument(argument);
-
+		const std::string_view currentArgument(argument);
 		bool argumentDefined = false;
 
-		if (currentArgument[0] == '-' && currentArgument[1] == '-') {
-			const char* argumentWithoutDash = currentArgument.c_str() + 2;
+		if (currentArgument.size() > 1) {
 
-			for (auto j = 0; j < arguments.size(); j++) {
+			if (currentArgument[0] == '-' && currentArgument[1] == '-' && currentArgument.size() > 2) {
+				std::string_view argumentWithoutDash(&currentArgument[2]);
 
-				if (arguments[j]->ParseLong(argumentWithoutDash)) {
-					argumentDefined = true;
-					break;
+				for (auto j = 0; j < arguments.size(); j++) {
+
+					if (arguments[j]->ParseLong(argumentWithoutDash.data())) {
+						argumentDefined = true;
+						break;
+					}
 				}
 			}
-		}
-		else if (*currentArgument.c_str() == '-') {
-			const char* argumentWithoutDash = currentArgument.c_str() + 1;
+			else if (currentArgument[0] == '-') {
+				std::string_view argumentWithoutDash(&currentArgument[1]);
 
-			for (auto j = 0; j < arguments.size(); j++) {
+				for (auto argument : arguments) {
 
-				if (arguments[j]->Parse(argumentWithoutDash)) {
-					argumentDefined = true;
+					if (argument->Parse(argumentWithoutDash.data())) {
+						argumentDefined = true;
 
-					if (arguments[j]->GetType() == ArgumentType::Empty && std::strlen(argumentWithoutDash) > 1) {
-						const char* currentOption = argumentWithoutDash + 1;
-
-						for (; std::strlen(currentOption) != 0; currentOption++) {
-							argumentDefined = false;
-
-							for (auto k = 0; k < arguments.size(); k++) {
-
-								if (arguments[k]->GetType() == ArgumentType::Empty) {
-									
-									if (arguments[k]->Parse(currentOption)) {
-										argumentDefined = true;
-										break;
-									}
-								}
-							}
+						if (argument->GetType() == ArgumentType::Empty && argumentWithoutDash.size() > 1) {
+							argumentDefined = ParseSubsequence(argumentWithoutDash.data());
 						}
-					}
 
-					break;
+						break;
+					}
 				}
 			}
 		}
@@ -71,7 +80,7 @@ bool ArgParser::Parse(const int argc, const char** argv) {
 	return true;
 }
 
-std::string ArgParser::GetHelp() {
+const std::string ArgParser::GetHelp() const {
 	std::string result = "";
 
 	for (auto argument : arguments) {
