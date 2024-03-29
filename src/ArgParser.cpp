@@ -23,7 +23,7 @@ bool ArgParser::Parse(const int argc, const char** argv) {
 
 		bool argumentDefined = false;
 
-		if (*currentArgument.c_str() == '-' && *(currentArgument.c_str() + 1) == '-') {
+		if (currentArgument[0] == '-' && currentArgument[1] == '-') {
 			const char* argumentWithoutDash = currentArgument.c_str() + 2;
 
 			for (auto j = 0; j < arguments.size(); j++) {
