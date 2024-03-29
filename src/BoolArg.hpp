@@ -12,7 +12,7 @@ namespace args_parse {
 	private:
 		bool value = false;
 	public: 
-		BoolArg(const char option, const char* longOption, const char* description = "");
+		BoolArg(const char option, std::string longOption, std::string description = "");
 		bool GetValue();
 		bool Parse(std::string_view option) override;
 		bool ParseLong(std::string_view option) override;

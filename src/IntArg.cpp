@@ -3,7 +3,7 @@
 
 using namespace args_parse;
 
-IntArg::IntArg(const char option, const char* longOption, const char* description) : Arg(option, longOption, description) {
+IntArg::IntArg(const char option, std::string longOption, std::string description) : Arg(option, longOption, description) {
 	type = ArgumentType::Int;
 };
 

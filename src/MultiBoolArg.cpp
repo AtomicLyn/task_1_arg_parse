@@ -3,7 +3,7 @@
 
 using namespace args_parse;
 
-MultiBoolArg::MultiBoolArg(const char option, const char* longOption, const char* description) : Arg(option, longOption, description) {
+MultiBoolArg::MultiBoolArg(const char option, std::string longOption, std::string description) : Arg(option, longOption, description) {
 	type = ArgumentType::MultiBool;
 };
 

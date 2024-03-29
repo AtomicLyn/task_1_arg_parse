@@ -2,7 +2,7 @@
 
 using namespace args_parse;
 
-EmptyArg::EmptyArg(const char option, const char* longOption, const char* description) : Arg(option, longOption, description) {
+EmptyArg::EmptyArg(const char option, std::string longOption, std::string description) : Arg(option, longOption, description) {
 	type = ArgumentType::Empty;
 };
 

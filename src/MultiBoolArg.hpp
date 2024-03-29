@@ -13,7 +13,7 @@ namespace args_parse {
 	private:
 		std::vector<bool> values;
 	public:
-		MultiBoolArg(const char option, const char* longOption, const char* description = "");
+		MultiBoolArg(const char option, std::string longOption, std::string description = "");
 		std::vector<bool> GetValues();
 		bool Parse(std::string_view option) override;
 		bool ParseLong(std::string_view option) override;

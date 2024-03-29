@@ -3,7 +3,7 @@
 
 using namespace args_parse;
 
-MultiIntArg::MultiIntArg(const char option, const char* longOption, const char* description) : Arg(option, longOption, description) {
+MultiIntArg::MultiIntArg(const char option, std::string longOption, std::string description) : Arg(option, longOption, description) {
 	type = ArgumentType::MultiInt;
 };
 
