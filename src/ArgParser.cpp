@@ -8,18 +8,18 @@ void ArgParser::Add(Arg* argument) {
 	arguments.push_back(argument);
 }
 
-const bool ArgParser::ParseSubsequence(const char* argumentWithoutDash) {
-	const char* currentOption = argumentWithoutDash + 1;
+const bool ArgParser::ParseSubsequence(std::string_view argumentWithoutDash) {
+	std::string_view argumentWithoutOption(&argumentWithoutDash[1]);
 	bool argumentDefined = false;
 
-	for (; std::strlen(currentOption) != 0; currentOption++) {
+	for (auto currentOption = argumentWithoutOption.begin(); currentOption != argumentWithoutOption.end(); currentOption++) {
 		argumentDefined = false;
 
 		for (auto argument : arguments) {
 
 			if (argument->GetType() == ArgumentType::Empty) {
 
-				if (argument->Parse(currentOption)) {
+				if (argument->Parse(&(*currentOption))) {
 					argumentDefined = true;
 					break;
 				}
@@ -41,7 +41,7 @@ bool ArgParser::Parse(const int argc, const char** argv) {
 			}
 		}
 
-		const std::string_view currentArgument(argument);
+		std::string_view currentArgument(argument);
 		bool argumentDefined = false;
 
 		if (currentArgument.size() > 1) {
@@ -66,7 +66,7 @@ bool ArgParser::Parse(const int argc, const char** argv) {
 						argumentDefined = true;
 
 						if (argument->GetType() == ArgumentType::Empty && argumentWithoutDash.size() > 1) {
-							argumentDefined = ParseSubsequence(argumentWithoutDash.data());
+							argumentDefined = ParseSubsequence(argumentWithoutDash);
 						}
 
 						break;

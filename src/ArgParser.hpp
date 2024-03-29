@@ -1,7 +1,7 @@
 #pragma once
 
-#include <vector>
 #include "Arg.hpp"
+#include <vector>
 #include <string>
 
 namespace args_parse {
@@ -19,7 +19,7 @@ namespace args_parse {
 
 	class ArgParser {
 		std::vector<Arg*> arguments;
-		const bool ParseSubsequence(const char* argumentWithoutDash);
+		const bool ParseSubsequence(std::string_view argumentWithoutDash);
 	public:
 		void Add(Arg* argument);
 		bool Parse(const int argc, const char** argv);
