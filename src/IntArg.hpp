@@ -14,8 +14,8 @@ namespace args_parse {
 	public:
 		IntArg(const char option, const char* longOption, const char* description = "");
 		int GetValue();
-		bool Parse(const char* arg) override;
-		bool ParseLong(const char* arg) override;
+		bool Parse(std::string_view arg) override;
+		bool ParseLong(std::string_view arg) override;
 	};
 
 }

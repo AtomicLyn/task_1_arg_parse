@@ -7,7 +7,7 @@ EmptyArg::EmptyArg(const char option, const char* longOption, const char* descri
 	type = ArgumentType::Empty;
 };
 
-bool EmptyArg::Parse(const char* arg) {
+bool EmptyArg::Parse(std::string_view arg) {
 
 	if (ParseOption(arg)) {
 		return isDefined = true;
@@ -16,7 +16,7 @@ bool EmptyArg::Parse(const char* arg) {
 	return false;
 }
 
-bool EmptyArg::ParseLong(const char* arg) {
+bool EmptyArg::ParseLong(std::string_view arg) {
 
 	if (ParseOption(arg)) {
 		return isDefined = true;

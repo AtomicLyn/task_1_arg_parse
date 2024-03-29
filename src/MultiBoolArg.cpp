@@ -12,7 +12,7 @@ std::vector<bool> MultiBoolArg::GetValues() {
 	return values;
 }
 
-bool MultiBoolArg::Parse(const char* arg) {
+bool MultiBoolArg::Parse(std::string_view arg) {
 	if (ParseOption(arg)) {
 
 		if (std::isdigit(*operands)) {
@@ -29,7 +29,7 @@ bool MultiBoolArg::Parse(const char* arg) {
 	return false;
 }
 
-bool MultiBoolArg::ParseLong(const char* arg) {
+bool MultiBoolArg::ParseLong(std::string_view arg) {
 	if (ParseLongOption(arg)) {
 
 		if (std::isdigit(*operands)) {

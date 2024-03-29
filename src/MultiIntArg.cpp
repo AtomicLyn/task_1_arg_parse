@@ -12,7 +12,7 @@ std::vector<int> MultiIntArg::GetValues() {
 	return values;
 }
 
-bool MultiIntArg::Parse(const char* arg) {
+bool MultiIntArg::Parse(std::string_view arg) {
 	if (ParseOption(arg)) {
 
 		if (std::isdigit(*operands)) {
@@ -25,7 +25,7 @@ bool MultiIntArg::Parse(const char* arg) {
 	return false;
 }
 
-bool MultiIntArg::ParseLong(const char* arg) {
+bool MultiIntArg::ParseLong(std::string_view arg) {
 	if (ParseLongOption(arg)) {
 
 		if (std::isdigit(*operands)) {

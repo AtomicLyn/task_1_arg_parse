@@ -12,7 +12,7 @@ bool BoolArg::GetValue() {
 	return value;
 }
 
-bool BoolArg::Parse(const char* arg) {
+bool BoolArg::Parse(std::string_view arg) {
 	if (ParseOption(arg)) {
 
 		if (std::isdigit(*operands)) {
@@ -29,7 +29,7 @@ bool BoolArg::Parse(const char* arg) {
 	return false;
 }
 
-bool BoolArg::ParseLong(const char* arg) {
+bool BoolArg::ParseLong(std::string_view arg) {
 	if (ParseLongOption(arg)) {
 
 		if (std::isdigit(*operands)) {

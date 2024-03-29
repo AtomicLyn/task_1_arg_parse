@@ -10,7 +10,7 @@ std::vector<std::string> MultiStringArg::GetValues() {
 	return values;
 }
 
-bool MultiStringArg::Parse(const char* arg) {
+bool MultiStringArg::Parse(std::string_view arg) {
 	if (ParseOption(arg)) {
 		values.push_back(std::string(operands));
 
@@ -20,7 +20,7 @@ bool MultiStringArg::Parse(const char* arg) {
 	return false;
 }
 
-bool MultiStringArg::ParseLong(const char* arg) {
+bool MultiStringArg::ParseLong(std::string_view arg) {
 	if (ParseLongOption(arg)) {
 		values.push_back(std::string(operands));
 

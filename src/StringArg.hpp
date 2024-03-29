@@ -15,8 +15,8 @@ namespace args_parse {
 	public:
 		StringArg(const char option, const char* longOption, const char* description = "");
 		std::string GetValue();
-		bool Parse(const char* option) override;
-		bool ParseLong(const char* option) override;
+		bool Parse(std::string_view option) override;
+		bool ParseLong(std::string_view option) override;
 	};
 
 }

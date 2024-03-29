@@ -28,8 +28,8 @@ namespace args_parse {
 		const std::string GetDescription();
 		const ArgumentType GetType();
 		const bool IsDefined();
-		virtual bool Parse(const char* arg) = 0;
-		virtual bool ParseLong(const char* arg) = 0;
+		virtual bool Parse(std::string_view arg) = 0;
+		virtual bool ParseLong(std::string_view arg) = 0;
 		
 	};
 
