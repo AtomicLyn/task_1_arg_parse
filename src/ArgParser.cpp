@@ -51,7 +51,7 @@ bool ArgParser::Parse(const int argc, const char** argv) {
 
 				for (auto j = 0; j < arguments.size(); j++) {
 
-					if (arguments[j]->ParseLong(argumentWithoutDash.data())) {
+					if (arguments[j]->ParseLong(argumentWithoutDash)) {
 						argumentDefined = true;
 						break;
 					}
@@ -62,7 +62,7 @@ bool ArgParser::Parse(const int argc, const char** argv) {
 
 				for (auto argument : arguments) {
 
-					if (argument->Parse(argumentWithoutDash.data())) {
+					if (argument->Parse(argumentWithoutDash)) {
 						argumentDefined = true;
 
 						if (argument->GetType() == ArgumentType::Empty && argumentWithoutDash.size() > 1) {

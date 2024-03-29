@@ -13,7 +13,7 @@ bool Arg::ParseOption(std::string_view argWithoutDash) {
 				if (argWithoutOption.size() > 1) {
 					std::string_view argWithoutOptionAndEq(&argWithoutOption[1]);
 
-					operands = argWithoutOptionAndEq.data();
+					operands = argWithoutOptionAndEq;
 
 					return true;
 				}
@@ -21,7 +21,7 @@ bool Arg::ParseOption(std::string_view argWithoutDash) {
 				return false;
 			}
 
-			operands = argWithoutOption.data();
+			operands = argWithoutOption;
 		}
 
 		return true;
@@ -42,7 +42,7 @@ bool Arg::ParseLongOption(std::string_view argWithoutDash) {
 				if (argWithoutOption.size() > 1) {
 					std::string_view argWithoutOptionAndEq(&argWithoutOption[1]);
 
-					operands = argWithoutOptionAndEq.data();
+					operands = argWithoutOptionAndEq;
 
 					return true;
 
@@ -51,7 +51,7 @@ bool Arg::ParseLongOption(std::string_view argWithoutDash) {
 				return false;
 			}
 			
-			operands = argWithoutOption.data();
+			operands = argWithoutOption;
 		}
 
 		return true;
