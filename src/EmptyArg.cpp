@@ -1,5 +1,4 @@
 #include "EmptyArg.hpp"
-#include <iostream>
 
 using namespace args_parse;
 

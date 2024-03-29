@@ -1,6 +1,5 @@
 #include "BoolArg.hpp"
-#include <cctype>
-#include <cstdlib>
+#include "Helpers.hpp"
 
 using namespace args_parse;
 
@@ -15,8 +14,8 @@ bool BoolArg::GetValue() {
 bool BoolArg::Parse(std::string_view arg) {
 	if (ParseOption(arg)) {
 
-		if (std::isdigit(*operands)) {
-			auto num = atoi(operands);
+		if (isInteger(operands)) {
+			auto num = atoi(&operands[0]);
 
 			if (num == 0 || num == 1) {
 				value = num == 1;
@@ -32,8 +31,8 @@ bool BoolArg::Parse(std::string_view arg) {
 bool BoolArg::ParseLong(std::string_view arg) {
 	if (ParseLongOption(arg)) {
 
-		if (std::isdigit(*operands)) {
-			auto num = atoi(operands);
+		if (isInteger(operands)) {
+			auto num = atoi(&operands[0]);
 
 			if (num == 0 || num == 1) {
 				value = num == 1;

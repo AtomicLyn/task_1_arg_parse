@@ -1,6 +1,5 @@
 #include "IntArg.hpp"
-#include <cctype>
-#include <cstdlib>
+#include "Helpers.hpp"
 
 using namespace args_parse;
 
@@ -15,8 +14,8 @@ int IntArg::GetValue() {
 bool IntArg::Parse(std::string_view arg) {
 	if (ParseOption(arg)) {
 
-		if (std::isdigit(*operands)) {
-			value = atoi(operands);
+		if (isInteger(operands)) {
+			value = atoi(&operands[0]);
 
 			return isDefined = true;
 		}
@@ -28,8 +27,8 @@ bool IntArg::Parse(std::string_view arg) {
 bool IntArg::ParseLong(std::string_view arg) {
 	if (ParseLongOption(arg)) {
 
-		if (std::isdigit(*operands)) {
-			value = atoi(operands);
+		if (isInteger(operands)) {
+			value = atoi(&operands[0]);
 
 			return isDefined = true;
 		}

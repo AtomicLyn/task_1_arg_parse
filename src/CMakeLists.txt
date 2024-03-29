@@ -21,6 +21,8 @@ add_library(args_parse STATIC
 	MultiStringArg.hpp
 	StringArg.cpp
 	StringArg.hpp
+	
+	Helpers.hpp
 )
 
 target_include_directories(args_parse PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/..")

@@ -1,5 +1,4 @@
 #include "Arg.hpp"
-#include <string>
 
 using namespace args_parse;
 
@@ -61,7 +60,7 @@ bool Arg::ParseLongOption(std::string_view argWithoutDash) {
 	return false;
 }
 
-Arg::Arg(const char option, std::string longOption, std::string description) : longOption{ longOption }, description{ description } {
+Arg::Arg(const char option, std::string longOption, std::string description) : longOption{ longOption }, description{ description }, operands("") {
 	this->option = option;
 }
 

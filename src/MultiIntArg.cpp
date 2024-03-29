@@ -1,6 +1,5 @@
 #include "MultiIntArg.hpp"
-#include <cctype>
-#include <cstdlib>
+#include "Helpers.hpp"
 
 using namespace args_parse;
 
@@ -15,8 +14,8 @@ std::vector<int> MultiIntArg::GetValues() {
 bool MultiIntArg::Parse(std::string_view arg) {
 	if (ParseOption(arg)) {
 
-		if (std::isdigit(*operands)) {
-			values.push_back(atoi(operands));
+		if (isInteger(operands)) {
+			values.push_back(atoi(&operands[0]));
 
 			return isDefined = true;
 		}
@@ -28,8 +27,8 @@ bool MultiIntArg::Parse(std::string_view arg) {
 bool MultiIntArg::ParseLong(std::string_view arg) {
 	if (ParseLongOption(arg)) {
 
-		if (std::isdigit(*operands)) {
-			values.push_back(atoi(operands));
+		if (isInteger(operands)) {
+			values.push_back(atoi(&operands[0]));
 
 			return isDefined = true;
 		}
