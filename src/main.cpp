@@ -21,16 +21,16 @@ int main(int argc, const char **argv)
 
     ArgParser parser;
 
-    EmptyArg help('h', "help", "Get some help");
-    EmptyArg fast('f', "fast", "Gotta go fast (ex. -f)");
-    EmptyArg sleep('s', "sleep");
-    EmptyArg megafast('m', "megafast", "Gotta go megafast");
-    BoolArg lock('l', "lock", "Input 0 or 1 (ex. -l=0)");
-    IntArg warnings('w', "warnings", "Input integer value (ex. -w=10)");
-    StringArg name('n', "name", "Input string value (ex. -n=o.txt)");
-    MultiStringArg output('o', "output");
-    MultiIntArg codes('c', "codes");
-    MultiBoolArg authorizes('a', "authorizes");
+    EmptyArg help{ 'h', "help", "Get some help" };
+    EmptyArg fast{ 'f', "fast", "Gotta go fast (ex. -f)" };
+    EmptyArg sleep{ 's', "sleep" };
+    EmptyArg megafast{ 'm', "megafast", "Gotta go megafast" };
+    BoolArg lock{ 'l', "lock", "Input 0 or 1 (ex. -l=0)" };
+    IntArg warnings{ 'w', "warnings", "Input integer value (ex. -w=10)" };
+    StringArg name{ 'n', "name", "Input string value (ex. -n=o.txt)" };
+    MultiStringArg output{ 'o', "output" };
+    MultiIntArg codes{ 'c', "codes" };
+    MultiBoolArg authorizes{ 'a', "authorizes" };
 
     parser.Add(&help);
     parser.Add(&fast);
