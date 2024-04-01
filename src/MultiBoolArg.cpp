@@ -13,7 +13,7 @@ bool MultiBoolArg::Parse(std::string_view arg) {
 	if (ParseOption(arg)) {
 
 		if (isInteger(operands)) {
-			auto num = atoi(&operands[0]);
+			auto num = atoi(operands.c_str());
 
 			if (num == 0 || num == 1) {
 				values.push_back(num == 1);
@@ -30,7 +30,7 @@ bool MultiBoolArg::ParseLong(std::string_view arg) {
 	if (ParseLongOption(arg)) {
 
 		if (isInteger(operands)) {
-			auto num = atoi(&operands[0]);
+			auto num = atoi(operands.c_str());
 
 			if (num == 0 || num == 1) {
 				values.push_back(num == 1);

@@ -13,7 +13,7 @@ bool IntArg::Parse(std::string_view arg) {
 	if (ParseOption(arg)) {
 
 		if (isInteger(operands)) {
-			value = atoi(&operands[0]);
+			value = atoi(operands.c_str());
 
 			return isDefined = true;
 		}
@@ -26,7 +26,7 @@ bool IntArg::ParseLong(std::string_view arg) {
 	if (ParseLongOption(arg)) {
 
 		if (isInteger(operands)) {
-			value = atoi(&operands[0]);
+			value = atoi(operands.c_str());
 
 			return isDefined = true;
 		}

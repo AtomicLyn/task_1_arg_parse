@@ -13,7 +13,7 @@ bool MultiIntArg::Parse(std::string_view arg) {
 	if (ParseOption(arg)) {
 
 		if (isInteger(operands)) {
-			values.push_back(atoi(&operands[0]));
+			values.push_back(atoi(operands.c_str()));
 
 			return isDefined = true;
 		}
@@ -26,7 +26,7 @@ bool MultiIntArg::ParseLong(std::string_view arg) {
 	if (ParseLongOption(arg)) {
 
 		if (isInteger(operands)) {
-			values.push_back(atoi(&operands[0]));
+			values.push_back(atoi(operands.c_str()));
 
 			return isDefined = true;
 		}

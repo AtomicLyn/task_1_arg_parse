@@ -3,15 +3,15 @@
 using namespace args_parse;
 
 bool Arg::ParseOption(std::string_view argWithoutDash) {
-	if (argWithoutDash[0] == option) {
+	if (argWithoutDash.find(option) == 0) {
 
 		if (argWithoutDash.size() > 1) {
-			std::string_view argWithoutOption(&argWithoutDash[1]);
+			std::string_view argWithoutOption(argWithoutDash.data() + 1);
 
 			if (argWithoutOption[0] == '=') {
 
 				if (argWithoutOption.size() > 1) {
-					std::string_view argWithoutOptionAndEq(&argWithoutOption[1]);
+					std::string_view argWithoutOptionAndEq(argWithoutOption.data() + 1);
 
 					operands = argWithoutOptionAndEq;
 
@@ -40,7 +40,7 @@ bool Arg::ParseLongOption(std::string_view argWithoutDash) {
 			if (argWithoutOption[0] == '=') {
 
 				if (argWithoutOption.size() > 1) {
-					std::string_view argWithoutOptionAndEq(&argWithoutOption[1]);
+					std::string_view argWithoutOptionAndEq(argWithoutOption.data() + 1);
 
 					operands = argWithoutOptionAndEq;
 

@@ -11,7 +11,7 @@ std::string StringArg::GetValue() {
 
 bool StringArg::Parse(std::string_view arg) {
 	if (ParseOption(arg)) {
-		value = std::string(operands);
+		value = operands;
 
 		return isDefined = true;
 	}
@@ -21,7 +21,7 @@ bool StringArg::Parse(std::string_view arg) {
 
 bool StringArg::ParseLong(std::string_view arg) {
 	if (ParseLongOption(arg)) {
-		value = std::string(operands);
+		value = operands;
 
 		return isDefined = true;
 	}
