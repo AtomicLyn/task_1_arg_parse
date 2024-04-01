@@ -15,7 +15,7 @@ const bool ArgParser::ParseSubsequence(std::string_view argumentWithoutDash) {
 	for (auto currentOption = argumentWithoutOption.begin(); currentOption != argumentWithoutOption.end(); currentOption++) {
 		argumentDefined = false;
 
-		for (auto argument : arguments) {
+		for (const auto& argument : arguments) {
 
 			if (argument->Parse(&(*currentOption))) {
 				if (argument->GetType() != ArgumentType::Empty) return true;
@@ -49,9 +49,9 @@ bool ArgParser::Parse(const int argc, const char** argv) {
 			if (currentArgument[0] == '-' && currentArgument[1] == '-' && currentArgument.size() > 2) {
 				std::string_view argumentWithoutDash(&currentArgument[2]);
 
-				for (auto j = 0; j < arguments.size(); j++) {
+				for (const auto& argument : arguments) {
 
-					if (arguments[j]->ParseLong(argumentWithoutDash)) {
+					if (argument->ParseLong(argumentWithoutDash)) {
 						argumentDefined = true;
 						break;
 					}
@@ -60,7 +60,7 @@ bool ArgParser::Parse(const int argc, const char** argv) {
 			else if (currentArgument[0] == '-') {
 				std::string_view argumentWithoutDash(&currentArgument[1]);
 
-				for (auto argument : arguments) {
+				for (const auto& argument : arguments) {
 
 					if (argument->Parse(argumentWithoutDash)) {
 						argumentDefined = true;

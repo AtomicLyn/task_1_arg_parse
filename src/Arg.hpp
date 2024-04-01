@@ -2,6 +2,7 @@
 
 #include "ArgumentType.hpp"
 #include <string>
+#include <string_view>
 
 namespace args_parse {
 	
