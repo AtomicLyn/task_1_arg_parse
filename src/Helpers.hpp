@@ -4,9 +4,6 @@
 namespace args_parse {
 	inline bool isInteger(std::string_view s)
 	{
-		if (s.empty() || ((!isdigit(s[0])) && (s[0] != '-') && (s[0] != '+'))) return false;
-		char* p;
-		strtol(s.data(), &p, 10);
-		return (*p == 0);
+		return !s.empty() && std::find_if(s.begin(), s.end(), [](unsigned char c) { return !std::isdigit(c); }) == s.end();
 	}
 }

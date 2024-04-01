@@ -15,7 +15,7 @@ namespace args_parse {
 		char option;
 		const std::string longOption;
 		const std::string description;
-		std::string_view operands;
+		std::string operands;
 		bool isDefined = false;
 
 		bool ParseOption(std::string_view arg);
