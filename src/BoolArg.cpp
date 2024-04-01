@@ -3,9 +3,7 @@
 
 using namespace args_parse;
 
-BoolArg::BoolArg(const char option, std::string longOption, std::string description) : Arg(option, longOption, description) {
-	type = ArgumentType::Bool;
-};
+BoolArg::BoolArg(const char option, std::string longOption, std::string description) : Arg(ArgumentType::Bool, option, longOption, description) {};
 
 bool BoolArg::GetValue() {
 	return value;

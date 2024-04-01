@@ -50,7 +50,7 @@ bool Arg::ParseLongOption(std::string_view argWithoutDash) {
 
 				return false;
 			}
-			
+
 			operands = argWithoutOption;
 		}
 
@@ -60,9 +60,8 @@ bool Arg::ParseLongOption(std::string_view argWithoutDash) {
 	return false;
 }
 
-Arg::Arg(const char option, std::string longOption, std::string description) : longOption{ longOption }, description{ description }, operands("") {
-	this->option = option;
-}
+Arg::Arg(ArgumentType type, const char option, std::string longOption, std::string description) 
+	: type{ type }, option{ option }, longOption{ longOption }, description{ description },  operands("") { }
 
 Arg::~Arg() {}
 

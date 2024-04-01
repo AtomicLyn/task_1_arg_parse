@@ -3,9 +3,7 @@
 
 using namespace args_parse;
 
-MultiBoolArg::MultiBoolArg(const char option, std::string longOption, std::string description) : Arg(option, longOption, description) {
-	type = ArgumentType::MultiBool;
-};
+MultiBoolArg::MultiBoolArg(const char option, std::string longOption, std::string description) : Arg(ArgumentType::MultiBool, option, longOption, description) {};
 
 std::vector<bool> MultiBoolArg::GetValues() {
 	return values;

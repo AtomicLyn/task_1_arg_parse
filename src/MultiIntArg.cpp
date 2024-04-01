@@ -3,9 +3,7 @@
 
 using namespace args_parse;
 
-MultiIntArg::MultiIntArg(const char option, std::string longOption, std::string description) : Arg(option, longOption, description) {
-	type = ArgumentType::MultiInt;
-};
+MultiIntArg::MultiIntArg(const char option, std::string longOption, std::string description) : Arg(ArgumentType::MultiInt, option, longOption, description) {};
 
 std::vector<int> MultiIntArg::GetValues() {
 	return values;

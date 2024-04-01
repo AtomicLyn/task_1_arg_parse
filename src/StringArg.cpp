@@ -2,9 +2,7 @@
 
 using namespace args_parse;
 
-StringArg::StringArg(const char option, std::string longOption, std::string description) : Arg(option, longOption, description) {
-	type = ArgumentType::String;
-};
+StringArg::StringArg(const char option, std::string longOption, std::string description) : Arg(ArgumentType::String, option, longOption, description) {};
 
 std::string StringArg::GetValue() {
 	return value;

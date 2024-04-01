@@ -3,9 +3,7 @@
 
 using namespace args_parse;
 
-IntArg::IntArg(const char option, std::string longOption, std::string description) : Arg(option, longOption, description) {
-	type = ArgumentType::Int;
-};
+IntArg::IntArg(const char option, std::string longOption, std::string description) : Arg(ArgumentType::Int, option, longOption, description) {};
 
 int IntArg::GetValue() {
 	return value;

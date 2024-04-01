@@ -17,17 +17,17 @@ const bool ArgParser::ParseSubsequence(std::string_view argumentWithoutDash) {
 
 		for (auto argument : arguments) {
 
-			if (argument->GetType() == ArgumentType::Empty) {
-
-				if (argument->Parse(&(*currentOption))) {
-					argumentDefined = true;
-					break;
-				}
+			if (argument->Parse(&(*currentOption))) {
+				if (argument->GetType() != ArgumentType::Empty) return true;
+				argumentDefined = true;
+				break;
 			}
 		}
+
+		if (!argumentDefined) return false;
 	}
 
-	return argumentDefined;
+	return true;
 }
 
 bool ArgParser::Parse(const int argc, const char** argv) {
