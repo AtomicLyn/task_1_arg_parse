@@ -13,7 +13,7 @@ const bool BoolArg::Parse(std::string_view arg) {
 	if (ParseOption(arg)) {
 
 		if (isInteger(operands)) {
-			auto num = atoi(operands.c_str());
+			const auto num = atoi(operands.c_str());
 
 			if (num == 0 || num == 1) {
 				value = num == 1;
@@ -30,7 +30,7 @@ const bool BoolArg::ParseLong(std::string_view arg) {
 	if (ParseLongOption(arg)) {
 
 		if (isInteger(operands)) {
-			auto num = atoi(operands.c_str());
+			const auto num = atoi(operands.c_str());
 
 			if (num == 0 || num == 1) {
 				value = num == 1;
