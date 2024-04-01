@@ -2,7 +2,7 @@
 
 using namespace args_parse;
 
-bool Arg::ParseOption(std::string_view argWithoutDash) {
+const bool Arg::ParseOption(std::string_view argWithoutDash) {
 	if (argWithoutDash.find(option) == 0) {
 
 		if (argWithoutDash.size() > 1) {
@@ -30,7 +30,7 @@ bool Arg::ParseOption(std::string_view argWithoutDash) {
 	return false;
 }
 
-bool Arg::ParseLongOption(std::string_view argWithoutDash) {
+const bool Arg::ParseLongOption(std::string_view argWithoutDash) {
 	const auto longOptionSize = longOption.size();
 
 	if (argWithoutDash.find(longOption) == 0) {
@@ -65,23 +65,23 @@ Arg::Arg(ArgumentType type, const char option, std::string longOption, std::stri
 
 Arg::~Arg() {}
 
-const char Arg::GetOption() {
+const char Arg::GetOption() const {
 	return option;
 }
 
-const std::string Arg::GetLongOption() {
+const std::string Arg::GetLongOption() const {
 	return longOption;
 }
 
-const std::string Arg::GetDescription() {
+const std::string Arg::GetDescription() const {
 	return description;
 }
 
-const ArgumentType Arg::GetType() {
+const ArgumentType Arg::GetType() const {
 	return type;
 }
 
-const bool Arg::IsDefined() {
+const bool Arg::IsDefined() const {
 	return isDefined;
 }
 

@@ -4,12 +4,12 @@ using namespace args_parse;
 
 StringArg::StringArg(const char option, std::string longOption, std::string description) : Arg(ArgumentType::String, option, longOption, description) {};
 
-std::string StringArg::GetValue() {
+const std::string StringArg::GetValue() {
 	return value;
 }
 
 
-bool StringArg::Parse(std::string_view arg) {
+const bool StringArg::Parse(std::string_view arg) {
 	if (ParseOption(arg)) {
 		value = operands;
 
@@ -19,7 +19,7 @@ bool StringArg::Parse(std::string_view arg) {
 	return false;
 }
 
-bool StringArg::ParseLong(std::string_view arg) {
+const bool StringArg::ParseLong(std::string_view arg) {
 	if (ParseLongOption(arg)) {
 		value = operands;
 

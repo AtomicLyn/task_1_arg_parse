@@ -5,11 +5,11 @@ using namespace args_parse;
 
 IntArg::IntArg(const char option, std::string longOption, std::string description) : Arg(ArgumentType::Int, option, longOption, description) {};
 
-int IntArg::GetValue() {
+const int IntArg::GetValue() {
 	return value;
 }
 
-bool IntArg::Parse(std::string_view arg) {
+const bool IntArg::Parse(std::string_view arg) {
 	if (ParseOption(arg)) {
 
 		if (isInteger(operands)) {
@@ -22,7 +22,7 @@ bool IntArg::Parse(std::string_view arg) {
 	return false;
 }
 
-bool IntArg::ParseLong(std::string_view arg) {
+const bool IntArg::ParseLong(std::string_view arg) {
 	if (ParseLongOption(arg)) {
 
 		if (isInteger(operands)) {

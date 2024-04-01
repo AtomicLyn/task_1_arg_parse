@@ -17,9 +17,9 @@ const bool ArgParser::ParseSubsequence(std::string_view argumentWithoutDash) {
 
 		for (const auto& argument : arguments) {
 
-			if (argument->Parse(&(*currentOption))) {
-				if (argument->GetType() != ArgumentType::Empty) return true;
+			if (argument->Parse(&(*currentOption))) {	
 				argumentDefined = true;
+				if (argument->GetType() != ArgumentType::Empty) return argumentDefined;
 				break;
 			}
 		}
@@ -27,12 +27,12 @@ const bool ArgParser::ParseSubsequence(std::string_view argumentWithoutDash) {
 		if (!argumentDefined) return false;
 	}
 
-	return true;
+	return argumentDefined;
 }
 
-bool ArgParser::Parse(const int argc, const char** argv) {
+const bool ArgParser::Parse(const int argc, const char** argv) {
 	for (auto i = 1; i < argc; i++) {
-		std::string argument(argv[i]);
+		std::string argument{ argv[i] };
 
 		if (i < argc - 1) {
 			if (*argv[i + 1] != '-') {
@@ -41,13 +41,13 @@ bool ArgParser::Parse(const int argc, const char** argv) {
 			}
 		}
 
-		std::string_view currentArgument(argument);
+		std::string_view currentArgument{ argument };
 		bool argumentDefined = false;
 
 		if (currentArgument.size() > 1) {
 
 			if (currentArgument[0] == '-' && currentArgument[1] == '-' && currentArgument.size() > 2) {
-				std::string_view argumentWithoutDash(&currentArgument[2]);
+				std::string_view argumentWithoutDash{ currentArgument.data() + 2 };
 
 				for (const auto& argument : arguments) {
 
@@ -58,7 +58,7 @@ bool ArgParser::Parse(const int argc, const char** argv) {
 				}
 			}
 			else if (currentArgument[0] == '-') {
-				std::string_view argumentWithoutDash(&currentArgument[1]);
+				std::string_view argumentWithoutDash{ currentArgument.data() + 1 };
 
 				for (const auto& argument : arguments) {
 
@@ -67,6 +67,8 @@ bool ArgParser::Parse(const int argc, const char** argv) {
 
 						if (argument->GetType() == ArgumentType::Empty && argumentWithoutDash.size() > 1) {
 							argumentDefined = ParseSubsequence(argumentWithoutDash);
+
+							break;
 						}
 
 						break;

@@ -14,9 +14,9 @@ namespace args_parse {
 		std::vector<std::string> values;
 	public:
 		MultiStringArg(const char option, std::string longOption, std::string description = "");
-		std::vector<std::string> GetValues();
-		bool Parse(std::string_view option) override;
-		bool ParseLong(std::string_view option) override;
+		const std::vector<std::string> GetValues();
+		const bool Parse(std::string_view option) override;
+		const bool ParseLong(std::string_view option) override;
 	};
 
 }
