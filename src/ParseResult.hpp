@@ -4,12 +4,13 @@
 
 namespace args_parse {
 
+	/// @brief Структура для хранения сообщения о неудачном парсинге
 	struct Error {
-		std::string Message;
+		std::string Message; ///< Сообщение об ошибке
 	};
 
 	class [[nodiscard]] ParseResult {
-		std::optional<Error> error;
+		std::optional<Error> error; ///< Опциональное поле, хранящее ошибку в случае ошибки парсинга
 
 		ParseResult() = default;
 		ParseResult(Error err) : error{ std::move(err) } {};
@@ -18,8 +19,9 @@ namespace args_parse {
 		static ParseResult Ok() { return ParseResult{}; }
 		static ParseResult Fail(Error err) { return ParseResult{ err }; }
 
+		/// @brief Метод для определения результата парсинга
 		[[nodiscard]] const bool IsOk() const { return !error.has_value(); }
-		[[nodiscard]] const Error& GetError() const { return error.value(); }
+		[[nodiscard]] const Error& GetError() const { return error.value(); } ///< Геттер для Error, если результат содержал ошибку
 	};
 
 }

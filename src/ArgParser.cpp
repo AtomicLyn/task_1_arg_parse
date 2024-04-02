@@ -82,10 +82,10 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 					}
 				}
 			}
-			else return ParseResult::Fail(Error{ "The argument is set incorrectly" });
+			else return ParseResult::Fail(Error{ "The argument is set incorrectly: the character \'-\' is missing" });
 		}
 
-		if (!argumentDefined) return ParseResult::Fail(Error{"An argument from the list of existing ones was not found"});
+		if (!argumentDefined) return ParseResult::Fail(Error{"An argument with this value type was not found in the list of existing ones"});
 	}
 
 	return ParseResult::Ok();

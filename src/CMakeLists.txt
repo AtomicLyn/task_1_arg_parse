@@ -25,7 +25,7 @@ add_library(args_parse STATIC
 	Helpers.hpp
 )
 
-target_include_directories(args_parse PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/..")
+target_include_directories(args_parse PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(args_parse_demo main.cpp)
 
