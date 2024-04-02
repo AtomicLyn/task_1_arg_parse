@@ -10,12 +10,12 @@ namespace args_parse {
 
 	class StringArg : public Arg {
 	private:
-		std::string value = "";
+		std::string value = ""; ///< Поле, хранящее значение аргумента в случае успешного парсинга
 	public:
 		StringArg(const char option, std::string longOption, std::string description = "");
-		const std::string GetValue();
-		const bool Parse(std::string_view option) override;
-		const bool ParseLong(std::string_view option) override;
+		const std::string GetValue(); ///< Геттер для value
+		const bool Parse(std::string_view arg) override;
+		const bool ParseLong(std::string_view arg) override;
 	};
 
 }

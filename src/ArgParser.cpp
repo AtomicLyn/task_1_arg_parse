@@ -19,6 +19,7 @@ const bool ArgParser::ParseSubsequence(std::string_view argumentWithoutDash) {
 
 			if (argument->Parse(&(*currentOption))) {	
 				argumentDefined = true;
+				/// Последний аргумент - не EmptyArg
 				if (argument->GetType() != ArgumentType::Empty) return argumentDefined;
 				break;
 			}
@@ -34,18 +35,22 @@ const bool ArgParser::Parse(const int argc, const char** argv) {
 	for (auto i = 1; i < argc; i++) {
 		std::string argument{ argv[i] };
 
+		
 		if (i < argc - 1) {
+			/// Следующий элемент argv не содержит \'-\'
 			if (*argv[i + 1] != '-') {
 				argument += argv[i + 1];
 				i++;
 			}
 		}
 
-		std::string_view currentArgument{ argument };
+
+		std::string_view currentArgument{ argument }; ///< текущий аргумент с учетом склейки текущего и следующего
 		bool argumentDefined = false;
 
 		if (currentArgument.size() > 1) {
 
+			/// Аргумент начинается с \'--\'
 			if (currentArgument[0] == '-' && currentArgument[1] == '-' && currentArgument.size() > 2) {
 				std::string_view argumentWithoutDash{ currentArgument.data() + 2 };
 
@@ -57,6 +62,7 @@ const bool ArgParser::Parse(const int argc, const char** argv) {
 					}
 				}
 			}
+			/// Аргумент начинается с \'-\'
 			else if (currentArgument[0] == '-') {
 				std::string_view argumentWithoutDash{ currentArgument.data() + 1 };
 
@@ -65,6 +71,7 @@ const bool ArgParser::Parse(const int argc, const char** argv) {
 					if (argument->Parse(argumentWithoutDash)) {
 						argumentDefined = true;
 
+						/// Аргумент является EmptyArg и строка имеет еще символы
 						if (argument->GetType() == ArgumentType::Empty && argumentWithoutDash.size() > 1) {
 							argumentDefined = ParseSubsequence(argumentWithoutDash);
 

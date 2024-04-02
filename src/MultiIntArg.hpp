@@ -11,10 +11,12 @@ namespace args_parse {
 
 	class MultiIntArg : public Arg {
 	private:
+		/// Поле, хранящее значения аргумента в случае успешного парсинга 
+		/// @warning Может быть передано несколько одинаковых аргументов командной строки
 		std::vector<int> values;
 	public:
 		MultiIntArg(const char option, std::string longOption, std::string description = "");
-		const std::vector<int> GetValues();
+		const std::vector<int> GetValues(); ///< Геттер для values
 		const bool Parse(std::string_view arg) override;
 		const bool ParseLong(std::string_view arg) override;
 	};
