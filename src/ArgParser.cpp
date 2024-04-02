@@ -17,7 +17,7 @@ const bool ArgParser::ParseSubsequence(std::string_view argumentWithoutDash) {
 
 		for (const auto& argument : arguments) {
 
-			if (argument->Parse(&(*currentOption))) {
+			if (const auto result = argument->Parse(&(*currentOption)); result.IsOk()) {
 				argumentDefined = true;
 				/// Последний аргумент - не EmptyArg
 				if (argument->GetType() != ArgumentType::Empty) return argumentDefined;
@@ -56,7 +56,7 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 
 				for (const auto& argument : arguments) {
 
-					if (argument->ParseLong(argumentWithoutDash)) {
+					if (const auto result = argument->ParseLong(argumentWithoutDash); result.IsOk()) {
 						argumentDefined = true;
 						break;
 					}
@@ -68,7 +68,7 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 
 				for (const auto& argument : arguments) {
 
-					if (argument->Parse(argumentWithoutDash)) {
+					if (const auto result = argument->Parse(argumentWithoutDash); result.IsOk()) {
 						argumentDefined = true;
 
 						/// Аргумент является EmptyArg и строка еще имеет символы

@@ -17,6 +17,7 @@ namespace args_parse {
 
 	public:
 		static ParseResult Ok() { return ParseResult{}; }
+		static ParseResult Fail() { return ParseResult{ { } }; } ///< В случае, если аргумент не был найден
 		static ParseResult Fail(Error err) { return ParseResult{ err }; }
 
 		/// @brief Метод для определения результата парсинга

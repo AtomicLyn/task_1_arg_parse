@@ -4,21 +4,23 @@ using namespace args_parse;
 
 EmptyArg::EmptyArg(const char option, std::string longOption, std::string description) : Arg(ArgumentType::Empty, option, longOption, description) {};
 
-const bool EmptyArg::Parse(std::string_view arg) {
+const ParseResult EmptyArg::Parse(std::string_view arg) {
 
-	if (ParseOption(arg)) {
-		return isDefined = true;
+	if (const auto result = ParseOption(arg); result.IsOk()) {
+		isDefined = true;
+
+		return ParseResult::Ok();
 	}
-
-	return false;
+	else return result;
 }
 
-const bool EmptyArg::ParseLong(std::string_view arg) {
+const ParseResult EmptyArg::ParseLong(std::string_view arg) {
 
-	if (ParseLongOption(arg)) {
-		return isDefined = true;
+	if (const auto result = ParseLongOption(arg); result.IsOk()) {
+		isDefined = true;
+
+		return ParseResult::Ok();
 	}
-
-	return false;
+	else return result;
 }
 

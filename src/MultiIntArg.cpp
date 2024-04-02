@@ -13,28 +13,32 @@ const int MultiIntArg::GetCount() {
 	return values.size();
 }
 
-const bool MultiIntArg::Parse(std::string_view arg) {
-	if (ParseOption(arg)) {
+const ParseResult MultiIntArg::Parse(std::string_view arg) {
+	if (const auto result = ParseOption(arg); result.IsOk()) {
 
 		if (isInteger(operands)) {
 			values.push_back(atoi(operands.c_str()));
 
-			return isDefined = true;
-		}
-	}
+			isDefined = true;
 
-	return false;
+			return ParseResult::Ok();
+		}
+		else return ParseResult::Fail({ "In " + std::string(arg) + ": The option is found, but the value is not integer" });
+	}
+	else return result;
 }
 
-const bool MultiIntArg::ParseLong(std::string_view arg) {
-	if (ParseLongOption(arg)) {
+const ParseResult MultiIntArg::ParseLong(std::string_view arg) {
+	if (const auto result = ParseLongOption(arg); result.IsOk()) {
 
 		if (isInteger(operands)) {
 			values.push_back(atoi(operands.c_str()));
 
-			return isDefined = true;
-		}
-	}
+			isDefined = true;
 
-	return false;
+			return ParseResult::Ok();
+		}
+		else return ParseResult::Fail({ "In " + std::string(arg) + ": The option is found, but the value is not integer" });
+	}
+	else return result;
 }
