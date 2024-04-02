@@ -1,0 +1,6 @@
+E:/C++/Projects/task_1_arg_parse/task_1_arg_parse/out/build/x64-debug/CMakeFiles/edit_cache.dir
+E:/C++/Projects/task_1_arg_parse/task_1_arg_parse/out/build/x64-debug/CMakeFiles/rebuild_cache.dir
+E:/C++/Projects/task_1_arg_parse/task_1_arg_parse/out/build/x64-debug/src/CMakeFiles/args_parse.dir
+E:/C++/Projects/task_1_arg_parse/task_1_arg_parse/out/build/x64-debug/src/CMakeFiles/args_parse_demo.dir
+E:/C++/Projects/task_1_arg_parse/task_1_arg_parse/out/build/x64-debug/src/CMakeFiles/edit_cache.dir
+E:/C++/Projects/task_1_arg_parse/task_1_arg_parse/out/build/x64-debug/src/CMakeFiles/rebuild_cache.dir

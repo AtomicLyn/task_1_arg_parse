@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ArgumentType.hpp"
+#include "Result.hpp"
 #include <string>
 #include <string_view>
 
