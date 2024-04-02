@@ -34,6 +34,7 @@ const bool Arg::ParseLongOption(std::string_view argWithoutDash) {
 	const auto longOptionSize = longOption.size();
 
 	if (argWithoutDash.find(longOption) == 0) {
+
 		if (argWithoutDash.size() > longOptionSize) {
 			std::string_view argWithoutOption(&argWithoutDash[longOptionSize]);
 
@@ -45,7 +46,6 @@ const bool Arg::ParseLongOption(std::string_view argWithoutDash) {
 					operands = argWithoutOptionAndEq;
 
 					return true;
-
 				}
 
 				return false;

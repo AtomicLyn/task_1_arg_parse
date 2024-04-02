@@ -14,7 +14,8 @@ const bool EmptyArg::Parse(std::string_view arg) {
 }
 
 const bool EmptyArg::ParseLong(std::string_view arg) {
-	if (ParseOption(arg)) {
+
+	if (ParseLongOption(arg)) {
 		return isDefined = true;
 	}
 
