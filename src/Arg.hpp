@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ArgumentType.hpp"
-#include "Result.hpp"
+#include "ParseResult.hpp"
 #include <string>
 #include <string_view>
 

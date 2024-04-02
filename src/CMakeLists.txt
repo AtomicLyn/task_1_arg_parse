@@ -21,7 +21,7 @@ add_library(args_parse STATIC
 	MultiStringArg.hpp
 	StringArg.cpp
 	StringArg.hpp
-	
+	ParseResult.hpp
 	Helpers.hpp
 )
 
