@@ -9,6 +9,10 @@ const std::vector<int> MultiIntArg::GetValues() {
 	return values;
 }
 
+const int MultiIntArg::GetCount() {
+	return values.size();
+}
+
 const bool MultiIntArg::Parse(std::string_view arg) {
 	if (ParseOption(arg)) {
 

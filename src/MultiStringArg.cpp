@@ -8,6 +8,10 @@ const std::vector<std::string> MultiStringArg::GetValues() {
 	return values;
 }
 
+const int MultiStringArg::GetCount() {
+	return values.size();
+}
+
 const bool MultiStringArg::Parse(std::string_view arg) {
 	if (ParseOption(arg)) {
 		values.push_back(operands);

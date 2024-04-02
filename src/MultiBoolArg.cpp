@@ -9,6 +9,10 @@ const std::vector<bool> MultiBoolArg::GetValues() {
 	return values;
 }
 
+const int MultiBoolArg::GetCount() {
+	return values.size();
+}
+
 const bool MultiBoolArg::Parse(std::string_view arg) {
 	if (ParseOption(arg)) {
 

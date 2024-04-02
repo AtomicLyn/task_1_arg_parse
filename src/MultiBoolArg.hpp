@@ -17,6 +17,7 @@ namespace args_parse {
 	public:
 		MultiBoolArg(const char option, std::string longOption, std::string description = "");
 		const std::vector<bool> GetValues(); ///< Геттер для values
+		const int GetCount(); ///< Количество значений в values
 		const bool Parse(std::string_view arg) override;
 		const bool ParseLong(std::string_view arg) override;
 	};

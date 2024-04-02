@@ -17,6 +17,7 @@ namespace args_parse {
 	public:
 		MultiStringArg(const char option, std::string longOption, std::string description = "");
 		const std::vector<std::string> GetValues(); ///< Геттер для values
+		const int GetCount(); ///< Количество значений в values
 		const bool Parse(std::string_view arg) override;
 		const bool ParseLong(std::string_view arg) override;
 	};
