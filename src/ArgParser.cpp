@@ -31,13 +31,13 @@ const bool ArgParser::ParseSubsequence(std::string_view argumentWithoutDash) {
 	return argumentDefined;
 }
 
-const bool ArgParser::Parse(const int argc, const char** argv) {
+const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 	for (auto i = 1; i < argc; i++) {
 		std::string argument{ argv[i] };
 
 		
 		if (i < argc - 1) {
-			/// Следующий элемент argv не содержит \'-\'
+			/// Следующий элемент argv не содержит '-'
 			if (*argv[i + 1] != '-') {
 				argument += argv[i + 1];
 				i++;
@@ -50,7 +50,7 @@ const bool ArgParser::Parse(const int argc, const char** argv) {
 
 		if (currentArgument.size() > 1) {
 
-			/// Аргумент начинается с \'--\'
+			/// Аргумент начинается с "--"
 			if (currentArgument[0] == '-' && currentArgument[1] == '-' && currentArgument.size() > 2) {
 				std::string_view argumentWithoutDash{ currentArgument.data() + 2 };
 
@@ -62,7 +62,7 @@ const bool ArgParser::Parse(const int argc, const char** argv) {
 					}
 				}
 			}
-			/// Аргумент начинается с \'-\'
+			/// Аргумент начинается с '-'
 			else if (currentArgument[0] == '-') {
 				std::string_view argumentWithoutDash{ currentArgument.data() + 1 };
 
@@ -71,7 +71,7 @@ const bool ArgParser::Parse(const int argc, const char** argv) {
 					if (argument->Parse(argumentWithoutDash)) {
 						argumentDefined = true;
 
-						/// Аргумент является EmptyArg и строка имеет еще символы
+						/// Аргумент является EmptyArg и строка еще имеет символы
 						if (argument->GetType() == ArgumentType::Empty && argumentWithoutDash.size() > 1) {
 							argumentDefined = ParseSubsequence(argumentWithoutDash);
 
@@ -82,11 +82,13 @@ const bool ArgParser::Parse(const int argc, const char** argv) {
 					}
 				}
 			}
+			else return ParseResult::Fail(Error{ "The argument is set incorrectly" });
 		}
 
-		if (!argumentDefined) return false;
+		if (!argumentDefined) return ParseResult::Fail(Error{"An argument from the list of existing ones was not found"});
 	}
-	return true;
+
+	return ParseResult::Ok();
 }
 
 const std::string ArgParser::GetHelp() const {

@@ -44,7 +44,8 @@ int main(int argc, const char **argv)
     parser.Add(&authorizes);
 
     cout << "Try to parse: ";
-    if (parser.Parse(argc, argv)) {
+    const auto result = parser.Parse(argc, argv);
+    if (result.IsOk()) {
         cout << "True" << endl << endl;
 
         if (help.IsDefined()) {
@@ -94,7 +95,7 @@ int main(int argc, const char **argv)
         }
     }
     else
-        cout << "False" << endl;
+        cout << result.GetError().Message << endl;
 
     return 0;
 }

@@ -31,7 +31,7 @@ namespace args_parse {
 		* @warning Возвращает True , если парсинг всех аргументов из возможных arguments выполнен успешного
 		* @warning Возвращает False , если во время парсинга одного из аргументов возникла ошибка
 		*/
-		[[nodiscard]] const bool Parse(const int argc, const char** argv);
+		[[nodiscard]] const ParseResult Parse(const int argc, const char** argv);
 		const std::string GetHelp() const; ///< Метод для получения всей доступной информации о возможных аргументах
 	};
 }
