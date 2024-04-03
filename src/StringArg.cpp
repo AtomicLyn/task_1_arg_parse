@@ -25,17 +25,17 @@ const ParseResult StringArg::Parse(std::string_view arg) {
 	else return result;
 }
 
-const ParseResult StringArg::ParseLong(std::string_view arg) {
-	if (const auto result = ParseLongOption(arg); result.IsOk()) {
+const std::pair<ParseResult, int> StringArg::ParseLong(std::string_view arg) {
+	if (const auto result = ParseLongOption(arg); result.first.IsOk()) {
 		
 		if (const auto valResult = (*validator)->Check(operands); valResult.IsOk()) {
 			value = operands;
 
 			isDefined = true;
 
-			return ParseResult::Ok();
+			return std::make_pair(ParseResult::Ok(), result.second);
 		}
-		else return valResult;
+		else return std::make_pair(valResult, result.second);
 	}
 	else return result;
 }

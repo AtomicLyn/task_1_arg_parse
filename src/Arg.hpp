@@ -4,6 +4,7 @@
 #include "ParseResult.hpp"
 #include <string>
 #include <string_view>
+#include <utility>
 
 namespace args_parse {
 	
@@ -31,11 +32,13 @@ namespace args_parse {
 		* @brief Метод предварительного парсинга длинной опции аргумента
 		* Выполняет парсинг полного названия аргумента и сохраняет остраток строки в operands
 		* @param[in] argWithoutDash входной аргумент из строки
+		* Возвращает пару значений с результатом парсинга и количеством совпавших символов в случае успешного парсинга
 		*/
-		[[nodiscard]] const ParseResult ParseLongOption(std::string_view argWithoutDash);
+		[[nodiscard]] const std::pair<ParseResult, int> ParseLongOption(std::string_view argWithoutDash);
 	public:
 		Arg(ArgumentType type, const char option, const std::string longOption,  std::string description = "");
 		virtual ~Arg();
+		void SetDefined(const bool defined);
 		const char GetOption() const; ///< Геттер для option
 		const std::string GetLongOption() const; ///< Геттер для longOption
 		const std::string GetDescription() const; ///< Геттер для description
@@ -52,7 +55,7 @@ namespace args_parse {
 		* Выполняет парсинг полного названия аргумента, после чего определяет значение из operands, соответствующее типу аргумента
 		* @param[in] arg входной аргумент из строки
 		*/
-		[[nodiscard]] virtual const ParseResult ParseLong(std::string_view arg) = 0;
+		[[nodiscard]] virtual const std::pair<ParseResult, int> ParseLong(std::string_view arg) = 0;
 		
 	};
 

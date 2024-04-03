@@ -1,6 +1,7 @@
 #include "ArgParser.hpp"
 #include "Arg.hpp"
 #include <string>
+#include <algorithm>
 
 using namespace args_parse;
 
@@ -41,6 +42,7 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 		if (i < argc - 1) {
 			/// Следующий элемент argv не содержит '-'
 			if (*argv[i + 1] != '-') {
+				argument += '=';
 				argument += argv[i + 1];
 				i++;
 			}
@@ -55,14 +57,20 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 			if (currentArgument[0] == '-' && currentArgument[1] == '-' && currentArgument.size() > 2) {
 				std::string_view argumentWithoutDash{ currentArgument.data() + 2 };
 
-				for (const auto& argument : arguments) {
+				/// Обработка частично встретившихся названий аргументов
+				std::vector<std::pair<std::shared_ptr<Arg*>, int>> argMatches;
 
-					if (const auto result = (*argument)->ParseLong(argumentWithoutDash); result.IsOk()) {
+				for (const auto& argument : arguments) {
+					if (const auto result = (*argument)->ParseLong(argumentWithoutDash); result.first.IsOk()) {
+						argMatches.push_back(std::pair(argument, result.second));
+
 						argumentDefined = true;
-						break;
 					}
-					else if (!result.GetError().Message.empty()) return result;
+					else if (!result.first.GetError().Message.empty()) return result.first;
 				}
+
+				/// Найдено несколько частичных совпадений
+				if (argMatches.size() > 1) return ParseResult::Fail({ "In " + std::string(currentArgument) + ": Several definitions of the argument have been found" });
 			}
 			/// Аргумент начинается с '-'
 			else if (currentArgument[0] == '-') {
@@ -90,10 +98,10 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 					else if (!result.GetError().Message.empty()) return result;
 				}
 			}
-			else return ParseResult::Fail(Error{ "In " + std::string(currentArgument) + ": The argument is set incorrectly: the character \'-\' is missing" });
+			else return ParseResult::Fail({ "In " + std::string(currentArgument) + ": The argument is set incorrectly: the character \'-\' is missing" });
 		}
 
-		if (!argumentDefined) return ParseResult::Fail(Error{ "In " + std::string(currentArgument) + ": An argument with this value type was not found in the list of existing ones"});
+		if (!argumentDefined) return ParseResult::Fail({ "In " + std::string(currentArgument) + ": An argument with this value type was not found in the list of existing ones" });
 	}
 
 	return ParseResult::Ok();

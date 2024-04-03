@@ -5,6 +5,7 @@ using namespace args_parse;
 const ParseResult Arg::ParseOption(std::string_view argWithoutDash) {
 	if (argWithoutDash.find(option) == 0) {
 
+		/// Парсинг операндов
 		if (argWithoutDash.size() > 1) {
 			std::string_view argWithoutOption(argWithoutDash.data() + 1);
 
@@ -14,14 +15,12 @@ const ParseResult Arg::ParseOption(std::string_view argWithoutDash) {
 					std::string_view argWithoutOptionAndEq(argWithoutOption.data() + 1);
 
 					operands = argWithoutOptionAndEq;
-
-					return ParseResult::Ok();
 				}
+				else return ParseResult::Fail({ "In " + std::string(argWithoutDash) + ": Symbol '='  was found, but there is no value" });
 
-				return ParseResult::Fail({ "In " + std::string(argWithoutDash) + ": Symbol '='  was found, but there is no value"});
 			}
+			else operands = argWithoutOption;
 
-			operands = argWithoutOption;
 		}
 
 		return ParseResult::Ok();
@@ -30,13 +29,20 @@ const ParseResult Arg::ParseOption(std::string_view argWithoutDash) {
 	return ParseResult::Fail();
 }
 
-const ParseResult Arg::ParseLongOption(std::string_view argWithoutDash) {
+const std::pair<ParseResult, int> Arg::ParseLongOption(std::string_view argWithoutDash) {
 	const auto longOptionSize = longOption.size();
 
-	if (argWithoutDash.find(longOption) == 0) {
+	if (argWithoutDash.find(longOption[0]) == 0) {
+		auto matches = 1;
 
-		if (argWithoutDash.size() > longOptionSize) {
-			std::string_view argWithoutOption(&argWithoutDash[longOptionSize]);
+		/// Поиск количества совпавших символов
+		for (; matches < longOption.size() && matches < argWithoutDash.size(); matches++) {
+			if (argWithoutDash[matches] != longOption[matches]) break;
+		}
+
+		/// Парсинг операндов
+		if (argWithoutDash.size() > matches) {
+			std::string_view argWithoutOption(argWithoutDash.data() + matches);
 
 			if (argWithoutOption[0] == '=') {
 
@@ -44,26 +50,28 @@ const ParseResult Arg::ParseLongOption(std::string_view argWithoutDash) {
 					std::string_view argWithoutOptionAndEq(argWithoutOption.data() + 1);
 
 					operands = argWithoutOptionAndEq;
-
-					return ParseResult::Ok();
 				}
+				else return std::make_pair(ParseResult::Fail({ "In " + std::string(argWithoutDash) + ": Symbol '='  was found, but there is no value" }), 0);
 
-				return ParseResult::Fail({ "In " + std::string(argWithoutDash) + ": Symbol '='  was found, but there is no value" });
 			}
+			else operands = argWithoutOption;
 
-			operands = argWithoutOption;
 		}
 
-		return ParseResult::Ok();
+		return std::make_pair(ParseResult::Ok(), matches);
 	}
 
-	return ParseResult::Fail();
+	return std::make_pair(ParseResult::Fail(), 0);
 }
 
 Arg::Arg(ArgumentType type, const char option, std::string longOption, std::string description)
 	: type{ type }, option{ option }, longOption{ longOption }, description{ description }, operands("") { }
 
 Arg::~Arg() {}
+
+void Arg::SetDefined(const bool defined) {
+	isDefined = defined;
+}
 
 const char Arg::GetOption() const {
 	return option;

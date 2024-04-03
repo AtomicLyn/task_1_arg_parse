@@ -22,7 +22,7 @@ TEST_CASE("EmptyArg", "[all]")
 		auto longStr = "check";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();	
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -35,7 +35,7 @@ TEST_CASE("EmptyArg", "[all]")
 		auto longStr = "aaaa";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -48,7 +48,7 @@ TEST_CASE("EmptyArg", "[all]")
 		auto longStr = "check1";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -61,7 +61,7 @@ TEST_CASE("EmptyArg", "[all]")
 		auto longStr = "check=";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -74,7 +74,7 @@ TEST_CASE("EmptyArg", "[all]")
 		auto longStr = "check=1";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -94,7 +94,7 @@ TEST_CASE("BoolArg", "[all]")
 		auto longStr = "check1";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -107,7 +107,7 @@ TEST_CASE("BoolArg", "[all]")
 		auto longStr = "aaaa1";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -120,7 +120,7 @@ TEST_CASE("BoolArg", "[all]")
 		auto longStr = "check2";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -133,7 +133,7 @@ TEST_CASE("BoolArg", "[all]")
 		auto longStr = "check=";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -146,7 +146,7 @@ TEST_CASE("BoolArg", "[all]")
 		auto longStr = "check=1";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -166,7 +166,7 @@ TEST_CASE("IntArg", "[all]")
 		auto longStr = "check1";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -179,7 +179,7 @@ TEST_CASE("IntArg", "[all]")
 		auto longStr = "aaaa1";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -192,7 +192,7 @@ TEST_CASE("IntArg", "[all]")
 		auto longStr = "checkfile.txt";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -205,7 +205,7 @@ TEST_CASE("IntArg", "[all]")
 		auto longStr = "check=";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -218,7 +218,7 @@ TEST_CASE("IntArg", "[all]")
 		auto longStr = "check=1";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -238,7 +238,7 @@ TEST_CASE("StringArg", "[all]")
 		auto longStr = "check";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -251,7 +251,7 @@ TEST_CASE("StringArg", "[all]")
 		auto longStr = "aaaa";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -264,7 +264,7 @@ TEST_CASE("StringArg", "[all]")
 		auto longStr = "check=";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -277,7 +277,7 @@ TEST_CASE("StringArg", "[all]")
 		auto longStr = "check=file.txt";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -297,7 +297,7 @@ TEST_CASE("MultiBoolArg", "[all]")
 		auto longStr = "check1";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -311,7 +311,7 @@ TEST_CASE("MultiBoolArg", "[all]")
 		auto longStr = "aaaa1";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();\
+		auto longResult = arg.ParseLong(longStr).first.IsOk();\
 			std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -325,7 +325,7 @@ TEST_CASE("MultiBoolArg", "[all]")
 		auto longStr = "check2";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -339,7 +339,7 @@ TEST_CASE("MultiBoolArg", "[all]")
 		auto longStr = "check=";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -353,7 +353,7 @@ TEST_CASE("MultiBoolArg", "[all]")
 		auto longStr = "check=1";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 
 		REQUIRE(shortResult);
 		REQUIRE(longResult);
@@ -372,7 +372,7 @@ TEST_CASE("MultiIntArg", "[all]")
 		auto longStr = "check1";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -386,7 +386,7 @@ TEST_CASE("MultiIntArg", "[all]")
 		auto longStr = "aaaa1";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -399,7 +399,7 @@ TEST_CASE("MultiIntArg", "[all]")
 		auto longStr = "checkfile.txt";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -412,7 +412,7 @@ TEST_CASE("MultiIntArg", "[all]")
 		auto longStr = "check=";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -425,7 +425,7 @@ TEST_CASE("MultiIntArg", "[all]")
 		auto longStr = "check=1";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -447,7 +447,7 @@ TEST_CASE("MultiStringArg", "[all]")
 		auto longStr = "check";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -461,7 +461,7 @@ TEST_CASE("MultiStringArg", "[all]")
 		auto longStr = "aaaa";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -475,7 +475,7 @@ TEST_CASE("MultiStringArg", "[all]")
 		auto longStr = "check=";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 
@@ -489,7 +489,7 @@ TEST_CASE("MultiStringArg", "[all]")
 		auto longStr = "check=file.txt";
 
 		auto shortResult = arg.Parse(shortStr).IsOk();
-		auto longResult = arg.ParseLong(longStr).IsOk();
+		auto longResult = arg.ParseLong(longStr).first.IsOk();
 		std::cout << std::boolalpha << shortResult << std::endl;
 		std::cout << std::boolalpha << longResult << std::endl;
 

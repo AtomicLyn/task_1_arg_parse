@@ -12,7 +12,6 @@ namespace args_parse {
 	*/
 
 	class MultiIntArg : public Arg {
-	private:
 		const std::unique_ptr<IntValidator*> validator;
 		/// Поле, хранящее значения аргумента в случае успешного парсинга 
 		/// @warning Может быть передано несколько одинаковых аргументов командной строки
@@ -22,7 +21,7 @@ namespace args_parse {
 		const std::vector<int> GetValues(); ///< Геттер для values
 		const int GetCount(); ///< Количество значений в values
 		const ParseResult Parse(std::string_view arg) override;
-		const ParseResult ParseLong(std::string_view arg) override;
+		const std::pair<ParseResult, int> ParseLong(std::string_view arg) override;
 	};
 
 }

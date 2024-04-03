@@ -33,8 +33,8 @@ const ParseResult MultiBoolArg::Parse(std::string_view arg) {
 	else return result;
 }
 
-const ParseResult MultiBoolArg::ParseLong(std::string_view arg) {
-	if (const auto result = ParseLongOption(arg); result.IsOk()) {
+const std::pair<ParseResult, int> MultiBoolArg::ParseLong(std::string_view arg) {
+	if (const auto result = ParseLongOption(arg); result.first.IsOk()) {
 
 		if (isInteger(operands)) {
 			const auto num = atoi(operands.c_str());
@@ -44,11 +44,11 @@ const ParseResult MultiBoolArg::ParseLong(std::string_view arg) {
 
 				isDefined = true;
 
-				return ParseResult::Ok();
+				return std::make_pair(ParseResult::Ok(), result.second);
 			}
-			else return valResult;
+			else return std::make_pair(valResult, result.second);
 		}
-		else return ParseResult::Fail({ "In " + std::string(arg) + ": The option is found, but the value is not integer" });
+		else return std::make_pair(ParseResult::Fail({ "In " + std::string(arg) + ": The option is found, but the value is not integer" }), result.second);
 	}
 	else return result;
 }

@@ -28,16 +28,16 @@ const ParseResult MultiStringArg::Parse(std::string_view arg) {
 	else return result;
 }
 
-const ParseResult MultiStringArg::ParseLong(std::string_view arg) {
-	if (const auto result = ParseLongOption(arg); result.IsOk()) {
+const std::pair<ParseResult, int> MultiStringArg::ParseLong(std::string_view arg) {
+	if (const auto result = ParseLongOption(arg); result.first.IsOk()) {
 		if (const auto valResult = (*validator)->Check(operands); valResult.IsOk()) {
 			values.push_back(operands);
 
 			isDefined = true;
 
-			return ParseResult::Ok();
+			return std::make_pair(ParseResult::Ok(), result.second);
 		}
-		else return valResult;
+		else return std::make_pair(valResult, result.second);
 	}
 	else return result;
 }

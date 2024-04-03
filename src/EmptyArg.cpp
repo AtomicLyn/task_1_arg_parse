@@ -14,12 +14,12 @@ const ParseResult EmptyArg::Parse(std::string_view arg) {
 	else return result;
 }
 
-const ParseResult EmptyArg::ParseLong(std::string_view arg) {
+const std::pair<ParseResult, int> EmptyArg::ParseLong(std::string_view arg) {
 
-	if (const auto result = ParseLongOption(arg); result.IsOk()) {
+	if (const auto result = ParseLongOption(arg); result.first.IsOk()) {
 		isDefined = true;
 
-		return ParseResult::Ok();
+		return std::make_pair(ParseResult::Ok(), result.second);
 	}
 	else return result;
 }

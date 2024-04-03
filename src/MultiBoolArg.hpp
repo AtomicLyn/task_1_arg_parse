@@ -10,7 +10,6 @@ namespace args_parse {
 	* Аргумент содержит опцию и набор булевых операндов
 	*/
 	class MultiBoolArg : public Arg {
-	private:
 		const BoolValidator validator;
 		/// Поле, хранящее значения аргумента в случае успешного парсинга 
 		/// @warning Может быть передано несколько одинаковых аргументов командной строки
@@ -20,7 +19,7 @@ namespace args_parse {
 		const std::vector<bool> GetValues(); ///< Геттер для values
 		const int GetCount(); ///< Количество значений в values
 		const ParseResult Parse(std::string_view arg) override;
-		const ParseResult ParseLong(std::string_view arg) override;
+		const std::pair<ParseResult, int> ParseLong(std::string_view arg) override;
 	};
 
 }

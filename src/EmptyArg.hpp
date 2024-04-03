@@ -13,7 +13,7 @@ namespace args_parse {
 	public:
 		EmptyArg(const char option, std::string longOption, std::string description = "");
 		const ParseResult Parse(std::string_view arg) override;
-		const ParseResult ParseLong(std::string_view arg) override;
+		const std::pair<ParseResult, int> ParseLong(std::string_view arg) override;
 	};
 
 }
