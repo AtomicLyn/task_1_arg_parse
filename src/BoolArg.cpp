@@ -9,8 +9,8 @@ const bool BoolArg::GetValue() {
 	return value;
 }
 
-const bool BoolArg::Parse(std::string_view arg) {
-	if (ParseOption(arg)) {
+const ParseResult BoolArg::Parse(std::string_view arg) {
+	if (const auto result = ParseOption(arg); result.IsOk()) {
 
 		if (isInteger(operands)) {
 			const auto num = atoi(operands.c_str());
@@ -18,16 +18,19 @@ const bool BoolArg::Parse(std::string_view arg) {
 			if (num == 0 || num == 1) {
 				value = num == 1;
 
-				return isDefined = true;
-			}
-		}
-	}
+				isDefined = true;
 
-	return false;
+				return ParseResult::Ok();
+			}
+			else return ParseResult::Fail({ "In " + std::string(arg) + ": The option is found, but the value is not bool (0 or 1)" });
+		}
+		else return ParseResult::Fail({ "In " + std::string(arg) + ": The option is found, but the value is not integer" });
+	}
+	else return result;
 }
 
-const bool BoolArg::ParseLong(std::string_view arg) {
-	if (ParseLongOption(arg)) {
+const ParseResult BoolArg::ParseLong(std::string_view arg) {
+	if (const auto result = ParseLongOption(arg); result.IsOk()) {
 
 		if (isInteger(operands)) {
 			const auto num = atoi(operands.c_str());
@@ -35,10 +38,13 @@ const bool BoolArg::ParseLong(std::string_view arg) {
 			if (num == 0 || num == 1) {
 				value = num == 1;
 
-				return isDefined = true;
-			}
-		}
-	}
+				isDefined = true;
 
-	return false;
+				return ParseResult::Ok();
+			}
+			else return ParseResult::Fail({ "In " + std::string(arg) + ": The option is found, but the value is not bool (0 or 1)" });
+		}
+		else return ParseResult::Fail({ "In " + std::string(arg) + ": The option is found, but the value is not integer" });
+	}
+	else return result;
 }

@@ -12,8 +12,8 @@ namespace args_parse {
 	class EmptyArg : public Arg {
 	public:
 		EmptyArg(const char option, std::string longOption, std::string description = "");
-		const bool Parse(std::string_view arg) override;
-		const bool ParseLong(std::string_view arg) override;
+		const ParseResult Parse(std::string_view arg) override;
+		const ParseResult ParseLong(std::string_view arg) override;
 	};
 
 }

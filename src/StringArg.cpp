@@ -9,23 +9,25 @@ const std::string StringArg::GetValue() {
 }
 
 
-const bool StringArg::Parse(std::string_view arg) {
-	if (ParseOption(arg)) {
+const ParseResult StringArg::Parse(std::string_view arg) {
+	if (const auto result = ParseOption(arg); result.IsOk()) {
 		value = operands;
 
-		return isDefined = true;
-	}
+		isDefined = true;
 
-	return false;
+		return ParseResult::Ok();
+	}
+	else return result;
 }
 
-const bool StringArg::ParseLong(std::string_view arg) {
-	if (ParseLongOption(arg)) {
+const ParseResult StringArg::ParseLong(std::string_view arg) {
+	if (const auto result = ParseLongOption(arg); result.IsOk()) {
 		value = operands;
 
-		return isDefined = true;
-	}
+		isDefined = true;
 
-	return false;
+		return ParseResult::Ok();
+	}
+	else return result;
 }
 

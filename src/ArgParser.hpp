@@ -21,7 +21,7 @@ namespace args_parse {
 		* -abc 10
 		* @endcode
 		*/
-		[[nodiscard]] const bool ParseSubsequence(std::string_view argumentWithoutDash);
+		[[nodiscard]] const ParseResult ParseSubsequence(std::string_view argumentWithoutDash);
 	public:
 		void Add(Arg* argument); ///< Метод для добавления возможного аргумента командной строки
 		/**

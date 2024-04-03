@@ -2,7 +2,7 @@
 
 using namespace args_parse;
 
-const bool Arg::ParseOption(std::string_view argWithoutDash) {
+const ParseResult Arg::ParseOption(std::string_view argWithoutDash) {
 	if (argWithoutDash.find(option) == 0) {
 
 		if (argWithoutDash.size() > 1) {
@@ -15,22 +15,22 @@ const bool Arg::ParseOption(std::string_view argWithoutDash) {
 
 					operands = argWithoutOptionAndEq;
 
-					return true;
+					return ParseResult::Ok();
 				}
 
-				return false;
+				return ParseResult::Fail({ "In " + std::string(argWithoutDash) + ": Symbol '='  was found, but there is no value"});
 			}
 
 			operands = argWithoutOption;
 		}
 
-		return true;
+		return ParseResult::Ok();
 	}
 
-	return false;
+	return ParseResult::Fail();
 }
 
-const bool Arg::ParseLongOption(std::string_view argWithoutDash) {
+const ParseResult Arg::ParseLongOption(std::string_view argWithoutDash) {
 	const auto longOptionSize = longOption.size();
 
 	if (argWithoutDash.find(longOption) == 0) {
@@ -45,23 +45,23 @@ const bool Arg::ParseLongOption(std::string_view argWithoutDash) {
 
 					operands = argWithoutOptionAndEq;
 
-					return true;
+					return ParseResult::Ok();
 				}
 
-				return false;
+				return ParseResult::Fail({ "In " + std::string(argWithoutDash) + ": Symbol '='  was found, but there is no value" });
 			}
 
 			operands = argWithoutOption;
 		}
 
-		return true;
+		return ParseResult::Ok();
 	}
 
-	return false;
+	return ParseResult::Fail();
 }
 
-Arg::Arg(ArgumentType type, const char option, std::string longOption, std::string description) 
-	: type{ type }, option{ option }, longOption{ longOption }, description{ description },  operands("") { }
+Arg::Arg(ArgumentType type, const char option, std::string longOption, std::string description)
+	: type{ type }, option{ option }, longOption{ longOption }, description{ description }, operands("") { }
 
 Arg::~Arg() {}
 

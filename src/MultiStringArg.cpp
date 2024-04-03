@@ -12,23 +12,25 @@ const int MultiStringArg::GetCount() {
 	return values.size();
 }
 
-const bool MultiStringArg::Parse(std::string_view arg) {
-	if (ParseOption(arg)) {
+const ParseResult MultiStringArg::Parse(std::string_view arg) {
+	if (const auto result = ParseOption(arg); result.IsOk()) {
 		values.push_back(operands);
 
-		return isDefined = true;
-	}
+		isDefined = true;
 
-	return false;
+		return ParseResult::Ok();
+	}
+	else return result;
 }
 
-const bool MultiStringArg::ParseLong(std::string_view arg) {
-	if (ParseLongOption(arg)) {
+const ParseResult MultiStringArg::ParseLong(std::string_view arg) {
+	if (const auto result = ParseLongOption(arg); result.IsOk()) {
 		values.push_back(operands);
 
-		return isDefined = true;
-	}
+		isDefined = true;
 
-	return false;
+		return ParseResult::Ok();
+	}
+	else return result;
 }
 

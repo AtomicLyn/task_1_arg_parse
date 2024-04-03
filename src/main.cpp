@@ -43,7 +43,7 @@ int main(int argc, const char **argv)
     parser.Add(&codes);
     parser.Add(&authorizes);
 
-    cout << "Try to parse: ";
+    cout << "Try to parse: " << std::endl;
     const auto result = parser.Parse(argc, argv);
     if (result.IsOk()) {
         cout << "True" << endl << endl;
