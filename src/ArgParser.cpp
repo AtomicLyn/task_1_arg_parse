@@ -8,7 +8,7 @@ void ArgParser::Add(Arg* argument) {
 	arguments.push_back(argument);
 }
 
-const bool ArgParser::ParseSubsequence(std::string_view argumentWithoutDash) {
+const ParseResult ArgParser::ParseSubsequence(std::string_view argumentWithoutDash) {
 	std::string_view argumentWithoutOption(&argumentWithoutDash[1]);
 	bool argumentDefined = false;
 
@@ -19,16 +19,18 @@ const bool ArgParser::ParseSubsequence(std::string_view argumentWithoutDash) {
 
 			if (const auto result = argument->Parse(&(*currentOption)); result.IsOk()) {
 				argumentDefined = true;
+
 				/// Последний аргумент - не EmptyArg
-				if (argument->GetType() != ArgumentType::Empty) return argumentDefined;
+				if (argument->GetType() != ArgumentType::Empty) return ParseResult::Ok();
 				break;
 			}
+			else if (!result.GetError().Message.empty()) return result;
 		}
 
-		if (!argumentDefined) return false;
+		if (!argumentDefined) return ParseResult::Fail();
 	}
 
-	return argumentDefined;
+	return ParseResult::Ok();
 }
 
 const ParseResult ArgParser::Parse(const int argc, const char** argv) {
@@ -43,7 +45,6 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 				i++;
 			}
 		}
-
 
 		std::string_view currentArgument{ argument }; ///< текущий аргумент с учетом склейки текущего и следующего
 		bool argumentDefined = false;
@@ -60,6 +61,7 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 						argumentDefined = true;
 						break;
 					}
+					else if (!result.GetError().Message.empty()) return result;
 				}
 			}
 			/// Аргумент начинается с '-'
@@ -73,19 +75,25 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 
 						/// Аргумент является EmptyArg и строка еще имеет символы
 						if (argument->GetType() == ArgumentType::Empty && argumentWithoutDash.size() > 1) {
-							argumentDefined = ParseSubsequence(argumentWithoutDash);
+							argumentDefined = false;
+
+							if (const auto subResult = ParseSubsequence(argumentWithoutDash); subResult.IsOk()) {
+								argumentDefined = true;
+							}
+							else if (!subResult.GetError().Message.empty()) return subResult;
 
 							break;
 						}
 
 						break;
 					}
+					else if (!result.GetError().Message.empty()) return result;
 				}
 			}
-			else return ParseResult::Fail(Error{ "The argument is set incorrectly: the character \'-\' is missing" });
+			else return ParseResult::Fail(Error{ "In " + std::string(currentArgument) + ": The argument is set incorrectly: the character \'-\' is missing" });
 		}
 
-		if (!argumentDefined) return ParseResult::Fail(Error{ "An argument with this value type was not found in the list of existing ones" });
+		if (!argumentDefined) return ParseResult::Fail(Error{ "In " + std::string(currentArgument) + ": An argument with this value type was not found in the list of existing ones"});
 	}
 
 	return ParseResult::Ok();

@@ -20,13 +20,13 @@ const ParseResult BoolArg::Parse(std::string_view arg) {
 
 				isDefined = true;
 
-				return result;
+				return ParseResult::Ok();
 			}
-			else ParseResult::Fail({ "In " + std::string(arg) + ": The option is found, but the value is not bool (0 or 1)" });
+			else return ParseResult::Fail({ "In " + std::string(arg) + ": The option is found, but the value is not bool (0 or 1)" });
 		}
 		else return ParseResult::Fail({ "In " + std::string(arg) + ": The option is found, but the value is not integer" });
 	}
-	else return ParseResult::Ok();
+	else return result;
 }
 
 const ParseResult BoolArg::ParseLong(std::string_view arg) {
@@ -42,9 +42,9 @@ const ParseResult BoolArg::ParseLong(std::string_view arg) {
 
 				return ParseResult::Ok();
 			}
-			else ParseResult::Fail({ "In " + std::string(arg) + ": The option is found, but the value is not bool (0 or 1)" });
+			else return ParseResult::Fail({ "In " + std::string(arg) + ": The option is found, but the value is not bool (0 or 1)" });
 		}
 		else return ParseResult::Fail({ "In " + std::string(arg) + ": The option is found, but the value is not integer" });
 	}
-	else return ParseResult::Ok();
+	else return result;
 }
