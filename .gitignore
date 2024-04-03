@@ -1,5 +1,7 @@
 /.vs
-/out
 /build
+/html
+/latex
+/out
 
 CMakeUserPresets.json

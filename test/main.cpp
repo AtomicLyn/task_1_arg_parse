@@ -157,7 +157,7 @@ TEST_CASE("BoolArg", "[all]")
 
 TEST_CASE("IntArg", "[all]")
 {
-	IntArg arg('c', "check");
+	IntArg arg(new IntInRangeValidator(0, 10), 'c', "check");
 
 	std::cout << "IntArg" << std::endl;
 
@@ -229,7 +229,7 @@ TEST_CASE("IntArg", "[all]")
 
 TEST_CASE("StringArg", "[all]")
 {
-	StringArg arg('c', "check");
+	StringArg arg(new StringFileNameValidator(), 'c', "check");
 
 	std::cout << "StringArg" << std::endl;
 
@@ -363,7 +363,7 @@ TEST_CASE("MultiBoolArg", "[all]")
 
 TEST_CASE("MultiIntArg", "[all]")
 {
-	MultiIntArg arg('c', "check");
+	MultiIntArg arg(new IntInRangeValidator(0, 10), 'c', "check");
 
 	std::cout << "MultiIntArg" << std::endl;
 
@@ -438,7 +438,7 @@ TEST_CASE("MultiIntArg", "[all]")
 
 TEST_CASE("MultiStringArg", "[all]")
 {
-	MultiStringArg arg('c', "check");
+	MultiStringArg arg(new StringFileNameValidator(), 'c', "check");
 
 	std::cout << "MultiStringArg" << std::endl;
 

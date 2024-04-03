@@ -2,7 +2,8 @@
 
 using namespace args_parse;
 
-StringArg::StringArg(const char option, std::string longOption, std::string description) : Arg(ArgumentType::String, option, longOption, description) {};
+StringArg::StringArg(StringValidator* validator, const char option, std::string longOption, std::string description)
+	: validator{ std::make_unique<StringValidator*>(std::move(validator)) }, Arg(ArgumentType::String, option, longOption, description) {};
 
 const std::string StringArg::GetValue() {
 	return value;
@@ -11,22 +12,30 @@ const std::string StringArg::GetValue() {
 
 const ParseResult StringArg::Parse(std::string_view arg) {
 	if (const auto result = ParseOption(arg); result.IsOk()) {
-		value = operands;
+		
+		if (const auto valResult = (*validator)->Check(operands); valResult.IsOk()) {
+			value = operands;
 
-		isDefined = true;
+			isDefined = true;
 
-		return ParseResult::Ok();
+			return ParseResult::Ok();
+		}
+		else return valResult;
 	}
 	else return result;
 }
 
 const ParseResult StringArg::ParseLong(std::string_view arg) {
 	if (const auto result = ParseLongOption(arg); result.IsOk()) {
-		value = operands;
+		
+		if (const auto valResult = (*validator)->Check(operands); valResult.IsOk()) {
+			value = operands;
 
-		isDefined = true;
+			isDefined = true;
 
-		return ParseResult::Ok();
+			return ParseResult::Ok();
+		}
+		else return valResult;
 	}
 	else return result;
 }

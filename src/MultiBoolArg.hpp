@@ -2,15 +2,16 @@
 
 #include "Arg.hpp"
 #include <vector>
+#include "Validators.hpp"
 
 namespace args_parse {
 	/**
 	* @brief Класс мультибулевого аргумента
 	* Аргумент содержит опцию и набор булевых операндов
 	*/
-
 	class MultiBoolArg : public Arg {
 	private:
+		const BoolValidator validator;
 		/// Поле, хранящее значения аргумента в случае успешного парсинга 
 		/// @warning Может быть передано несколько одинаковых аргументов командной строки
 		std::vector<bool> values;

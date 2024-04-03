@@ -2,6 +2,8 @@
 
 #include "Arg.hpp"
 #include <vector>
+#include <memory>
+#include "Validators.hpp"
 
 namespace args_parse {
 	/**
@@ -11,11 +13,12 @@ namespace args_parse {
 
 	class MultiStringArg : public Arg {
 	private:
+		const std::unique_ptr<StringValidator*> validator;
 		/// Поле, хранящее значения аргумента в случае успешного парсинга 
 		/// @warning Может быть передано несколько одинаковых аргументов командной строки
 		std::vector<std::string> values; 
 	public:
-		MultiStringArg(const char option, std::string longOption, std::string description = "");
+		MultiStringArg(StringValidator* validator, const char option, std::string longOption, std::string description = "");
 		const std::vector<std::string> GetValues(); ///< Геттер для values
 		const int GetCount(); ///< Количество значений в values
 		const ParseResult Parse(std::string_view arg) override;

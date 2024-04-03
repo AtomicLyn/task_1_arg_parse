@@ -19,14 +19,14 @@ const ParseResult MultiBoolArg::Parse(std::string_view arg) {
 		if (isInteger(operands)) {
 			const auto num = atoi(operands.c_str());
 
-			if (num == 0 || num == 1) {
+			if (const auto valResult = validator.Check(num); valResult.IsOk()) {
 				values.push_back(num == 1);
 
 				isDefined = true;
 
 				return ParseResult::Ok();
 			}
-			else return ParseResult::Fail({ "In " + std::string(arg) + ": The option is found, but the value is not bool (0 or 1)" });
+			else return valResult;
 		}
 		else return ParseResult::Fail({ "In " + std::string(arg) + ": The option is found, but the value is not integer" });
 	}
@@ -39,14 +39,14 @@ const ParseResult MultiBoolArg::ParseLong(std::string_view arg) {
 		if (isInteger(operands)) {
 			const auto num = atoi(operands.c_str());
 
-			if (num == 0 || num == 1) {
+			if (const auto valResult = validator.Check(num); valResult.IsOk()) {
 				values.push_back(num == 1);
 
 				isDefined = true;
 
 				return ParseResult::Ok();
 			}
-			else return ParseResult::Fail({ "In " + std::string(arg) + ": The option is found, but the value is not bool (0 or 1)" });
+			else return valResult;
 		}
 		else return ParseResult::Fail({ "In " + std::string(arg) + ": The option is found, but the value is not integer" });
 	}

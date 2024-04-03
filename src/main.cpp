@@ -7,6 +7,7 @@
 #include "MultiIntArg.hpp"
 #include "MultiStringArg.hpp"
 #include "ArgParser.hpp"
+#include "Validators.hpp"
 
 using namespace args_parse;
 using namespace std;
@@ -26,10 +27,10 @@ int main(int argc, const char **argv)
     EmptyArg sleep{ 's', "sleep" };
     EmptyArg megafast{ 'm', "megafast", "Gotta go megafast" };
     BoolArg lock{ 'l', "lock", "Input 0 or 1 (ex. -l=0)" };
-    IntArg warnings{ 'w', "warnings", "Input integer value (ex. -w=10)" };
-    StringArg name{ 'n', "name", "Input string value (ex. -n=o.txt)" };
-    MultiStringArg output{ 'o', "output" };
-    MultiIntArg codes{ 'c', "codes" };
+    IntArg warnings{ new IntInRangeValidator{0, 100}, 'w', "warnings", "Input integer value (ex. -w=10)" };
+    StringArg name{ new StringFileNameValidator{}, 'n', "name", "Input string value (ex. -n=o.txt)" };
+    MultiStringArg output{ new StringFileFormatValidator{}, 'o', "output" };
+    MultiIntArg codes{ new IntInRangeValidator{0, 1000}, 'c', "codes" };
     MultiBoolArg authorizes{ 'a', "authorizes" };
 
     parser.Add(&help);

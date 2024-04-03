@@ -23,6 +23,7 @@ add_library(args_parse STATIC
 	StringArg.hpp
 	ParseResult.hpp
 	Helpers.hpp
+	Validators.hpp
 )
 
 target_include_directories(args_parse PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

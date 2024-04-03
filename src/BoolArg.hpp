@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Arg.hpp"
+#include "Validators.hpp"
 
 namespace args_parse {
 	/**
@@ -10,6 +11,7 @@ namespace args_parse {
 
 	class BoolArg : public Arg {
 	private:
+		const BoolValidator validator;
 		bool value = false; ///< Поле, хранящее значение аргумента в случае успешного парсинга
 	public: 
 		BoolArg(const char option, std::string longOption, std::string description = "");
