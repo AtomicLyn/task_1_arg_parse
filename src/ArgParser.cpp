@@ -5,7 +5,7 @@
 using namespace args_parse;
 
 void ArgParser::Add(Arg* argument) {
-	arguments.push_back(argument);
+	arguments.push_back(std::make_unique<Arg*>(argument));
 }
 
 const ParseResult ArgParser::ParseSubsequence(std::string_view argumentWithoutDash) {
@@ -17,11 +17,11 @@ const ParseResult ArgParser::ParseSubsequence(std::string_view argumentWithoutDa
 
 		for (const auto& argument : arguments) {
 
-			if (const auto result = argument->Parse(&(*currentOption)); result.IsOk()) {
+			if (const auto result = (*argument)->Parse(&(*currentOption)); result.IsOk()) {
 				argumentDefined = true;
 
 				/// Последний аргумент - не EmptyArg
-				if (argument->GetType() != ArgumentType::Empty) return ParseResult::Ok();
+				if ((*argument)->GetType() != ArgumentType::Empty) return ParseResult::Ok();
 				break;
 			}
 			else if (!result.GetError().Message.empty()) return result;
@@ -57,7 +57,7 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 
 				for (const auto& argument : arguments) {
 
-					if (const auto result = argument->ParseLong(argumentWithoutDash); result.IsOk()) {
+					if (const auto result = (*argument)->ParseLong(argumentWithoutDash); result.IsOk()) {
 						argumentDefined = true;
 						break;
 					}
@@ -70,11 +70,11 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 
 				for (const auto& argument : arguments) {
 
-					if (const auto result = argument->Parse(argumentWithoutDash); result.IsOk()) {
+					if (const auto result = (*argument)->Parse(argumentWithoutDash); result.IsOk()) {
 						argumentDefined = true;
 
 						/// Аргумент является EmptyArg и строка еще имеет символы
-						if (argument->GetType() == ArgumentType::Empty && argumentWithoutDash.size() > 1) {
+						if ((*argument)->GetType() == ArgumentType::Empty && argumentWithoutDash.size() > 1) {
 							argumentDefined = false;
 
 							if (const auto subResult = ParseSubsequence(argumentWithoutDash); subResult.IsOk()) {
@@ -102,13 +102,13 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 const std::string ArgParser::GetHelp() const {
 	std::string result = "";
 
-	for (auto argument : arguments) {
+	for (const auto& argument : arguments) {
 		result += "-";
-		result += argument->GetOption();
+		result += (*argument)->GetOption();
 		result += " --";
-		result += argument->GetLongOption();
+		result += (*argument)->GetLongOption();
 		result += " | ";
-		result += argument->GetDescription();
+		result += (*argument)->GetDescription();
 		result += "\n";
 	}
 
