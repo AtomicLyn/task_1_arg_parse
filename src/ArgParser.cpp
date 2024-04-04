@@ -18,12 +18,15 @@ const ParseResult ArgParser::ParseSubsequence(std::string_view argumentWithoutDa
 
 		for (const auto& argument : arguments) {
 
-			if (const auto result = (*argument)->Parse(&(*currentOption)); result.IsOk()) {
+			if (const auto result = (*argument)->ParseOption(&(*currentOption)); result.IsOk()) {
 				argumentDefined = true;
 
-				/// Последний аргумент - не EmptyArg
-				if ((*argument)->GetType() != ArgumentType::Empty) return ParseResult::Ok();
-				break;
+				if (const auto operandResult = (*argument)->SetDefinedAndParseOperand(&(*currentOption)); result.IsOk()) {
+					/// Последний аргумент - не EmptyArg
+					if ((*argument)->GetType() != ArgumentType::Empty) return ParseResult::Ok();
+					break;
+				}
+				else if (!result.GetError().Message.empty()) return operandResult;
 			}
 			else if (!result.GetError().Message.empty()) return result;
 		}
@@ -61,16 +64,27 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 				std::vector<std::pair<std::shared_ptr<Arg*>, int>> argMatches;
 
 				for (const auto& argument : arguments) {
-					if (const auto result = (*argument)->ParseLong(argumentWithoutDash); result.first.IsOk()) {
+					if (const auto result = (*argument)->ParseLongOption(argumentWithoutDash); result.first.IsOk()) {
 						argMatches.push_back(std::pair(argument, result.second));
-
-						argumentDefined = true;
 					}
 					else if (!result.first.GetError().Message.empty()) return result.first;
 				}
 
 				/// Найдено несколько частичных совпадений
-				if (argMatches.size() > 1) return ParseResult::Fail({ "In " + std::string(currentArgument) + ": Several definitions of the argument have been found" });
+				if (argMatches.size() > 0) {
+					auto compFun = [](const std::pair<std::shared_ptr<Arg*>, int>& l, const std::pair<std::shared_ptr<Arg*>, int>& r) { return l.second < r.second; };
+					auto maxMatch = std::max_element(argMatches.begin(), argMatches.end(), compFun);
+
+					auto condFun = [&](const std::pair<std::shared_ptr<Arg*>, int>& el) { return el.second == (*maxMatch).second; };
+					auto maxMatchCount = std::count_if(argMatches.begin(), argMatches.end(), condFun);
+
+					if(maxMatchCount > 1) return ParseResult::Fail({ "In " + std::string(currentArgument) + ": Several definitions of the argument have been found" });
+
+					if (const auto result = (*(*maxMatch).first)->SetDefinedAndParseLongOperand(argumentWithoutDash); result.first.IsOk()) {
+						argumentDefined = true;
+					}
+					else if (!result.first.GetError().Message.empty()) return result.first;
+				}
 			}
 			/// Аргумент начинается с '-'
 			else if (currentArgument[0] == '-') {
@@ -78,20 +92,24 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 
 				for (const auto& argument : arguments) {
 
-					if (const auto result = (*argument)->Parse(argumentWithoutDash); result.IsOk()) {
+					if (const auto result = (*argument)->ParseOption(argumentWithoutDash); result.IsOk()) {
 						argumentDefined = true;
 
-						/// Аргумент является EmptyArg и строка еще имеет символы
-						if ((*argument)->GetType() == ArgumentType::Empty && argumentWithoutDash.size() > 1) {
-							argumentDefined = false;
+						if (const auto operandResult = (*argument)->SetDefinedAndParseOperand(argumentWithoutDash); result.IsOk()) {
 
-							if (const auto subResult = ParseSubsequence(argumentWithoutDash); subResult.IsOk()) {
-								argumentDefined = true;
+							/// Аргумент является EmptyArg и строка еще имеет символы
+							if ((*argument)->GetType() == ArgumentType::Empty && argumentWithoutDash.size() > 1) {
+								argumentDefined = false;
+
+								if (const auto subResult = ParseSubsequence(argumentWithoutDash); subResult.IsOk()) {
+									argumentDefined = true;
+								}
+								else if (!subResult.GetError().Message.empty()) return subResult;
+
+								break;
 							}
-							else if (!subResult.GetError().Message.empty()) return subResult;
-
-							break;
 						}
+						else if (!operandResult.GetError().Message.empty()) return operandResult;
 
 						break;
 					}

@@ -28,7 +28,7 @@ int main(int argc, const char **argv)
     EmptyArg megafast{ 'm', "megafast", "Gotta go megafast" };
     BoolArg lock{ 'l', "lock", "Input 0 or 1 (ex. -l=0)" };
     IntArg warnings{ new IntInRangeValidator{0, 100}, 'w', "warnings", "Input integer value (ex. -w=10)" };
-    IntArg warnas{ new IntInRangeValidator{0, 100}, 'w', "wars", "Input integer value (ex. -w=10)" };
+    IntArg warnas{ new IntInRangeValidator{0, 100}, 'w', "warnas", "Input integer value (ex. -w=10)" };
     StringArg name{ new StringFileNameValidator{}, 'n', "name", "Input string value (ex. -n=o.txt)" };
     MultiStringArg output{ new StringFileFormatValidator{}, 'o', "output" };
     MultiIntArg codes{ new IntInRangeValidator{0, 1000}, 'c', "codes" };
@@ -71,6 +71,9 @@ int main(int argc, const char **argv)
         }
         if (warnings.IsDefined()) {
             cout << "Int argument: " << warnings.GetOption() << "/" << warnings.GetLongOption() << " " << warnings.GetValue() << endl;
+        }
+        if (warnas.IsDefined()) {
+            cout << "Int argument: " << warnas.GetOption() << "/" << warnas.GetLongOption() << " " << warnas.GetValue() << endl;
         }
         if (name.IsDefined()) {
             cout << "String argument: " << name.GetOption() << "/" << name.GetLongOption() << " " << name.GetValue() << endl;

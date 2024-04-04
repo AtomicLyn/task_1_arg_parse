@@ -10,7 +10,7 @@ const int IntArg::GetValue() {
 	return value;
 }
 
-const ParseResult IntArg::Parse(std::string_view arg) {
+const ParseResult IntArg::SetDefinedAndParseOperand(std::string_view arg) {
 	if (const auto result = ParseOption(arg); result.IsOk()) {
 
 		if (isInteger(operands)) {
@@ -30,7 +30,7 @@ const ParseResult IntArg::Parse(std::string_view arg) {
 	else return result;
 }
 
-const std::pair<ParseResult, int> IntArg::ParseLong(std::string_view arg) {
+const std::pair<ParseResult, int> IntArg::SetDefinedAndParseLongOperand(std::string_view arg) {
 	if (const auto result = ParseLongOption(arg); result.first.IsOk()) {
 
 		if (isInteger(operands)) {

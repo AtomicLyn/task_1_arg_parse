@@ -20,8 +20,8 @@ namespace args_parse {
 		MultiIntArg(IntValidator* validator, const char option, std::string longOption, std::string description = "");
 		const std::vector<int> GetValues(); ///< Геттер для values
 		const int GetCount(); ///< Количество значений в values
-		const ParseResult Parse(std::string_view arg) override;
-		const std::pair<ParseResult, int> ParseLong(std::string_view arg) override;
+		const ParseResult SetDefinedAndParseOperand(std::string_view arg) override;
+		const std::pair<ParseResult, int> SetDefinedAndParseLongOperand(std::string_view arg) override;
 	};
 
 }

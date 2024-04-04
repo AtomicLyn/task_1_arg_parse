@@ -13,7 +13,7 @@ const int MultiStringArg::GetCount() {
 	return values.size();
 }
 
-const ParseResult MultiStringArg::Parse(std::string_view arg) {
+const ParseResult MultiStringArg::SetDefinedAndParseOperand(std::string_view arg) {
 	if (const auto result = ParseOption(arg); result.IsOk()) {
 
 		if (const auto valResult = (*validator)->Check(operands); valResult.IsOk()) {
@@ -28,7 +28,7 @@ const ParseResult MultiStringArg::Parse(std::string_view arg) {
 	else return result;
 }
 
-const std::pair<ParseResult, int> MultiStringArg::ParseLong(std::string_view arg) {
+const std::pair<ParseResult, int> MultiStringArg::SetDefinedAndParseLongOperand(std::string_view arg) {
 	if (const auto result = ParseLongOption(arg); result.first.IsOk()) {
 		if (const auto valResult = (*validator)->Check(operands); valResult.IsOk()) {
 			values.push_back(operands);

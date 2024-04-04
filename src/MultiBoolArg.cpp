@@ -13,7 +13,7 @@ const int MultiBoolArg::GetCount() {
 	return values.size();
 }
 
-const ParseResult MultiBoolArg::Parse(std::string_view arg) {
+const ParseResult MultiBoolArg::SetDefinedAndParseOperand(std::string_view arg) {
 	if (const auto result = ParseOption(arg); result.IsOk()) {
 
 		if (isInteger(operands)) {
@@ -33,7 +33,7 @@ const ParseResult MultiBoolArg::Parse(std::string_view arg) {
 	else return result;
 }
 
-const std::pair<ParseResult, int> MultiBoolArg::ParseLong(std::string_view arg) {
+const std::pair<ParseResult, int> MultiBoolArg::SetDefinedAndParseLongOperand(std::string_view arg) {
 	if (const auto result = ParseLongOption(arg); result.first.IsOk()) {
 
 		if (isInteger(operands)) {

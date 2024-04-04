@@ -10,7 +10,7 @@ const std::string StringArg::GetValue() {
 }
 
 
-const ParseResult StringArg::Parse(std::string_view arg) {
+const ParseResult StringArg::SetDefinedAndParseOperand(std::string_view arg) {
 	if (const auto result = ParseOption(arg); result.IsOk()) {
 		
 		if (const auto valResult = (*validator)->Check(operands); valResult.IsOk()) {
@@ -25,7 +25,7 @@ const ParseResult StringArg::Parse(std::string_view arg) {
 	else return result;
 }
 
-const std::pair<ParseResult, int> StringArg::ParseLong(std::string_view arg) {
+const std::pair<ParseResult, int> StringArg::SetDefinedAndParseLongOperand(std::string_view arg) {
 	if (const auto result = ParseLongOption(arg); result.first.IsOk()) {
 		
 		if (const auto valResult = (*validator)->Check(operands); valResult.IsOk()) {

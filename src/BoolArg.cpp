@@ -9,7 +9,7 @@ const bool BoolArg::GetValue() {
 	return value;
 }
 
-const ParseResult BoolArg::Parse(std::string_view arg) {
+const ParseResult BoolArg::SetDefinedAndParseOperand(std::string_view arg) {
 	if (const auto result = ParseOption(arg); result.IsOk()) {
 
 		if (isInteger(operands)) {
@@ -29,7 +29,7 @@ const ParseResult BoolArg::Parse(std::string_view arg) {
 	else return result;
 }
 
-const std::pair<ParseResult, int> BoolArg::ParseLong(std::string_view arg) {
+const std::pair<ParseResult, int> BoolArg::SetDefinedAndParseLongOperand(std::string_view arg) {
 	if (const auto result = ParseLongOption(arg); result.first.IsOk()) {
 
 		if (isInteger(operands)) {
