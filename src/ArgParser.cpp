@@ -22,8 +22,10 @@ const ParseResult ArgParser::ParseSubsequence(std::string_view argumentWithoutDa
 				argumentDefined = true;
 
 				if (const auto operandResult = (*argument)->ParseOperandAndSetDefined(); operandResult.IsOk()) {
+
 					/// Последний аргумент - не EmptyArg
 					if ((*argument)->GetType() != ArgumentType::Empty) return ParseResult::Ok();
+
 					break;
 				}
 				else if (!operandResult.GetError().Message.empty()) return operandResult;
@@ -58,6 +60,7 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 			/// Аргумент начинается с "--"
 			if (currentArgument[0] == '-' && currentArgument[1] == '-' && currentArgument.size() > 2) {
 				std::string_view argumentWithoutDash{ currentArgument.data() + 2 };
+
 				/// Обработка частично встретившихся названий аргументов
 				std::vector<std::pair<std::shared_ptr<Arg*>, int>> argMatches;
 
@@ -70,7 +73,6 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 
 				}
 
-				/// Найдено несколько частичных совпадений
 				if (argMatches.size() > 0) {
 					auto compFun = [](const std::pair<std::shared_ptr<Arg*>, int>& l, const std::pair<std::shared_ptr<Arg*>, int>& r) { return l.second < r.second; };
 					auto maxMatch = std::max_element(argMatches.begin(), argMatches.end(), compFun);
@@ -78,6 +80,7 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 					auto condFun = [&](const std::pair<std::shared_ptr<Arg*>, int>& el) { return el.second == (*maxMatch).second; };
 					auto maxMatchCount = std::count_if(argMatches.begin(), argMatches.end(), condFun);
 
+					/// Найдено несколько частичных совпадений одинаковой длины
 					if(maxMatchCount > 1) return ParseResult::Fail({ "In " + std::string(currentArgument) + ": Several definitions of the argument have been found" });
 
 					if (const auto result = (*(*maxMatch).first)->ParseLongOperandAndSetDefined(); result.IsOk()) argumentDefined = true;
