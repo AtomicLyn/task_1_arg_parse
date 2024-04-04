@@ -13,13 +13,13 @@ namespace args_parse {
 	* Частично реализует общий функционал всех дочерних классов
 	*/
 	class Arg {
-		const ArgumentType type; ///< Указывает, каким типом является объект
-
-	protected:
 		const char option; ///< Указывает короткое название аргумента
 		const std::string longOption; ///< Указывает полное название аргумента
 		const std::string description; ///< Указывает подробное описание аргумента
+		const ArgumentType type; ///< Указывает, каким типом является объект
 
+	protected:		
+		std::string currentArg; ///< Текущая полученная для парсинга строка
 		std::string operands; ///< Хранит остаток строки после предварительного парсинга
 		bool isDefined = false; ///< Указывает, был ли успешно найден аргумент в процессе парсинга
 	

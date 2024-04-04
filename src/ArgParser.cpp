@@ -21,12 +21,12 @@ const ParseResult ArgParser::ParseSubsequence(std::string_view argumentWithoutDa
 			if (const auto result = (*argument)->ParseOption(&(*currentOption)); result.IsOk()) {
 				argumentDefined = true;
 
-				if (const auto operandResult = (*argument)->ParseOperandAndSetDefined(); result.IsOk()) {
+				if (const auto operandResult = (*argument)->ParseOperandAndSetDefined(); operandResult.IsOk()) {
 					/// Последний аргумент - не EmptyArg
 					if ((*argument)->GetType() != ArgumentType::Empty) return ParseResult::Ok();
 					break;
 				}
-				else if (!result.GetError().Message.empty()) return operandResult;
+				else if (!operandResult.GetError().Message.empty()) return operandResult;
 			}
 			else if (!result.GetError().Message.empty()) return result;
 		}
@@ -40,7 +40,6 @@ const ParseResult ArgParser::ParseSubsequence(std::string_view argumentWithoutDa
 const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 	for (auto i = 1; i < argc; i++) {
 		std::string argument{ argv[i] };
-
 
 		if (i < argc - 1) {
 			/// Следующий элемент argv не содержит '-'
@@ -94,7 +93,7 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 
 					if (const auto result = (*argument)->ParseOption(argumentWithoutDash); result.IsOk()) {
 
-						if (const auto operandResult = (*argument)->ParseOperandAndSetDefined(); result.IsOk()) {
+						if (const auto operandResult = (*argument)->ParseOperandAndSetDefined(); operandResult.IsOk()) {
 							argumentDefined = true;
 
 							/// Аргумент является EmptyArg и строка еще имеет символы
@@ -108,6 +107,8 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 
 								break;
 							}
+
+							break;
 						}
 						else if (!operandResult.GetError().Message.empty()) return operandResult;;
 

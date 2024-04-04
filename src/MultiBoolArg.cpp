@@ -26,21 +26,25 @@ const ParseResult MultiBoolArg::ParseOperandAndSetDefined() {
 		}
 		else return valResult;
 	}
-	else return ParseResult::Fail({ "In " + std::to_string(option) + "/" + longOption + ": The option is found, but the value is not integer" });
+	else return ParseResult::Fail({ "In " + currentArg + ": The option is found, but the value is not integer" });
 }
 
 const ParseResult MultiBoolArg::ParseLongOperandAndSetDefined() {
-	if (isInteger(operands)) {
-		const auto num = atoi(operands.c_str());
+	if (operands[0] != '=') return ParseResult::Fail({ "In " + currentArg + ": Symbol '=' or space between option and operand was not found" });
+	if (operands.size() <= 1) return ParseResult::Fail({ "In " + currentArg + ": Symbol '='  was found, but there is no value" });
 
-		if (const auto valResult = validator.Check(num); valResult.IsOk()) {
-			values.push_back(num == 1);
+	operands = operands.substr(1);
 
-			isDefined = true;
+	if (!isInteger(operands)) return ParseResult::Fail({ "In " + currentArg + ": The option is found, but the value is not integer" });
 
-			return ParseResult::Ok();
-		}
-		else return valResult;
+	const auto num = atoi(operands.c_str());
+
+	if (const auto valResult = validator.Check(num); valResult.IsOk()) {
+		values.push_back(num == 1);
+
+		isDefined = true;
+
+		return ParseResult::Ok();
 	}
-	else return ParseResult::Fail({ "In " + std::to_string(option) + "/" + longOption + ": The option is found, but the value is not integer" });;
+	else return valResult;
 }

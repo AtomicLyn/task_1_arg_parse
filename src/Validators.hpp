@@ -4,19 +4,25 @@
 
 namespace args_parse {
 
-	/// @brief Базовый класс валидатора Integer значений
+	/// @brief Р‘Р°Р·РѕРІС‹Р№ РєР»Р°СЃСЃ РІР°Р»РёРґР°С‚РѕСЂР° Integer Р·РЅР°С‡РµРЅРёР№
 	class IntValidator {
 	public:
 		virtual const ParseResult Check(const int value) const = 0;
 	};
 
-	/// @brief Базовый класс валидатора String значений
+	/// @brief Р‘Р°Р·РѕРІС‹Р№ РєР»Р°СЃСЃ РІР°Р»РёРґР°С‚РѕСЂР° String Р·РЅР°С‡РµРЅРёР№
 	class StringValidator {
 	public:
 		virtual const ParseResult Check(const std::string str) const = 0;
 	};
 
-	/// @brief Валидатор Integer значений в указанном диапазоне
+	/// @brief Р’Р°Р»РёРґР°С‚РѕСЂ Bool Р·РЅР°С‡РµРЅРёР№
+	class BoolValidator : public IntInRangeValidator {
+	public:
+		BoolValidator() : IntInRangeValidator(0, 1) {};
+	};
+
+	/// @brief Р’Р°Р»РёРґР°С‚РѕСЂ Integer Р·РЅР°С‡РµРЅРёР№ РІ Р·Р°РґР°РЅРЅРѕРј РґРёР°РїР°Р·РѕРЅРµ
 	class IntInRangeValidator : public IntValidator {
 		int min;
 		int max;
@@ -29,28 +35,28 @@ namespace args_parse {
 		}
 	};
 
-	/// @brief Валидатор Bool значений
+	/// @brief Р’Р°Р»РёРґР°С‚РѕСЂ Bool Р·РЅР°С‡РµРЅРёР№
 	class BoolValidator : public IntInRangeValidator {
 	public:
 		BoolValidator() : IntInRangeValidator(0, 1) {};
 	};
 
-	/// @brief Валидатор String значений для названий файлов
+	/// @brief Р’Р°Р»РёРґР°С‚РѕСЂ String Р·РЅР°С‡РµРЅРёР№ РґР»СЏ РЅР°Р·РІР°РЅРёР№ С„Р°Р№Р»РѕРІ
 	class StringFileNameValidator : public StringValidator {
-		const std::string strExpr = "^[a-z0-9-_]+[.][a-z]+";
+		const std::string strExpr = "^[a-z0-9-_]+[.][a-z]+$";
 	public:
 		const ParseResult Check(const std::string str) const override {
-			if (!std::regex_match(str, std::regex(strExpr))) ParseResult::Fail({ "In " + str + ": sting is does not match |" + strExpr + "|" });
+			if (!std::regex_match(str, std::regex(strExpr))) return ParseResult::Fail({ "In " + str + ": string is does not match |" + strExpr + "|" });
 			return ParseResult::Ok();
 		}
 	};
 
-	/// @brief Валидатор String значений для форматов файлов
+	/// @brief Р’Р°Р»РёРґР°С‚РѕСЂ String Р·РЅР°С‡РµРЅРёР№ РґР»СЏ С„РѕСЂРјР°С‚РѕРІ С„Р°Р№Р»РѕРІ
 	class StringFileFormatValidator : public StringValidator {
-		const std::string strExpr = "^[a-z]+[.][a-z]+";
+		const std::string strExpr = "^[*]+[.][a-z]+$";
 	public:
 		const ParseResult Check(const std::string str) const override {
-			if (!std::regex_match(str, std::regex(strExpr))) ParseResult::Fail({ "In " + str + ": sting is does not match |"+ strExpr + "|"});
+			if (!std::regex_match(str, std::regex(strExpr))) return ParseResult::Fail({ "In " + str + ": string is does not match |"+ strExpr + "|"});
 			return ParseResult::Ok();
 		}
 	};
