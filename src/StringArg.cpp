@@ -10,33 +10,25 @@ const std::string StringArg::GetValue() {
 }
 
 
-const ParseResult StringArg::SetDefinedAndParseOperand(std::string_view arg) {
-	if (const auto result = ParseOption(arg); result.IsOk()) {
-		
-		if (const auto valResult = (*validator)->Check(operands); valResult.IsOk()) {
-			value = operands;
+const ParseResult StringArg::ParseOperandAndSetDefined() {
+	if (const auto valResult = (*validator)->Check(operands); valResult.IsOk()) {
+		value = operands;
 
-			isDefined = true;
+		isDefined = true;
 
-			return ParseResult::Ok();
-		}
-		else return valResult;
+		return ParseResult::Ok();
 	}
-	else return result;
+	else return valResult;
 }
 
-const std::pair<ParseResult, int> StringArg::SetDefinedAndParseLongOperand(std::string_view arg) {
-	if (const auto result = ParseLongOption(arg); result.first.IsOk()) {
-		
-		if (const auto valResult = (*validator)->Check(operands); valResult.IsOk()) {
-			value = operands;
+const ParseResult StringArg::ParseLongOperandAndSetDefined() {
+	if (const auto valResult = (*validator)->Check(operands); valResult.IsOk()) {
+		value = operands;
 
-			isDefined = true;
+		isDefined = true;
 
-			return std::make_pair(ParseResult::Ok(), result.second);
-		}
-		else return std::make_pair(valResult, result.second);
+		return ParseResult::Ok();
 	}
-	else return result;
+	else return valResult;
 }
 

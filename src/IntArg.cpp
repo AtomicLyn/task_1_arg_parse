@@ -10,42 +10,34 @@ const int IntArg::GetValue() {
 	return value;
 }
 
-const ParseResult IntArg::SetDefinedAndParseOperand(std::string_view arg) {
-	if (const auto result = ParseOption(arg); result.IsOk()) {
+const ParseResult IntArg::ParseOperandAndSetDefined() {
+	if (isInteger(operands)) {
+		const auto num = atoi(operands.c_str());
 
-		if (isInteger(operands)) {
-			const auto num = atoi(operands.c_str());
+		if (const auto valResult = (*validator)->Check(num); valResult.IsOk()) {
+			value = num;
 
-			if (const auto valResult = (*validator)->Check(num); valResult.IsOk()) {
-				value = num;
+			isDefined = true;
 
-				isDefined = true;
-
-				return ParseResult::Ok();
-			}
-			else return valResult;
+			return ParseResult::Ok();
 		}
-		else return ParseResult::Fail({ "In " + std::string(arg) + ": The option is found, but the value is not integer" });
+		else return valResult;
 	}
-	else return result;
+	else return ParseResult::Fail({ "In " + std::to_string(option) + "/" + longOption + ": The option is found, but the value is not integer" });
 }
 
-const std::pair<ParseResult, int> IntArg::SetDefinedAndParseLongOperand(std::string_view arg) {
-	if (const auto result = ParseLongOption(arg); result.first.IsOk()) {
+const ParseResult IntArg::ParseLongOperandAndSetDefined() {
+	if (isInteger(operands)) {
+		const auto num = atoi(operands.c_str());
 
-		if (isInteger(operands)) {
-			const auto num = atoi(operands.c_str());
+		if (const auto valResult = (*validator)->Check(num); valResult.IsOk()) {
+			value = num;
 
-			if (const auto valResult = (*validator)->Check(num); valResult.IsOk()) {
-				value = num;
+			isDefined = true;
 
-				isDefined = true;
-
-				return std::make_pair(ParseResult::Ok(), result.second);
-			}
-			else return std::make_pair(valResult, result.second);
+			return ParseResult::Ok();
 		}
-		else return std::make_pair(ParseResult::Fail({ "In " + std::string(arg) + ": The option is found, but the value is not integer" }), 0);
+		else return valResult;
 	}
-	else return result;
+	else return ParseResult::Fail({ "In " + std::to_string(option) + "/" + longOption + ": The option is found, but the value is not integer" });
 }

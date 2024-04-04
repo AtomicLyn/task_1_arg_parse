@@ -69,10 +69,6 @@ Arg::Arg(ArgumentType type, const char option, std::string longOption, std::stri
 
 Arg::~Arg() {}
 
-void Arg::SetDefined(const bool defined) {
-	isDefined = defined;
-}
-
 const char Arg::GetOption() const {
 	return option;
 }

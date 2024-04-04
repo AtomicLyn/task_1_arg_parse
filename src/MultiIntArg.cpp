@@ -3,7 +3,7 @@
 
 using namespace args_parse;
 
-MultiIntArg::MultiIntArg(IntValidator* validator, const char option, std::string longOption, std::string description) 
+MultiIntArg::MultiIntArg(IntValidator* validator, const char option, std::string longOption, std::string description)
 	: validator{ std::make_unique<IntValidator*>(std::move(validator)) }, Arg(ArgumentType::MultiInt, option, longOption, description) {};
 
 const std::vector<int> MultiIntArg::GetValues() {
@@ -14,42 +14,34 @@ const int MultiIntArg::GetCount() {
 	return values.size();
 }
 
-const ParseResult MultiIntArg::SetDefinedAndParseOperand(std::string_view arg) {
-	if (const auto result = ParseOption(arg); result.IsOk()) {
+const ParseResult MultiIntArg::ParseOperandAndSetDefined() {
+	if (isInteger(operands)) {
+		auto num = atoi(operands.c_str());
 
-		if (isInteger(operands)) {
-			auto num = atoi(operands.c_str());
+		if (const auto valResult = (*validator)->Check(num); valResult.IsOk()) {
+			values.push_back(num);
 
-			if (const auto valResult = (*validator)->Check(num); valResult.IsOk()) {
-				values.push_back(num);
+			isDefined = true;
 
-				isDefined = true;
-
-				return ParseResult::Ok();
-			}
-			else return valResult;
+			return ParseResult::Ok();
 		}
-		else return ParseResult::Fail({ "In " + std::string(arg) + ": The option is found, but the value is not integer" });
+		else return valResult;
 	}
-	else return result;
+	else return ParseResult::Fail({ "In " + std::to_string(option) + "/" + longOption + ": The option is found, but the value is not integer" });
 }
 
-const std::pair<ParseResult, int> MultiIntArg::SetDefinedAndParseLongOperand(std::string_view arg) {
-	if (const auto result = ParseLongOption(arg); result.first.IsOk()) {
+const ParseResult MultiIntArg::ParseLongOperandAndSetDefined() {
+	if (isInteger(operands)) {
+		auto num = atoi(operands.c_str());
 
-		if (isInteger(operands)) {
-			auto num = atoi(operands.c_str());
+		if (const auto valResult = (*validator)->Check(num); valResult.IsOk()) {
+			values.push_back(num);
 
-			if (const auto valResult = (*validator)->Check(num); valResult.IsOk()) {
-				values.push_back(num);
+			isDefined = true;
 
-				isDefined = true;
-
-				return std::make_pair(ParseResult::Ok(), result.second);
-			}
-			else return std::make_pair(valResult, result.second);
+			return ParseResult::Ok();
 		}
-		else return std::make_pair(ParseResult::Fail({ "In " + std::string(arg) + ": The option is found, but the value is not integer" }), result.second);
+		else return valResult;
 	}
-	else return result;
+	else return ParseResult::Fail({ "In " + std::to_string(option) + "/" + longOption + ": The option is found, but the value is not integer" });
 }

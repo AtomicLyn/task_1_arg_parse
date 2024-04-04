@@ -21,7 +21,7 @@ const ParseResult ArgParser::ParseSubsequence(std::string_view argumentWithoutDa
 			if (const auto result = (*argument)->ParseOption(&(*currentOption)); result.IsOk()) {
 				argumentDefined = true;
 
-				if (const auto operandResult = (*argument)->SetDefinedAndParseOperand(&(*currentOption)); result.IsOk()) {
+				if (const auto operandResult = (*argument)->ParseOperandAndSetDefined(); result.IsOk()) {
 					/// Последний аргумент - не EmptyArg
 					if ((*argument)->GetType() != ArgumentType::Empty) return ParseResult::Ok();
 					break;
@@ -80,10 +80,10 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 
 					if(maxMatchCount > 1) return ParseResult::Fail({ "In " + std::string(currentArgument) + ": Several definitions of the argument have been found" });
 
-					if (const auto result = (*(*maxMatch).first)->SetDefinedAndParseLongOperand(argumentWithoutDash); result.first.IsOk()) {
+					if (const auto result = (*(*maxMatch).first)->ParseLongOperandAndSetDefined(); result.IsOk()) {
 						argumentDefined = true;
 					}
-					else if (!result.first.GetError().Message.empty()) return result.first;
+					else if (!result.GetError().Message.empty()) return result;
 				}
 			}
 			/// Аргумент начинается с '-'
@@ -95,7 +95,7 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 					if (const auto result = (*argument)->ParseOption(argumentWithoutDash); result.IsOk()) {
 						argumentDefined = true;
 
-						if (const auto operandResult = (*argument)->SetDefinedAndParseOperand(argumentWithoutDash); result.IsOk()) {
+						if (const auto operandResult = (*argument)->ParseOperandAndSetDefined(); result.IsOk()) {
 
 							/// Аргумент является EmptyArg и строка еще имеет символы
 							if ((*argument)->GetType() == ArgumentType::Empty && argumentWithoutDash.size() > 1) {

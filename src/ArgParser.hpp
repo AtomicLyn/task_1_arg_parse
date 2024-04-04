@@ -25,6 +25,8 @@ namespace args_parse {
 		* -abc=10
 		* -abc10
 		* -abc 10
+		* --authorize=10 --authority=10
+		* --authoriz=10 --authorit=10
 		* @endcode
 		*/
 		[[nodiscard]] const ParseResult ParseSubsequence(std::string_view argumentWithoutDash);

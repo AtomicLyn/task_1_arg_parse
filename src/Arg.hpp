@@ -14,20 +14,23 @@ namespace args_parse {
 	*/
 	class Arg {
 		const ArgumentType type; ///< Указывает, каким типом является объект
-		char option; ///< Указывает короткое название аргумента
+
+	protected:
+		const char option; ///< Указывает короткое название аргумента
 		const std::string longOption; ///< Указывает полное название аргумента
 		const std::string description; ///< Указывает подробное описание аргумента
 
-	protected:
 		std::string operands; ///< Хранит остаток строки после предварительного парсинга
 		bool isDefined = false; ///< Указывает, был ли успешно найден аргумент в процессе парсинга
-
-		
+	
 	public:
 		Arg(ArgumentType type, const char option, const std::string longOption,  std::string description = "");
 		virtual ~Arg();
-		void SetDefined(const bool defined);
 		const char GetOption() const; ///< Геттер для option
+		const std::string GetLongOption() const; ///< Геттер для longOption
+		const std::string GetDescription() const; ///< Геттер для description
+		[[nodiscard]] const ArgumentType GetType() const; ///< Геттер для type
+		[[nodiscard]] const bool IsDefined() const; ///< Геттер для isDefined	
 		/**
 		* @brief Метод предварительного парсинга опции аргумента
 		* Выполняет парсинг короткого названия аргумента и сохраняет остраток строки в operands
@@ -41,22 +44,19 @@ namespace args_parse {
 		* Возвращает пару значений с результатом парсинга и количеством совпавших символов в случае успешного парсинга
 		*/
 		[[nodiscard]] const std::pair<ParseResult, int> ParseLongOption(std::string_view argWithoutDash);
-		const std::string GetLongOption() const; ///< Геттер для longOption
-		const std::string GetDescription() const; ///< Геттер для description
-		[[nodiscard]] const ArgumentType GetType() const; ///< Геттер для type
-		[[nodiscard]] const bool IsDefined() const; ///< Геттер для isDefined
+		
 		/**
 		* @brief Чистый виртуальный метод полного парсинга опции аргумента
 		* Выполняет парсинг короткого названия аргумента, после чего определяет значение из operands, соответствующее типу аргумента
 		* @param[in] arg входной аргумент из строки
 		*/
-		[[nodiscard]] virtual const ParseResult SetDefinedAndParseOperand(std::string_view arg) = 0;
+		[[nodiscard]] virtual const ParseResult ParseOperandAndSetDefined() = 0;
 		/**
 		* @brief Чистый виртуальный метод полного парсинга длинной опции аргумента
 		* Выполняет парсинг полного названия аргумента, после чего определяет значение из operands, соответствующее типу аргумента
 		* @param[in] arg входной аргумент из строки
 		*/
-		[[nodiscard]] virtual const std::pair<ParseResult, int> SetDefinedAndParseLongOperand(std::string_view arg) = 0;
+		[[nodiscard]] virtual const ParseResult ParseLongOperandAndSetDefined() = 0;
 		
 	};
 

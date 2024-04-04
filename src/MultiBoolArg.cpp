@@ -13,42 +13,34 @@ const int MultiBoolArg::GetCount() {
 	return values.size();
 }
 
-const ParseResult MultiBoolArg::SetDefinedAndParseOperand(std::string_view arg) {
-	if (const auto result = ParseOption(arg); result.IsOk()) {
+const ParseResult MultiBoolArg::ParseOperandAndSetDefined() {
+	if (isInteger(operands)) {
+		const auto num = atoi(operands.c_str());
 
-		if (isInteger(operands)) {
-			const auto num = atoi(operands.c_str());
+		if (const auto valResult = validator.Check(num); valResult.IsOk()) {
+			values.push_back(num == 1);
 
-			if (const auto valResult = validator.Check(num); valResult.IsOk()) {
-				values.push_back(num == 1);
+			isDefined = true;
 
-				isDefined = true;
-
-				return ParseResult::Ok();
-			}
-			else return valResult;
+			return ParseResult::Ok();
 		}
-		else return ParseResult::Fail({ "In " + std::string(arg) + ": The option is found, but the value is not integer" });
+		else return valResult;
 	}
-	else return result;
+	else return ParseResult::Fail({ "In " + std::to_string(option) + "/" + longOption + ": The option is found, but the value is not integer" });
 }
 
-const std::pair<ParseResult, int> MultiBoolArg::SetDefinedAndParseLongOperand(std::string_view arg) {
-	if (const auto result = ParseLongOption(arg); result.first.IsOk()) {
+const ParseResult MultiBoolArg::ParseLongOperandAndSetDefined() {
+	if (isInteger(operands)) {
+		const auto num = atoi(operands.c_str());
 
-		if (isInteger(operands)) {
-			const auto num = atoi(operands.c_str());
+		if (const auto valResult = validator.Check(num); valResult.IsOk()) {
+			values.push_back(num == 1);
 
-			if (const auto valResult = validator.Check(num); valResult.IsOk()) {
-				values.push_back(num == 1);
+			isDefined = true;
 
-				isDefined = true;
-
-				return std::make_pair(ParseResult::Ok(), result.second);
-			}
-			else return std::make_pair(valResult, result.second);
+			return ParseResult::Ok();
 		}
-		else return std::make_pair(ParseResult::Fail({ "In " + std::string(arg) + ": The option is found, but the value is not integer" }), result.second);
+		else return valResult;
 	}
-	else return result;
+	else return ParseResult::Fail({ "In " + std::to_string(option) + "/" + longOption + ": The option is found, but the value is not integer" });;
 }

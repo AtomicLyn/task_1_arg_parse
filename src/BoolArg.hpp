@@ -15,8 +15,8 @@ namespace args_parse {
 	public: 
 		BoolArg(const char option, std::string longOption, std::string description = "");
 		const bool GetValue(); ///< Геттер для value
-		const ParseResult SetDefinedAndParseOperand(std::string_view arg) override;
-		const std::pair<ParseResult, int> SetDefinedAndParseLongOperand(std::string_view arg) override;
+		const ParseResult ParseOperandAndSetDefined() override;
+		const ParseResult ParseLongOperandAndSetDefined() override;
 	};
 
 }
