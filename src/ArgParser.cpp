@@ -59,15 +59,16 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 			/// Аргумент начинается с "--"
 			if (currentArgument[0] == '-' && currentArgument[1] == '-' && currentArgument.size() > 2) {
 				std::string_view argumentWithoutDash{ currentArgument.data() + 2 };
-
 				/// Обработка частично встретившихся названий аргументов
 				std::vector<std::pair<std::shared_ptr<Arg*>, int>> argMatches;
 
 				for (const auto& argument : arguments) {
+
 					if (const auto result = (*argument)->ParseLongOption(argumentWithoutDash); result.first.IsOk()) {
 						argMatches.push_back(std::pair(argument, result.second));
 					}
 					else if (!result.first.GetError().Message.empty()) return result.first;
+
 				}
 
 				/// Найдено несколько частичных совпадений
@@ -80,11 +81,10 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 
 					if(maxMatchCount > 1) return ParseResult::Fail({ "In " + std::string(currentArgument) + ": Several definitions of the argument have been found" });
 
-					if (const auto result = (*(*maxMatch).first)->ParseLongOperandAndSetDefined(); result.IsOk()) {
-						argumentDefined = true;
-					}
+					if (const auto result = (*(*maxMatch).first)->ParseLongOperandAndSetDefined(); result.IsOk()) argumentDefined = true;
 					else if (!result.GetError().Message.empty()) return result;
 				}
+
 			}
 			/// Аргумент начинается с '-'
 			else if (currentArgument[0] == '-') {
@@ -93,9 +93,9 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 				for (const auto& argument : arguments) {
 
 					if (const auto result = (*argument)->ParseOption(argumentWithoutDash); result.IsOk()) {
-						argumentDefined = true;
 
 						if (const auto operandResult = (*argument)->ParseOperandAndSetDefined(); result.IsOk()) {
+							argumentDefined = true;
 
 							/// Аргумент является EmptyArg и строка еще имеет символы
 							if ((*argument)->GetType() == ArgumentType::Empty && argumentWithoutDash.size() > 1) {
@@ -109,9 +109,8 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 								break;
 							}
 						}
-						else if (!operandResult.GetError().Message.empty()) return operandResult;
+						else if (!operandResult.GetError().Message.empty()) return operandResult;;
 
-						break;
 					}
 					else if (!result.GetError().Message.empty()) return result;
 				}
