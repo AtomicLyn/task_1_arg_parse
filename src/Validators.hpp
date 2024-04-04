@@ -16,12 +16,6 @@ namespace args_parse {
 		virtual const ParseResult Check(const std::string str) const = 0;
 	};
 
-	/// @brief Валидатор Bool значений
-	class BoolValidator : public IntInRangeValidator {
-	public:
-		BoolValidator() : IntInRangeValidator(0, 1) {};
-	};
-
 	/// @brief Валидатор Integer значений в заданном диапазоне
 	class IntInRangeValidator : public IntValidator {
 		int min;

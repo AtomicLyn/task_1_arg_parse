@@ -483,4 +483,12 @@ TEST_CASE("ArgParser", "[basic]") {
 
 		REQUIRE_FALSE(result.IsOk());
 	}
+
+	SECTION("Wrong sequence short arguments") {
+		std::vector args{ "PLUG", "-hsn=.txt" };
+
+		auto result = parser.Parse(args.size(), &args[0]);
+
+		REQUIRE_FALSE(result.IsOk());
+	}
 }
