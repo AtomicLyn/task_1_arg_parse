@@ -15,19 +15,18 @@ const int MultiIntArg::GetCount() {
 }
 
 const ParseResult MultiIntArg::ParseOperandAndSetDefined() {
-	if (isInteger(operands)) {
-		auto num = atoi(operands.c_str());
+	if (!isInteger(operands)) return ParseResult::Fail({ "In " + currentArg + ": The option is found, but the value is not integer" });
 
-		if (const auto valResult = (*validator)->Check(num); valResult.IsOk()) {
-			values.push_back(num);
+	auto num = atoi(operands.c_str());
 
-			isDefined = true;
+	if (const auto valResult = (*validator)->Check(num); valResult.IsOk()) {
+		values.push_back(num);
 
-			return ParseResult::Ok();
-		}
-		else return valResult;
+		isDefined = true;
+
+		return ParseResult::Ok();
 	}
-	else return ParseResult::Fail({ "In " + currentArg + ": The option is found, but the value is not integer" });
+	else return valResult;
 }
 
 const ParseResult MultiIntArg::ParseLongOperandAndSetDefined() {
