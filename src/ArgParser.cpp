@@ -28,12 +28,13 @@ const ParseResult ArgParser::ParseSubsequence(std::string_view argumentWithoutDa
 
 					break;
 				}
-				else if (!operandResult.GetError().Message.empty()) return operandResult;
+				else if (!operandResult.IsNotFound()) return operandResult;
 			}
-			else if (!result.GetError().Message.empty()) return result;
+			else if (!result.IsNotFound()) return result;
 		}
 
-		if (!argumentDefined) return ParseResult::Fail({"In " + std::string(argumentWithoutOption) + " : An argument was not found in the list of existing ones"});
+		if (!argumentDefined) 
+			return ParseResult::Fail({"In " + std::string(argumentWithoutOption) + " : An argument was not found in the list of existing ones"});
 	}
 
 	return ParseResult::Ok();
@@ -69,22 +70,29 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 					if (const auto result = (*argument)->ParseLongOption(argumentWithoutDash); result.first.IsOk()) {
 						argMatches.push_back(std::pair(argument, result.second));
 					}
-					else if (!result.first.GetError().Message.empty()) return result.first;
+					else if (!result.first.IsNotFound()) return result.first;
 
 				}
 
 				if (argMatches.size() > 0) {
-					auto compFun = [](const std::pair<std::shared_ptr<Arg*>, int>& l, const std::pair<std::shared_ptr<Arg*>, int>& r) { return l.second < r.second; };
+					auto compFun = []
+						(const std::pair<std::shared_ptr<Arg*>, int>& l, const std::pair<std::shared_ptr<Arg*>, int>& r) 
+						{ return l.second < r.second; };
+
 					auto maxMatch = std::max_element(argMatches.begin(), argMatches.end(), compFun);
 
-					auto condFun = [&](const std::pair<std::shared_ptr<Arg*>, int>& el) { return el.second == (*maxMatch).second; };
+					auto condFun = [&]
+						(const std::pair<std::shared_ptr<Arg*>, int>& el) 
+						{ return el.second == (*maxMatch).second; };
+
 					auto maxMatchCount = std::count_if(argMatches.begin(), argMatches.end(), condFun);
 
 					/// Найдено несколько частичных совпадений одинаковой длины
-					if(maxMatchCount > 1) return ParseResult::Fail({ "In " + std::string(currentArgument) + ": Several definitions of the argument have been found" });
+					if(maxMatchCount > 1) 
+						return ParseResult::Fail({ "In " + std::string(currentArgument) + ": Several definitions of the argument have been found" });
 
 					if (const auto result = (*(*maxMatch).first)->ParseLongOperandAndSetDefined(); result.IsOk()) argumentDefined = true;
-					else if (!result.GetError().Message.empty()) return result;
+					else if (!result.IsNotFound()) return result;
 				}
 
 			}
@@ -106,23 +114,25 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 								if (const auto subResult = ParseSubsequence(argumentWithoutDash); subResult.IsOk()) {
 									argumentDefined = true;
 								}
-								else if (!subResult.GetError().Message.empty()) return subResult;
+								else if (!subResult.IsNotFound()) return subResult;
 
 								break;
 							}
 
 							break;
 						}
-						else if (!operandResult.GetError().Message.empty()) return operandResult;;
+						else if (!operandResult.IsNotFound()) return operandResult;;
 
 					}
-					else if (!result.GetError().Message.empty()) return result;
+					else if (!result.IsNotFound()) return result;
 				}
 			}
-			else return ParseResult::Fail({ "In " + std::string(currentArgument) + ": The argument is set incorrectly: the character \'-\' is missing" });
+			else 
+				return ParseResult::Fail({ "In " + std::string(currentArgument) + ": The argument is set incorrectly: the character \'-\' is missing" });
 		}
 
-		if (!argumentDefined) return ParseResult::Fail({ "In " + std::string(currentArgument) + ": An argument was not found in the list of existing ones" });
+		if (!argumentDefined) 
+			return ParseResult::Fail({ "In " + std::string(currentArgument) + ": An argument was not found in the list of existing ones" });
 	}
 
 	return ParseResult::Ok();

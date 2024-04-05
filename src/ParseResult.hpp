@@ -17,10 +17,14 @@ namespace args_parse {
 
 	public:
 		static ParseResult Ok() { return ParseResult{}; }
+
+
 		static ParseResult Fail() { return ParseResult{ {  } }; } ///< В случае, если аргумент не был найден
 		static ParseResult Fail(Error err) { return ParseResult{ err }; }
 
 		[[nodiscard]] const bool IsOk() const { return !error.has_value(); } ///< Метод для определения результата парсинга
+		/// Метод для определения, найден ли был аргумент во время парсинга
+		[[nodiscard]] const bool IsNotFound() const { return error.has_value() ? error.value().Message.empty() : false; }
 		[[nodiscard]] const Error& GetError() const { return error.value(); } ///< Геттер для Error, если результат содержал ошибку
 	};
 

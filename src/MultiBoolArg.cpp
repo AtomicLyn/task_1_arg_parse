@@ -14,7 +14,8 @@ const int MultiBoolArg::GetCount() {
 }
 
 const ParseResult MultiBoolArg::ParseOperandAndSetDefined() {
-	if (!isInteger(operands)) return ParseResult::Fail({ "In " + currentArg + ": The option is found, but the value is not integer" });
+	if (!isInteger(operands)) 
+		return ParseResult::Fail({ "In " + currentArg + ": The option is found, but the value is not integer" });
 
 	const auto num = atoi(operands.c_str());
 
@@ -30,12 +31,15 @@ const ParseResult MultiBoolArg::ParseOperandAndSetDefined() {
 }
 
 const ParseResult MultiBoolArg::ParseLongOperandAndSetDefined() {
-	if (operands[0] != '=') return ParseResult::Fail({ "In " + currentArg + ": Symbol '=' or space between option and operand was not found" });
-	if (operands.size() <= 1) return ParseResult::Fail({ "In " + currentArg + ": Symbol '='  was found, but there is no value" });
+	if (operands[0] != '=') 
+		return ParseResult::Fail({ "In " + currentArg + ": Symbol '=' or space between option and operand was not found" });
+	if (operands.size() <= 1) 
+		return ParseResult::Fail({ "In " + currentArg + ": Symbol '='  was found, but there is no value" });
 
 	operands = operands.substr(1);
 
-	if (!isInteger(operands)) return ParseResult::Fail({ "In " + currentArg + ": The option is found, but the value is not integer" });
+	if (!isInteger(operands)) 
+		return ParseResult::Fail({ "In " + currentArg + ": The option is found, but the value is not integer" });
 
 	const auto num = atoi(operands.c_str());
 

@@ -14,7 +14,8 @@ const ParseResult Arg::ParseOption(std::string_view argWithoutDash) {
 
 		if (argWithoutOption[0] != '=') operands = argWithoutOption;
 		else {
-			if (argWithoutOption.size() < 2) return ParseResult::Fail({ "In " + currentArg + ": Symbol '='  was found, but there is no value" });
+			if (argWithoutOption.size() < 2) 
+				return ParseResult::Fail({ "In " + currentArg + ": Symbol '='  was found, but there is no value" });
 
 			std::string_view argWithoutOptionAndEq(argWithoutOption.substr(1));
 
