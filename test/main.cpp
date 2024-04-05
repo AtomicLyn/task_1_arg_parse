@@ -93,8 +93,10 @@ TEST_CASE("Arg EmptyArg", "[basic]")
 		auto shortStr = "c";
 		auto longStr = "check";
 
-		auto shortResult = arg.ParseOption(shortStr).IsOk();
-		auto longResult = arg.ParseLongOption(longStr).first.IsOk();
+		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined().IsOk() : false;
+		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined().IsOk() : false;
 
 		REQUIRE(shortResult);
 		REQUIRE(longResult);
@@ -104,8 +106,10 @@ TEST_CASE("Arg EmptyArg", "[basic]")
 		auto shortStr = "a";
 		auto longStr = "aaaa";
 
-		auto shortResult = arg.ParseOption(shortStr).IsOk();
-		auto longResult = arg.ParseLongOption(longStr).first.IsOk();
+		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined().IsOk() : false;
+		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined().IsOk() : false;
 
 		REQUIRE_FALSE(shortResult);
 		REQUIRE_FALSE(longResult);
@@ -115,7 +119,8 @@ TEST_CASE("Arg EmptyArg", "[basic]")
 		auto shortStr = "c1";
 		auto longStr = "check1";
 
-		auto shortResult = arg.ParseOption(shortStr).IsOk();
+		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined().IsOk() : false;
 		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
 		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined().IsOk() : false;
 
@@ -127,7 +132,8 @@ TEST_CASE("Arg EmptyArg", "[basic]")
 		auto shortStr = "c=";
 		auto longStr = "check=";
 
-		auto shortResult = arg.ParseOption(shortStr).IsOk();
+		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined().IsOk() : false;
 		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
 		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined().IsOk() : false;
 
@@ -139,7 +145,8 @@ TEST_CASE("Arg EmptyArg", "[basic]")
 		auto shortStr = "c=1";
 		auto longStr = "check=1";
 
-		auto shortResult = arg.ParseOption(shortStr).IsOk();
+		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined().IsOk() : false;
 		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
 		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined().IsOk() : false;
 
@@ -426,8 +433,8 @@ TEST_CASE("ArgParser", "[basic]") {
 	EmptyArg sleep{ 's', "sleep" };
 	BoolArg lock{ 'l', "lock", "Input 0 or 1 (ex. -l=0)" };
 
-	IntArg warnings{ new IntInRangeValidator{0, 10}, 'w', "warnings"};
 	IntArg warnas{ new IntInRangeValidator{0, 10}, 'w', "warnas" };
+	IntArg warnings{ new IntInRangeValidator{0, 10}, 'W', "warnings" };
 
 	StringArg name{ new StringFileNameValidator{}, 'n', "name" };
 	MultiBoolArg authorizes{ 'a', "authorizes" };
@@ -447,7 +454,7 @@ TEST_CASE("ArgParser", "[basic]") {
 	SECTION("All current arguments") {
 		std::vector args{"PLUG", "-hsl0",  "--warnings=10", "--warnas", "10", "-n", "file.txt", "-o=*.jpg",  "-c1", "--c=1", "-a=0"};
 
-		auto result = parser.Parse(args.size(), &args[0]);
+		auto result = parser.Parse(static_cast<int>(args.size()), &args[0]);
 
 		REQUIRE(result.IsOk());
 	}
@@ -455,7 +462,7 @@ TEST_CASE("ArgParser", "[basic]") {
 	SECTION("Wrong argument") {
 		std::vector args{ "PLUG", "-q" };
 
-		auto result = parser.Parse(args.size(), &args[0]);
+		auto result = parser.Parse(static_cast<int>(args.size()), &args[0]);
 
 		REQUIRE_FALSE(result.IsOk());
 	}
@@ -463,7 +470,7 @@ TEST_CASE("ArgParser", "[basic]") {
 	SECTION("No arguments") {
 		std::vector args{ "PLUG" };
 
-		auto result = parser.Parse(args.size(), &args[0]);
+		auto result = parser.Parse(static_cast<int>(args.size()), &args[0]);
 
 		REQUIRE(result.IsOk());
 	}
@@ -471,7 +478,7 @@ TEST_CASE("ArgParser", "[basic]") {
 	SECTION("Current shortened arguments") {
 		std::vector args{ "PLUG", "--warna=10", "--warni=10"};
 
-		auto result = parser.Parse(args.size(), &args[0]);
+		auto result = parser.Parse(static_cast<int>(args.size()), &args[0]);
 
 		REQUIRE(result.IsOk());
 	}
@@ -479,7 +486,7 @@ TEST_CASE("ArgParser", "[basic]") {
 	SECTION("Duplicate shortened argument") {
 		std::vector args{ "PLUG", "--warn=10" };
 
-		auto result = parser.Parse(args.size(), &args[0]);
+		auto result = parser.Parse(static_cast<int>(args.size()), &args[0]);
 
 		REQUIRE_FALSE(result.IsOk());
 	}
@@ -487,7 +494,7 @@ TEST_CASE("ArgParser", "[basic]") {
 	SECTION("Wrong sequence short arguments") {
 		std::vector args{ "PLUG", "-hsn=.txt" };
 
-		auto result = parser.Parse(args.size(), &args[0]);
+		auto result = parser.Parse(static_cast<int>(args.size()), &args[0]);
 
 		REQUIRE_FALSE(result.IsOk());
 	}

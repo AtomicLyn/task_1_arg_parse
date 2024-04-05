@@ -27,8 +27,8 @@ int main(int argc, const char **argv)
     EmptyArg sleep{ 's', "sleep" };
     EmptyArg megafast{ 'm', "megafast", "Gotta go megafast" };
     BoolArg lock{ 'l', "lock", "Input 0 or 1 (ex. -l=0)" };
-    IntArg warnings{ new IntInRangeValidator{0, 100}, 'w', "warnings", "Input integer value (ex. -w=10)" };
     IntArg warnas{ new IntInRangeValidator{0, 100}, 'w', "warnas", "Input integer value (ex. -w=10)" };
+    IntArg warnings{ new IntInRangeValidator{0, 100}, 'W', "warnings", "Input integer value (ex. -W=10)" };
     StringArg name{ new StringFileNameValidator{}, 'n', "name", "Input string value (ex. -n=o.txt)" };
     MultiBoolArg authorizes{ 'a', "authorizes" };
     MultiIntArg codes{ new IntInRangeValidator{0, 1000}, 'c', "codes" };

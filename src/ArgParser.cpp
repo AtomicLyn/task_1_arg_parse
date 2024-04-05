@@ -10,7 +10,7 @@ void ArgParser::Add(Arg* argument) {
 }
 
 const ParseResult ArgParser::ParseSubsequence(std::string_view argumentWithoutDash) {
-	std::string_view argumentWithoutOption(&argumentWithoutDash[1]);
+	std::string_view argumentWithoutOption(argumentWithoutDash.substr(1));
 	bool argumentDefined = false;
 
 	for (auto currentOption = argumentWithoutOption.begin(); currentOption != argumentWithoutOption.end(); currentOption++) {
@@ -33,7 +33,7 @@ const ParseResult ArgParser::ParseSubsequence(std::string_view argumentWithoutDa
 			else if (!result.GetError().Message.empty()) return result;
 		}
 
-		if (!argumentDefined) return ParseResult::Fail();
+		if (!argumentDefined) return ParseResult::Fail({"In " + std::string(argumentWithoutOption) + " : An argument was not found in the list of existing ones"});
 	}
 
 	return ParseResult::Ok();
@@ -59,7 +59,7 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 
 			/// Аргумент начинается с "--"
 			if (currentArgument[0] == '-' && currentArgument[1] == '-' && currentArgument.size() > 2) {
-				std::string_view argumentWithoutDash{ currentArgument.data() + 2 };
+				std::string_view argumentWithoutDash{ currentArgument.substr(2) };
 
 				/// Обработка частично встретившихся названий аргументов
 				std::vector<std::pair<std::shared_ptr<Arg*>, int>> argMatches;
@@ -90,7 +90,7 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 			}
 			/// Аргумент начинается с '-'
 			else if (currentArgument[0] == '-') {
-				std::string_view argumentWithoutDash{ currentArgument.data() + 1 };
+				std::string_view argumentWithoutDash{ currentArgument.substr(1)};
 
 				for (const auto& argument : arguments) {
 
@@ -122,7 +122,7 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 			else return ParseResult::Fail({ "In " + std::string(currentArgument) + ": The argument is set incorrectly: the character \'-\' is missing" });
 		}
 
-		if (!argumentDefined) return ParseResult::Fail({ "In " + std::string(currentArgument) + ": An argument with this value type was not found in the list of existing ones" });
+		if (!argumentDefined) return ParseResult::Fail({ "In " + std::string(currentArgument) + ": An argument was not found in the list of existing ones" });
 	}
 
 	return ParseResult::Ok();

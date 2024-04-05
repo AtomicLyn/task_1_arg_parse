@@ -48,13 +48,11 @@ namespace args_parse {
 		/**
 		* @brief Чистый виртуальный метод полного парсинга опции аргумента
 		* Выполняет парсинг короткого названия аргумента, после чего определяет значение из operands, соответствующее типу аргумента
-		* @param[in] arg входной аргумент из строки
 		*/
 		[[nodiscard]] virtual const ParseResult ParseOperandAndSetDefined() = 0;
 		/**
 		* @brief Чистый виртуальный метод полного парсинга длинной опции аргумента
 		* Выполняет парсинг полного названия аргумента, после чего определяет значение из operands, соответствующее типу аргумента
-		* @param[in] arg входной аргумент из строки
 		*/
 		[[nodiscard]] virtual const ParseResult ParseLongOperandAndSetDefined() = 0;
 		

@@ -9,13 +9,14 @@ const ParseResult Arg::ParseOption(std::string_view argWithoutDash) {
 
 	/// Препарсинг операндов
 	if (currentArg.size() > 1) {
+
 		std::string_view argWithoutOption(currentArg.c_str() + 1);
 
 		if (argWithoutOption[0] != '=') operands = argWithoutOption;
 		else {
 			if (argWithoutOption.size() < 2) return ParseResult::Fail({ "In " + currentArg + ": Symbol '='  was found, but there is no value" });
 
-			std::string_view argWithoutOptionAndEq(argWithoutOption.data() + 1);
+			std::string_view argWithoutOptionAndEq(argWithoutOption.substr(1));
 
 			operands = argWithoutOptionAndEq;
 		}
@@ -38,7 +39,7 @@ const std::pair<ParseResult, int> Arg::ParseLongOption(std::string_view argWitho
 		if (currentArg[matches] != longOption[matches]) break;
 
 	/// Сохранение остатка строки
-	if (currentArg.size() > matches) operands = currentArg.c_str() + matches;
+	if (currentArg.size() > matches) operands = currentArg.substr(matches);
 
 	return { ParseResult::Ok(), matches };
 }
