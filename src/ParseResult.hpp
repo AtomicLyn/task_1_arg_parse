@@ -9,6 +9,7 @@ namespace args_parse {
 		std::string Message; ///< Сообщение об ошибке
 	};
 
+	/// @brief Класс для хранения результата парсинга
 	class [[nodiscard]] ParseResult {
 		std::optional<Error> error; ///< Опциональное поле, хранящее ошибку в случае ошибки парсинга
 

@@ -16,8 +16,8 @@ namespace args_parse {
 		StringArg(StringValidator* validator, const char option, std::string longOption, std::string description = "");
 		/// Геттер для value
 		const std::string GetValue(); 
-		const ParseResult ParseOperandAndSetDefined() override;
-		const ParseResult ParseLongOperandAndSetDefined() override;
+		const ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
+		const ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
 	};
 
 }

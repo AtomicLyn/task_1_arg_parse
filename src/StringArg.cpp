@@ -10,32 +10,23 @@ const std::string StringArg::GetValue() {
 }
 
 
-const ParseResult StringArg::ParseOperandAndSetDefined() {
-	if (const auto valResult = (*validator)->Check(operands); valResult.IsOk()) {
-		value = operands;
+const ParseResult StringArg::ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) {
+	if (auto result = CheckOperand(nextArg, usedNextArg); !result.IsOk()) return result;
+	if (const auto valResult = (*validator)->Check(operands); !valResult.IsOk()) return valResult;
 
-		isDefined = true;
+	value = operands;
+	isDefined = true;
 
-		return ParseResult::Ok();
-	}
-	else return valResult;
+	return ParseResult::Ok();
 }
 
-const ParseResult StringArg::ParseLongOperandAndSetDefined() {
-	if (operands[0] != '=') 
-		return ParseResult::Fail({ "In " + currentArg + ": Symbol '=' or space between option and operand was not found" });
-	if (operands.size() <= 1) 
-		return ParseResult::Fail({ "In " + currentArg + ": Symbol '=' was found, but there is no value" });
+const ParseResult StringArg::ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) {
+	if (auto result = CheckLongOperand(nextArg, usedNextArg); !result.IsOk()) return result;
+	if (const auto valResult = (*validator)->Check(operands); !valResult.IsOk()) return valResult;
+	
+	value = operands;
+	isDefined = true;
 
-	operands = operands.substr(1);
-
-	if (const auto valResult = (*validator)->Check(operands); valResult.IsOk()) {
-		value = operands;
-
-		isDefined = true;
-
-		return ParseResult::Ok();
-	}
-	else return valResult;
+	return ParseResult::Ok();
 }
 

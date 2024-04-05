@@ -9,40 +9,34 @@ const bool BoolArg::GetValue() {
 	return value;
 }
 
-const ParseResult BoolArg::ParseOperandAndSetDefined() {
-	if (!isInteger(operands)) 
-		return ParseResult::Fail({ "In " + currentArg + ": The option is found, but the value is not integer" });
+const ParseResult BoolArg::ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) {
+	if (auto result = CheckOperand(nextArg, usedNextArg); !result.IsOk()) return result;
+
+	if (!isInteger(operands))
+		return ParseResult::Fail({ "In " + currentArg + " " + (nextArg.has_value() ? nextArg.value() : "") + " : The option is found, but the value is not integer"});
 
 	const auto num = atoi(operands.c_str());
 
-	if (const auto valResult = validator.Check(num); valResult.IsOk()) {
-		value = num == 1;
+	if (const auto valResult = validator.Check(num); !valResult.IsOk()) return valResult;
 
-		isDefined = true;
+	value = num == 1;
+	isDefined = true;
 
-		return ParseResult::Ok();
-	}
-	else return valResult;
+	return ParseResult::Ok();
 }
 
-const ParseResult BoolArg::ParseLongOperandAndSetDefined() {
-	if (operands[0] != '=') 
-		return ParseResult::Fail({ "In " + currentArg + ": Symbol '=' or space between option and operand was not found" });
-	if (operands.size() <= 1) 
-		return ParseResult::Fail({ "In " + currentArg + ": Symbol '='  was found, but there is no value" });
+const ParseResult BoolArg::ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) {
+	if (auto result = CheckLongOperand(nextArg, usedNextArg); !result.IsOk()) return result;
 
-	operands = operands.substr(1);
-
-	if (!isInteger(operands)) return ParseResult::Fail({ "In " + currentArg + ": The option is found, but the value is not integer" });
+	if (!isInteger(operands))
+		return ParseResult::Fail({ "In " + currentArg + " " + (nextArg.has_value() ? nextArg.value() : "") + " : The option is found, but the value is not integer"});
 
 	const auto num = atoi(operands.c_str());
 
-	if (const auto valResult = validator.Check(num); valResult.IsOk()) {
-		value = num == 1;
+	if (const auto valResult = validator.Check(num); !valResult.IsOk()) return valResult;
 
-		isDefined = true;
+	value = num == 1;
+	isDefined = true;
 
-		return ParseResult::Ok();
-	}
-	else return valResult;
+	return ParseResult::Ok();
 }

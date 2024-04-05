@@ -20,8 +20,8 @@ namespace args_parse {
 		const std::vector<bool> GetValues(); 
 		/// Количество значений в values
 		const int GetCount(); 
-		const ParseResult ParseOperandAndSetDefined() override;
-		const ParseResult ParseLongOperandAndSetDefined() override;
+		const ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
+		const ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
 	};
 
 }

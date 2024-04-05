@@ -23,6 +23,13 @@ namespace args_parse {
 		std::string operands; ///< Хранит остаток строки после предварительного парсинга
 		bool isDefined = false; ///< Указывает, был ли успешно найден аргумент в процессе парсинга
 	
+		/// Метод проверки операндов короткого аргумента и сдвига operands
+		/// @param[in] nextArg Следующий аргумент если таковой имеется
+		/// @param[in] usedNextArg Ссылка на булево значение, показывающее, был ли использован следующий аргумент
+		[[nodiscard]] const ParseResult CheckOperand(std::optional<std::string> nextArg, bool& usedNextArg);
+		/// Метод проверки операндов длинного аргумента и сдвига operands
+		/// @param[in] usedNextArg Ссылка на булево значение, показывающее, был ли использован следующий аргумент
+		[[nodiscard]] const ParseResult CheckLongOperand(std::optional<std::string> nextArg, bool& usedNextArg);
 	public:
 		Arg(ArgumentType type, const char option, const std::string longOption,  std::string description = "");
 		virtual ~Arg();
@@ -49,17 +56,20 @@ namespace args_parse {
 		* Возвращает пару значений с результатом парсинга и количеством совпавших символов в случае успешного парсинга
 		*/
 		[[nodiscard]] const std::pair<ParseResult, int> ParseLongOption(std::string_view argWithoutDash);
-		
 		/**
 		* @brief Чистый виртуальный метод полного парсинга опции аргумента
 		* Выполняет парсинг короткого названия аргумента, после чего определяет значение из operands, соответствующее типу аргумента
+		* @param[in] nextArg Следующий аргумент если таковой имеется
+		* @param[in] usedNextArg Ссылка на булево значение, показывающее, был ли использован следующий аргумент
 		*/
-		[[nodiscard]] virtual const ParseResult ParseOperandAndSetDefined() = 0;
+		[[nodiscard]] virtual const ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nexArg, bool& usedNextArg) = 0;
 		/**
 		* @brief Чистый виртуальный метод полного парсинга длинной опции аргумента
 		* Выполняет парсинг полного названия аргумента, после чего определяет значение из operands, соответствующее типу аргумента
+		* @param[in] nextArg Следующий аргумент если таковой имеется
+		* @param[in] usedNextArg Ссылка на булево значение, показывающее, был ли использован следующий аргумент
 		*/
-		[[nodiscard]] virtual const ParseResult ParseLongOperandAndSetDefined() = 0;
+		[[nodiscard]] virtual const ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nexArg, bool& usedNextArg) = 0;
 		
 	};
 
