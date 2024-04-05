@@ -26,11 +26,16 @@ namespace args_parse {
 	public:
 		Arg(ArgumentType type, const char option, const std::string longOption,  std::string description = "");
 		virtual ~Arg();
-		const char GetOption() const; ///< Геттер для option
-		const std::string GetLongOption() const; ///< Геттер для longOption
-		const std::string GetDescription() const; ///< Геттер для description
-		[[nodiscard]] const ArgumentType GetType() const; ///< Геттер для type
-		[[nodiscard]] const bool IsDefined() const; ///< Геттер для isDefined	
+		/// Геттер для option
+		const char GetOption() const; 
+		/// Геттер для longOption
+		const std::string GetLongOption() const; 
+		/// Геттер для description
+		const std::string GetDescription() const; 
+		/// Геттер для type
+		[[nodiscard]] const ArgumentType GetType() const; 
+		/// Геттер для isDefined
+		[[nodiscard]] const bool IsDefined() const;	
 		/**
 		* @brief Метод предварительного парсинга опции аргумента
 		* Выполняет парсинг короткого названия аргумента и сохраняет остраток строки в operands

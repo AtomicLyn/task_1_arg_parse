@@ -31,7 +31,8 @@ namespace args_parse {
 		*/
 		[[nodiscard]] const ParseResult ParseSubsequence(std::string_view argumentWithoutDash);
 	public:
-		void Add(Arg* argument); ///< Метод для добавления возможного аргумента командной строки
+		/// Метод для добавления возможного аргумента командной строки
+		void Add(Arg* argument); 
 		/**
 		* @brief Основной метод парсинга аргументов командной строки
 		* Выполняет последовательный парсинг каждого принятого аргумента из командной строки.
@@ -40,6 +41,7 @@ namespace args_parse {
 		* @return False , если во время парсинга одного из аргументов возникла ошибка
 		*/
 		[[nodiscard]] const ParseResult Parse(const int argc, const char** argv);
-		const std::string GetHelp() const; ///< Метод для получения всей доступной информации о возможных аргументах
+		/// Метод для получения всей доступной информации о возможных аргументах
+		const std::string GetHelp() const; 
 	};
 }

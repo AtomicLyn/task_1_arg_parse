@@ -16,8 +16,10 @@ namespace args_parse {
 		std::vector<bool> values;
 	public:
 		MultiBoolArg(const char option, std::string longOption, std::string description = "");
-		const std::vector<bool> GetValues(); ///< Геттер для values
-		const int GetCount(); ///< Количество значений в values
+		/// Геттер для values
+		const std::vector<bool> GetValues(); 
+		/// Количество значений в values
+		const int GetCount(); 
 		const ParseResult ParseOperandAndSetDefined() override;
 		const ParseResult ParseLongOperandAndSetDefined() override;
 	};

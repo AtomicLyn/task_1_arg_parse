@@ -14,7 +14,8 @@ namespace args_parse {
 		std::string value; ///< Поле, хранящее значение аргумента в случае успешного парсинга
 	public:
 		StringArg(StringValidator* validator, const char option, std::string longOption, std::string description = "");
-		const std::string GetValue(); ///< Геттер для value
+		/// Геттер для value
+		const std::string GetValue(); 
 		const ParseResult ParseOperandAndSetDefined() override;
 		const ParseResult ParseLongOperandAndSetDefined() override;
 	};

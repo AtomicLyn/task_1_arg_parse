@@ -18,8 +18,10 @@ namespace args_parse {
 		std::vector<std::string> values; 
 	public:
 		MultiStringArg(StringValidator* validator, const char option, std::string longOption, std::string description = "");
-		const std::vector<std::string> GetValues(); ///< Геттер для values
-		const int GetCount(); ///< Количество значений в values
+		/// Геттер для values
+		const std::vector<std::string> GetValues(); 
+		/// Количество значений в values
+		const int GetCount(); 
 		const ParseResult ParseOperandAndSetDefined() override;
 		const ParseResult ParseLongOperandAndSetDefined() override;
 	};
