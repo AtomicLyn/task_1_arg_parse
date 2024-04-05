@@ -24,6 +24,7 @@ const ParseResult ArgParser::ParseSubsequence(string_view argumentWithoutDash, o
 
 		for (const auto& argument : arguments) {
 
+			/// Парсинг сокращенного названия аргумента
 			if (const auto result = (*argument)->ParseOption(&(*currentOption)); result.IsOk()) {
 				argumentDefined = true;
 
@@ -68,6 +69,7 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 
 				for (const auto& argument : arguments) {
 
+					/// Парсинг длинного названия
 					if (const auto result = (*argument)->ParseLongOption(argumentWithoutDash); result.first.IsOk()) {
 						argMatches.push_back(pair(argument, result.second));
 					}
@@ -75,19 +77,23 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 
 				}
 
+				/// Были найдены совпадения
 				if (argMatches.size() > 0) {
 					auto compFun = [](const pair<shared_ptr<Arg*>, int>& l, const pair<shared_ptr<Arg*>, int>& r) { return l.second < r.second; };
 
+					/// Аргумент с максимальным совпадением символов
 					auto maxMatch = std::max_element(argMatches.begin(), argMatches.end(), compFun);
 
 					auto condFun = [&](const pair<shared_ptr<Arg*>, int>& el) { return el.second == (*maxMatch).second; };
 
+					/// Количество аргументов с максимальным совпадением символов
 					auto maxMatchCount = std::count_if(argMatches.begin(), argMatches.end(), condFun);
 
 					/// Найдено несколько частичных совпадений одинаковой длины
 					if (maxMatchCount > 1)
 						return ParseResult::Fail({ "In " + string(currentArgument) + ": Several definitions of the argument have been found" });
 
+					/// Парсинг единственного максимального аргумента
 					if (const auto result = (*(*maxMatch).first)->ParseLongOperandAndSetDefined(nextArgument, usedNextArg); result.IsOk()) argumentDefined = true;
 					else if (!result.IsNotFound()) return result;
 				}
@@ -99,6 +105,7 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 
 				for (const auto& argument : arguments) {
 
+					/// Парсинг сокращенного названия аргумента
 					if (const auto result = (*argument)->ParseOption(argumentWithoutDash); result.IsOk()) {
 
 						if (const auto operandResult = (*argument)->ParseOperandAndSetDefined(nextArgument, usedNextArg); operandResult.IsOk()) {
@@ -108,6 +115,7 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 							if ((*argument)->GetType() == ArgumentType::Empty && argumentWithoutDash.size() > 1) {
 								argumentDefined = false;
 
+								/// Парсинг подпоследовательности в строке
 								if (const auto subResult = ParseSubsequence(argumentWithoutDash, nextArgument, usedNextArg); subResult.IsOk()) {
 									argumentDefined = true;
 								}

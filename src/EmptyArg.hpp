@@ -8,7 +8,6 @@ namespace args_parse {
 	* @brief Класс пустого аргумента
 	* Аргумент не содержит ничего, кроме опции
 	*/
-
 	class EmptyArg : public Arg {
 	public:
 		EmptyArg(const char option, std::string longOption, std::string description = "");

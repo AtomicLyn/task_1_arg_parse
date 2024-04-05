@@ -10,7 +10,6 @@ namespace args_parse {
 	* @brief Класс мультистрокового аргумента
 	* Аргумент содержит опцию и набор строковых операндов
 	*/
-
 	class MultiStringArg : public Arg {
 		const std::unique_ptr<StringValidator*> validator;
 		/// Поле, хранящее значения аргумента в случае успешного парсинга 

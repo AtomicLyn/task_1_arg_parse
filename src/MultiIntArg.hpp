@@ -10,7 +10,6 @@ namespace args_parse {
 	* @brief Класс мультицелочисленного аргумента
 	* Аргумент содержит опцию и набор целочисленных операндов
 	*/
-
 	class MultiIntArg : public Arg {
 		const std::unique_ptr<IntValidator*> validator;
 		/// Поле, хранящее значения аргумента в случае успешного парсинга 
