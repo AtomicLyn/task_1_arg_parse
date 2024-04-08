@@ -18,11 +18,11 @@ namespace args_parse {
 
 	public:
 		/// Фабричный метод для случая, если парсинг успешно выполнен
-		static ParseResult Ok() { return ParseResult{}; }
+		[[nodiscard]] static ParseResult Ok() { return ParseResult{}; }
 		/// Фабричный метод для случая, если аргумент не был найден
-		static ParseResult Fail() { return ParseResult{ {  } }; }
+		[[nodiscard]] static ParseResult Fail() { return ParseResult{ {  } }; }
 		/// Фабричный метод для случая, если парсинг завершился с ошибкой
-		static ParseResult Fail(Error err) { return ParseResult{ std::move(err) }; }
+		[[nodiscard]] static ParseResult Fail(Error err) { return ParseResult{ std::move(err) }; }
 
 		/// Метод для определения результата парсинга
 		[[nodiscard]] const bool IsOk() const { return !error.has_value(); } 
