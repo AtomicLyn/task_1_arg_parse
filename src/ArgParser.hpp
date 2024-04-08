@@ -24,12 +24,12 @@ namespace args_parse {
 	* @endcode
 	*/
 	class ArgParser {
-		std::vector<std::shared_ptr<Arg*>> arguments; ///< Поле, хранящее возможные аргументы в командной строке
+		std::vector<Arg*> arguments; ///< Поле, хранящее возможные аргументы в командной строке
 		/**
 		* @brief Вспомогательный метод для парсинга последовательности нескольких аргументов
 		* Метод выполняет парсинг подпоследовательности после первого встретившегося аргумента. Определяет последовательность пустых аргументов и любой возможный аргумент на конце
 		*/
-		[[nodiscard]] const ParseResult ParseSubsequence(std::string_view argumentWithoutDash, std::optional<std::string> nextArg, bool& usedNextArg);
+		[[nodiscard]] ParseResult ParseSubsequence(std::string_view argumentWithoutDash, std::optional<std::string> nextArg, bool& usedNextArg);
 	public:
 		/// Метод для добавления возможного аргумента командной строки
 		void Add(Arg* argument);
@@ -40,7 +40,7 @@ namespace args_parse {
 		* @return True , если парсинг всех аргументов из возможных arguments выполнен успешного
 		* @return False , если во время парсинга одного из аргументов возникла ошибка
 		*/
-		[[nodiscard]] const ParseResult Parse(const int argc, const char** argv);
+		[[nodiscard]] ParseResult Parse(const int argc, const char** argv);
 		/// Метод для получения всей доступной информации о возможных аргументах
 		const std::string GetHelp() const;
 	};

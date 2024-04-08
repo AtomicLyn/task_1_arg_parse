@@ -3,13 +3,14 @@
 
 using namespace args_parse;
 
-BoolArg::BoolArg(const char option, std::string longOption, std::string description) : Arg(ArgumentType::Bool, option, longOption, description) {};
+BoolArg::BoolArg(const char option, std::string longOption, std::string description) 
+	: Arg(ArgumentType::Bool, option, longOption, description) {};
 
 const bool BoolArg::GetValue() {
 	return value;
 }
 
-const ParseResult BoolArg::ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) {
+ParseResult BoolArg::ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) {
 	if (auto result = CheckOperand(nextArg, usedNextArg); !result.IsOk()) return result;
 
 	if (!isInteger(operands))
@@ -25,7 +26,7 @@ const ParseResult BoolArg::ParseOperandAndSetDefined(const std::optional<std::st
 	return ParseResult::Ok();
 }
 
-const ParseResult BoolArg::ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) {
+ParseResult BoolArg::ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) {
 	if (auto result = CheckLongOperand(nextArg, usedNextArg); !result.IsOk()) return result;
 
 	if (!isInteger(operands))

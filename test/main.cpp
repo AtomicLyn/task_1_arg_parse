@@ -15,7 +15,7 @@ using namespace args_parse;
 
 TEST_CASE("IntValidator", "[basic]") {
 	auto min = 0, max = 10;
-	IntInRangeValidator rangeValidator{min, max};
+	IntInRangeValidator rangeValidator{ min, max };
 
 	SECTION("Current value") {
 		auto num = 5;
@@ -203,7 +203,7 @@ TEST_CASE("BoolArg", "[basic]") {
 }
 
 TEST_CASE("IntArg", "[basic]") {
-	IntArg arg{ new IntInRangeValidator{ 0, 10 }, 'c', "check" };
+	IntArg arg{ std::make_unique<IntInRangeValidator>(IntInRangeValidator{ 0, 10 }), 'c', "check" };
 	auto nextArg = std::nullopt;
 	auto usedNextArg = false;
 
@@ -249,7 +249,7 @@ TEST_CASE("IntArg", "[basic]") {
 }
 
 TEST_CASE("StringArg", "[basic]") {
-	StringArg arg{ new StringFileNameValidator {}, 'c', "check" };
+	StringArg arg{ std::make_unique<StringFileNameValidator>(StringFileNameValidator {}), 'c', "check" };
 	auto nextArg = std::nullopt;
 	auto usedNextArg = false;
 
@@ -343,7 +343,7 @@ TEST_CASE("MultiBoolArg", "[basic]") {
 }
 
 TEST_CASE("MultiIntArg", "[basic]") {
-	MultiIntArg arg{ new IntInRangeValidator{ 0, 10 }, 'c', "check" };
+	MultiIntArg arg{ std::make_unique<IntInRangeValidator>(IntInRangeValidator{ 0, 10 }), 'c', "check" };
 	auto nextArg = std::nullopt;
 	auto usedNextArg = false;
 
@@ -392,7 +392,7 @@ TEST_CASE("MultiIntArg", "[basic]") {
 }
 
 TEST_CASE("MultiStringArg", "[basic]") {
-	MultiStringArg arg{ new StringFileNameValidator {}, 'c', "check" };
+	MultiStringArg arg{ std::make_unique<StringFileNameValidator>(StringFileNameValidator {}), 'c', "check" };
 	auto nextArg = std::nullopt;
 	auto usedNextArg = false;
 
@@ -447,14 +447,14 @@ TEST_CASE("ArgParser", "[basic]") {
 	EmptyArg sleep{ 's', "sleep" };
 	BoolArg lock{ 'l', "lock", "Input 0 or 1 (ex. -l=0)" };
 
-	IntArg warnas{ new IntInRangeValidator{0, 10}, 'w', "warnas" };
-	IntArg warnings{ new IntInRangeValidator{0, 10}, 'W', "warnings" };
+	IntArg warnas{ std::make_unique<IntInRangeValidator>(IntInRangeValidator{0, 10}), 'w', "warnas" };
+	IntArg warnings{ std::make_unique<IntInRangeValidator>(IntInRangeValidator{0, 10}), 'W', "warnings" };
 
-	StringArg name{ new StringFileNameValidator{}, 'n', "name" };
+	StringArg name{ std::make_unique<StringFileNameValidator>(StringFileNameValidator{}), 'n', "name" };
 	MultiBoolArg authorizes{ 'a', "authorizes" };
-	MultiIntArg codes{ new IntInRangeValidator{0, 10}, 'c', "codes" };
-	MultiStringArg output{ new StringFileFormatValidator{}, 'o', "output" };
-	
+	MultiIntArg codes{ std::make_unique<IntInRangeValidator>(IntInRangeValidator{0, 10}), 'c', "codes" };
+	MultiStringArg output{ std::make_unique<StringFileFormatValidator>(StringFileFormatValidator{}), 'o', "output" };
+
 	parser.Add(&help);
 	parser.Add(&sleep);
 	parser.Add(&lock);
@@ -466,7 +466,7 @@ TEST_CASE("ArgParser", "[basic]") {
 	parser.Add(&authorizes);
 
 	SECTION("All current arguments") {
-		std::vector args{"PLUG", "-hsl0",  "--warnings=10", "--warnas", "10", "-n", "file.txt", "-o=*.jpg",  "-c1", "--c=1", "-a=0"};
+		std::vector args{ "PLUG", "-hsl0",  "--warnings=10", "--warnas", "10", "-n", "file.txt", "-o=*.jpg",  "-c1", "--c=1", "-a=0" };
 
 		auto result = parser.Parse(static_cast<int>(args.size()), &args[0]);
 
@@ -490,7 +490,7 @@ TEST_CASE("ArgParser", "[basic]") {
 	}
 
 	SECTION("Current shortened arguments") {
-		std::vector args{ "PLUG", "--warna=10", "--warni=10"};
+		std::vector args{ "PLUG", "--warna=10", "--warni=10" };
 
 		auto result = parser.Parse(static_cast<int>(args.size()), &args[0]);
 

@@ -11,18 +11,18 @@ namespace args_parse {
 	* Аргумент содержит опцию и набор целочисленных операндов
 	*/
 	class MultiIntArg : public Arg {
-		const std::unique_ptr<IntValidator*> validator;
+		const std::unique_ptr<IntValidator> validator;
 		/// Поле, хранящее значения аргумента в случае успешного парсинга 
 		/// @warning Может быть передано несколько одинаковых аргументов командной строки
 		std::vector<int> values;
 	public:
-		MultiIntArg(IntValidator* validator, const char option, std::string longOption, std::string description = "");
+		MultiIntArg(std::unique_ptr<IntValidator> validator, const char option, std::string longOption, std::string description = "");
 		/// Геттер для values
-		const std::vector<int> GetValues(); 
+		const std::vector<int>& GetValues() const;
 		/// Количество значений в values
-		const int GetCount(); 
-		const ParseResult ParseOperandAndSetDefined(std::optional<std::string> nextArg, bool& usedNextArg) override;
-		const ParseResult ParseLongOperandAndSetDefined(std::optional<std::string> nextArg, bool& usedNextArg) override;
+		const int GetCount();
+		ParseResult ParseOperandAndSetDefined(std::optional<std::string> nextArg, bool& usedNextArg) override;
+		ParseResult ParseLongOperandAndSetDefined(std::optional<std::string> nextArg, bool& usedNextArg) override;
 	};
 
 }

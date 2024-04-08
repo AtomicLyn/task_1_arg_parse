@@ -2,7 +2,7 @@
 
 using namespace args_parse;
 
-const ParseResult Arg::CheckOperand(std::optional<std::string> nextArg, bool& usedNextArg) {
+ParseResult Arg::CheckOperand(std::optional<std::string> nextArg, bool& usedNextArg) {
 	if (operands.empty() && !nextArg.has_value()) return ParseResult::Fail({ "In " + currentArg + " : An operand was expected" });
 	if (operands[0] == '=' && operands.size() < 2) return ParseResult::Fail({ "In " + currentArg + " : Symbol '='  was found, but there is no value" });
 
@@ -16,7 +16,7 @@ const ParseResult Arg::CheckOperand(std::optional<std::string> nextArg, bool& us
 	return ParseResult::Ok();
 }
 
-const ParseResult Arg::CheckLongOperand(std::optional<std::string> nextArg, bool& usedNextArg) {
+ParseResult Arg::CheckLongOperand(std::optional<std::string> nextArg, bool& usedNextArg) {
 	if (!operands.empty()) {
 		if (operands[0] != '=')
 			return ParseResult::Fail({ "In " + currentArg + " : Symbol '=' or space between option and operand was not found" });
@@ -35,7 +35,7 @@ const ParseResult Arg::CheckLongOperand(std::optional<std::string> nextArg, bool
 	return ParseResult::Ok();
 }
 
-const ParseResult Arg::ParseOption(std::string_view argWithoutDash) {
+ParseResult Arg::ParseOption(std::string_view argWithoutDash) {
 	currentArg = argWithoutDash;
 
 	if (currentArg.find(option) != 0) return ParseResult::Fail();
@@ -66,17 +66,17 @@ const std::pair<ParseResult, int> Arg::ParseLongOption(std::string_view argWitho
 Arg::Arg(ArgumentType type, const char option, std::string longOption, std::string description)
 	: type{ type }, option{ option }, longOption{ longOption }, description{ description }, operands("") { }
 
-Arg::~Arg() {}
+Arg::~Arg() = default;
 
 const char Arg::GetOption() const {
 	return option;
 }
 
-const std::string Arg::GetLongOption() const {
+std::string_view Arg::GetLongOption() const {
 	return longOption;
 }
 
-const std::string Arg::GetDescription() const {
+std::string_view Arg::GetDescription() const {
 	return description;
 }
 

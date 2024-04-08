@@ -12,10 +12,10 @@ using std::vector;
 using std::shared_ptr;
 
 void ArgParser::Add(Arg* argument) {
-	arguments.push_back(std::make_unique<Arg*>(argument));
+	arguments.push_back(argument);
 }
 
-const ParseResult ArgParser::ParseSubsequence(string_view argumentWithoutDash, optional<string> nextArg, bool& usedNextArg) {
+ParseResult ArgParser::ParseSubsequence(string_view argumentWithoutDash, optional<string> nextArg, bool& usedNextArg) {
 	string_view argumentWithoutOption(argumentWithoutDash.substr(1));
 	bool argumentDefined = false;
 
@@ -25,13 +25,13 @@ const ParseResult ArgParser::ParseSubsequence(string_view argumentWithoutDash, o
 		for (const auto& argument : arguments) {
 
 			/// Парсинг сокращенного названия аргумента
-			if (const auto result = (*argument)->ParseOption(&(*currentOption)); result.IsOk()) {
+			if (const auto result = argument->ParseOption(&(*currentOption)); result.IsOk()) {
 				argumentDefined = true;
 
-				if (const auto operandResult = (*argument)->ParseOperandAndSetDefined(nextArg, usedNextArg); operandResult.IsOk()) {
+				if (const auto operandResult = argument->ParseOperandAndSetDefined(nextArg, usedNextArg); operandResult.IsOk()) {
 
 					/// Последний аргумент - не EmptyArg
-					if ((*argument)->GetType() != ArgumentType::Empty) return ParseResult::Ok();
+					if (argument->GetType() != ArgumentType::Empty) return ParseResult::Ok();
 
 					break;
 				}
@@ -47,7 +47,7 @@ const ParseResult ArgParser::ParseSubsequence(string_view argumentWithoutDash, o
 	return ParseResult::Ok();
 }
 
-const ParseResult ArgParser::Parse(const int argc, const char** argv) {
+ParseResult ArgParser::Parse(const int argc, const char** argv) {
 	for (auto i = 1; i < argc; i++) {
 		// Текущий аргумент
 		const string currentArgument{ argv[i] };
@@ -65,12 +65,12 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 				string_view argumentWithoutDash{ string_view{currentArgument}.substr(2) };
 
 				/// Обработка частично встретившихся названий аргументов
-				vector<pair<shared_ptr<Arg*>, int>> argMatches;
+				vector<pair<Arg*, int>> argMatches;
 
 				for (const auto& argument : arguments) {
 
 					/// Парсинг длинного названия
-					if (const auto result = (*argument)->ParseLongOption(argumentWithoutDash); result.first.IsOk()) {
+					if (const auto result = argument->ParseLongOption(argumentWithoutDash); result.first.IsOk()) {
 						argMatches.push_back(pair(argument, result.second));
 					}
 					else if (!result.first.IsNotFound()) return result.first;
@@ -79,12 +79,12 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 
 				/// Были найдены совпадения
 				if (argMatches.size() > 0) {
-					auto compFun = [](const pair<shared_ptr<Arg*>, int>& l, const pair<shared_ptr<Arg*>, int>& r) { return l.second < r.second; };
+					auto compFun = [](const pair<Arg*, int>& l, const pair<Arg*, int>& r) { return l.second < r.second; };
 
 					/// Аргумент с максимальным совпадением символов
 					auto maxMatch = std::max_element(argMatches.begin(), argMatches.end(), compFun);
 
-					auto condFun = [&](const pair<shared_ptr<Arg*>, int>& el) { return el.second == (*maxMatch).second; };
+					auto condFun = [&](const pair<Arg*, int>& el) { return el.second == maxMatch->second; };
 
 					/// Количество аргументов с максимальным совпадением символов
 					auto maxMatchCount = std::count_if(argMatches.begin(), argMatches.end(), condFun);
@@ -94,7 +94,7 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 						return ParseResult::Fail({ "In " + string(currentArgument) + ": Several definitions of the argument have been found" });
 
 					/// Парсинг единственного максимального аргумента
-					if (const auto result = (*(*maxMatch).first)->ParseLongOperandAndSetDefined(nextArgument, usedNextArg); result.IsOk()) argumentDefined = true;
+					if (const auto result = maxMatch->first->ParseLongOperandAndSetDefined(nextArgument, usedNextArg); result.IsOk()) argumentDefined = true;
 					else if (!result.IsNotFound()) return result;
 				}
 
@@ -106,13 +106,13 @@ const ParseResult ArgParser::Parse(const int argc, const char** argv) {
 				for (const auto& argument : arguments) {
 
 					/// Парсинг сокращенного названия аргумента
-					if (const auto result = (*argument)->ParseOption(argumentWithoutDash); result.IsOk()) {
+					if (const auto result = argument->ParseOption(argumentWithoutDash); result.IsOk()) {
 
-						if (const auto operandResult = (*argument)->ParseOperandAndSetDefined(nextArgument, usedNextArg); operandResult.IsOk()) {
+						if (const auto operandResult = argument->ParseOperandAndSetDefined(nextArgument, usedNextArg); operandResult.IsOk()) {
 							argumentDefined = true;
 
 							/// Аргумент является EmptyArg и строка еще имеет символы
-							if ((*argument)->GetType() == ArgumentType::Empty && argumentWithoutDash.size() > 1) {
+							if (argument->GetType() == ArgumentType::Empty && argumentWithoutDash.size() > 1) {
 								argumentDefined = false;
 
 								/// Парсинг подпоследовательности в строке
@@ -150,11 +150,11 @@ const string ArgParser::GetHelp() const {
 
 	for (const auto& argument : arguments) {
 		result += "-";
-		result += (*argument)->GetOption();
+		result += argument->GetOption();
 		result += " --";
-		result += (*argument)->GetLongOption();
+		result += argument->GetLongOption();
 		result += " | ";
-		result += (*argument)->GetDescription();
+		result += argument->GetDescription();
 		result += "\n";
 	}
 

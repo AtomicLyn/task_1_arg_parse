@@ -17,11 +17,11 @@ namespace args_parse {
 	public:
 		MultiBoolArg(const char option, std::string longOption, std::string description = "");
 		/// Геттер для values
-		const std::vector<bool> GetValues(); 
+		const std::vector<bool>& GetValues(); 
 		/// Количество значений в values
 		const int GetCount(); 
-		const ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
-		const ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
+		ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
+		ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
 	};
 
 }

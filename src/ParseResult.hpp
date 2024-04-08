@@ -17,10 +17,12 @@ namespace args_parse {
 		ParseResult(Error err) : error{ std::move(err) } {};
 
 	public:
+		/// Фабричный метод для случая, если парсинг успешно выполнен
 		static ParseResult Ok() { return ParseResult{}; }
-		/// Фабрика для случая, если аргумент не был найден
-		static ParseResult Fail() { return ParseResult{ {  } }; } 
-		static ParseResult Fail(Error err) { return ParseResult{ err }; }
+		/// Фабричный метод для случая, если аргумент не был найден
+		static ParseResult Fail() { return ParseResult{ {  } }; }
+		/// Фабричный метод для случая, если парсинг завершился с ошибкой
+		static ParseResult Fail(Error err) { return ParseResult{ std::move(err) }; }
 
 		/// Метод для определения результата парсинга
 		[[nodiscard]] const bool IsOk() const { return !error.has_value(); } 

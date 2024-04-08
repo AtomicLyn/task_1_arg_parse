@@ -3,9 +3,10 @@
 
 using namespace args_parse;
 
-MultiBoolArg::MultiBoolArg(const char option, std::string longOption, std::string description) : Arg(ArgumentType::MultiBool, option, longOption, description) {};
+MultiBoolArg::MultiBoolArg(const char option, std::string longOption, std::string description) 
+	: Arg(ArgumentType::MultiBool, option, longOption, description) {};
 
-const std::vector<bool> MultiBoolArg::GetValues() {
+const std::vector<bool>& MultiBoolArg::GetValues() {
 	return values;
 }
 
@@ -13,7 +14,7 @@ const int MultiBoolArg::GetCount() {
 	return values.size();
 }
 
-const ParseResult MultiBoolArg::ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) {
+ParseResult MultiBoolArg::ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) {
 	if (auto result = CheckOperand(nextArg, usedNextArg); !result.IsOk()) return result;
 
 	if (!isInteger(operands))
@@ -30,7 +31,7 @@ const ParseResult MultiBoolArg::ParseOperandAndSetDefined(const std::optional<st
 
 }
 
-const ParseResult MultiBoolArg::ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) {
+ParseResult MultiBoolArg::ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) {
 	if (auto result = CheckLongOperand(nextArg, usedNextArg); !result.IsOk()) return result;
 
 	if (!isInteger(operands))

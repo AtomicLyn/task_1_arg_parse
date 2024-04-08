@@ -11,8 +11,8 @@ namespace args_parse {
 	class EmptyArg : public Arg {
 	public:
 		EmptyArg(const char option, std::string longOption, std::string description = "");
-		const ParseResult ParseOperandAndSetDefined(std::optional<std::string> nextArg, bool& usedNextArg) override;
-		const ParseResult ParseLongOperandAndSetDefined(std::optional<std::string> nextArg, bool& usedNextArg) override;
+		ParseResult ParseOperandAndSetDefined(std::optional<std::string> nextArg, bool& usedNextArg) override;
+		ParseResult ParseLongOperandAndSetDefined(std::optional<std::string> nextArg, bool& usedNextArg) override;
 	};
 
 }

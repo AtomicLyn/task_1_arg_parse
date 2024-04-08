@@ -10,7 +10,9 @@
 #include "Validators.hpp"
 
 using namespace args_parse;
-using namespace std;
+using std::cout;
+using std::endl;
+using std::boolalpha;
 
 int main(int argc, const char **argv)
 { 
@@ -20,19 +22,30 @@ int main(int argc, const char **argv)
     }
     cout << endl << endl;
 
-    ArgParser parser;
 
+    ArgParser parser;
     EmptyArg help{ 'h', "help", "Get some help" };
     EmptyArg fast{ 'f', "fast", "Gotta go fast (ex. -f)" };
     EmptyArg sleep{ 's', "sleep" };
     EmptyArg megafast{ 'm', "megafast", "Gotta go megafast" };
     BoolArg lock{ 'l', "lock", "Input 0 or 1 (ex. -l=0)" };
-    IntArg warnas{ new IntInRangeValidator{0, 100}, 'w', "warnas", "Input integer value (ex. -w=10)" };
-    IntArg warnings{ new IntInRangeValidator{0, 100}, 'W', "warnings", "Input integer value (ex. -W=10)" };
-    StringArg name{ new StringFileNameValidator{}, 'n', "name", "Input string value (ex. -n=o.txt)" };
+
+    IntInRangeValidator warnasValidator{ 0, 100 };
+    IntArg warnas{ std::make_unique<IntInRangeValidator>(warnasValidator), 'w', "warnas", "Input integer value (ex. -w=10)" };
+
+    IntInRangeValidator warningsValidator{ 0,100 };
+    IntArg warnings{ std::make_unique<IntInRangeValidator>(warningsValidator), 'W', "warnings", "Input integer value (ex. -W=10)"};
+
+    StringFileNameValidator nameValidator{};
+    StringArg name{ std::make_unique<StringFileNameValidator>(nameValidator), 'n', "name", "Input string value (ex. -n=o.txt)" };
+
     MultiBoolArg authorizes{ 'a', "authorizes" };
-    MultiIntArg codes{ new IntInRangeValidator{0, 1000}, 'c', "codes" };
-    MultiStringArg output{ new StringFileFormatValidator{}, 'o', "output" };
+
+    IntInRangeValidator codesValidator{ 0, 1000 };
+    MultiIntArg codes{ std::make_unique<IntInRangeValidator>(IntInRangeValidator{0, 100}), 'c', "codes" };
+
+    StringFileFormatValidator outputValidator{};
+    MultiStringArg output{ std::make_unique<StringFileFormatValidator>(outputValidator), 'o', "output" };
 
     parser.Add(&help);
     parser.Add(&fast);
