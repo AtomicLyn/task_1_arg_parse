@@ -3,24 +3,11 @@ cmake_minimum_required(VERSION 3.28)
 project(ArgParser)
 
 add_library(args_parse STATIC 
-	Arg.cpp
+	Args.cpp
+	Args.hpp
 	ArgParser.cpp
 	ArgParser.hpp
 	ArgumentType.hpp
-	BoolArg.cpp
-	BoolArg.hpp
-	EmptyArg.cpp
-	EmptyArg.hpp
-	IntArg.cpp
-	IntArg.hpp
-	MultiBoolArg.cpp
-	MultiBoolArg.hpp
-	MultiIntArg.cpp
-	MultiIntArg.hpp
-	MultiStringArg.cpp
-	MultiStringArg.hpp
-	StringArg.cpp
-	StringArg.hpp
 	ParseResult.hpp
 	Helpers.hpp
 	Validators.hpp

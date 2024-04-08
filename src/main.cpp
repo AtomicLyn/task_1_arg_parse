@@ -1,11 +1,5 @@
 #include <iostream>
-#include "EmptyArg.hpp"
-#include "BoolArg.hpp"
-#include "IntArg.hpp"
-#include "StringArg.hpp"
-#include "MultiBoolArg.hpp"
-#include "MultiIntArg.hpp"
-#include "MultiStringArg.hpp"
+#include "Args.hpp"
 #include "ArgParser.hpp"
 #include "Validators.hpp"
 

@@ -1,7 +1,5 @@
 #include "ArgParser.hpp"
-#include "Arg.hpp"
-#include <string>
-#include <algorithm>
+#include "Args.hpp"
 
 using namespace args_parse;
 using std::string;
