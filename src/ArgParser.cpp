@@ -69,7 +69,7 @@ ParseResult ArgParser::Parse(const int argc, const char** argv) {
 
 					/// Парсинг длинного названия
 					if (const auto result = argument->ParseLongOption(argumentWithoutDash); result.first.IsOk()) {
-						argMatches.push_back(pair(argument, result.second));
+						argMatches.push_back({ argument, result.second });
 					}
 					else if (!result.first.IsNotFound()) return result.first;
 
