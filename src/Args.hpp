@@ -1,11 +1,14 @@
 #pragma once
 
-#include "ArgumentType.hpp"
 #include "ParseResult.hpp"
 #include "Validators.hpp"
 
 namespace args_parse {
-	
+	/**
+	* @brief Класс-перечисление основных типов аргументов
+	* Используется для сопоставления типов при парсинге нескольких последовательных EmptyArg и определения последнего типа подпоследовательности
+	*/
+	enum class ArgumentType { Empty, Bool, Int, String, MultiBool, MultiInt, MultiString };
 	/**
 	* @brief Базовый абстрактный класс для всех аргументов
 	* Частично реализует общий функционал всех дочерних классов
