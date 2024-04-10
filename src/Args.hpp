@@ -3,13 +3,14 @@
 #include "ParseResult.hpp"
 #include "Validators.hpp"
 #include "Helpers.hpp"
+#include "UserTypes.hpp"
 
 namespace args_parse {
 	/**
 	* @brief Класс-перечисление основных типов аргументов
 	* Используется для сопоставления типов при парсинге нескольких последовательных EmptyArg и определения последнего типа подпоследовательности
 	*/
-	enum class ArgumentType { Empty, Bool, Int, String, MultiBool, MultiInt, MultiString };
+	enum class ArgumentType { UserType, Empty, Bool, Int, String, MultiBool, MultiInt, MultiString };
 	/**
 	* @brief Базовый абстрактный класс для всех аргументов
 	* Частично реализует общий функционал всех дочерних классов
@@ -91,20 +92,35 @@ namespace args_parse {
 	* @brief Шаблон класса одиночного аргумента
 	* Аргумент содержит опцию и шаблонный операнд
 	*/
-	template<typename T = Validator<int>>
+	template<typename T>
 	class SingleArg : public AbstractArg {
-		T userClass;
-		std::unique_ptr<Validator<T>> validator;
-		T value; ///< Поле, хранящее значение аргумента в случае успешного парсинга
+		UserType<T> value; ///< Поле, хранящее значение аргумента в случае успешного парсинга
 	public:
-		SingleArg(std::unique_ptr<Validator<T>> validator, const char option, std::string longOption, std::string description = "");
+		SingleArg(UserType<T> userType, const char option, std::string longOption, std::string description = "")
+			: value{ userType }, AbstractArg(ArgumentType::UserType, option, longOption, description) {};
 
 		/// Геттер для value
-		const T GetValue() const;
+		const T GetValue() const {
+			return value.Get();
+		}
 
-		ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
+		ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
+			if (auto result = value.Parse(operands); result.IsOk()) {
+				isDefined = true;
 
-		ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
+				return ParseResult::Ok();
+			}
+			else return result;
+		}
+
+		ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
+			if (auto result = value.Parse(operands); result.IsOk()) {
+				isDefined = true;
+
+				return ParseResult::Ok();
+			}
+			else return result;
+		}
 	};
 
 	/**
