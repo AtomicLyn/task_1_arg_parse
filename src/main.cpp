@@ -22,24 +22,24 @@ int main(int argc, const char **argv)
     EmptyArg fast{ 'f', "fast", "Gotta go fast (ex. -f)" };
     EmptyArg sleep{ 's', "sleep" };
     EmptyArg megafast{ 'm', "megafast", "Gotta go megafast" };
-    BoolArg lock{ 'l', "lock", "Input 0 or 1 (ex. -l=0)" };
+    SingleArg<bool> lock{ 'l', "lock", "Input 0 or 1 (ex. -l=0)" };
 
     InRangeValidator<int> warnasValidator{ 0, 100 };
-    IntArg warnas{ std::make_unique<InRangeValidator<int>>(warnasValidator), 'w', "warnas", "Input integer value (ex. -w=10)" };
+    SingleArg<int> warnas{ std::make_unique<InRangeValidator<int>>(warnasValidator), 'w', "warnas", "Input integer value (ex. -w=10)" };
 
     InRangeValidator warningsValidator{ 0,100 };
-    IntArg warnings{ std::make_unique<InRangeValidator<int>>(warningsValidator), 'W', "warnings", "Input integer value (ex. -W=10)"};
+    SingleArg<int> warnings{ std::make_unique<InRangeValidator<int>>(warningsValidator), 'W', "warnings", "Input integer value (ex. -W=10)"};
 
     FileNameValidator<std::string> nameValidator{};
-    StringArg name{ std::make_unique<FileNameValidator<std::string>>(nameValidator), 'n', "name", "Input string value (ex. -n=o.txt)" };
+    SingleArg<std::string> name{ std::make_unique<FileNameValidator<std::string>>(nameValidator), 'n', "name", "Input string value (ex. -n=o.txt)" };
 
-    MultiBoolArg authorizes{ 'a', "authorizes" };
+    MultiArg<bool> authorizes{ 'a', "authorizes" };
 
     InRangeValidator<int> codesValidator{ 0, 1000 };
-    MultiIntArg codes{ std::make_unique<InRangeValidator<int>>(InRangeValidator{0, 100}), 'c', "codes" };
+    MultiArg<int> codes{ std::make_unique<InRangeValidator<int>>(InRangeValidator{0, 100}), 'c', "codes" };
 
     FileFormatValidator<std::string> outputValidator{};
-    MultiStringArg output{ std::make_unique<FileFormatValidator<std::string>>(outputValidator), 'o', "output" };
+    MultiArg<std::string> output{ std::make_unique<FileFormatValidator<std::string>>(outputValidator), 'o', "output" };
 
     parser.Add(&help);
     parser.Add(&fast);

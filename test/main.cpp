@@ -151,7 +151,7 @@ TEST_CASE("Arg EmptyArg", "[basic]")
 }
 
 TEST_CASE("BoolArg", "[basic]") {
-	BoolArg arg{ 'c', "check" };
+	SingleArg<bool> arg{ 'c', "check" };
 	auto nextArg = std::nullopt;
 	auto usedNextArg = false;
 
@@ -196,7 +196,7 @@ TEST_CASE("BoolArg", "[basic]") {
 }
 
 TEST_CASE("IntArg", "[basic]") {
-	IntArg arg{ std::make_unique<InRangeValidator<int>>(InRangeValidator<int>{ 0, 10 }), 'c', "check" };
+	SingleArg<int> arg{ std::make_unique<InRangeValidator<int>>(InRangeValidator<int>{ 0, 10 }), 'c', "check" };
 	auto nextArg = std::nullopt;
 	auto usedNextArg = false;
 
@@ -242,7 +242,7 @@ TEST_CASE("IntArg", "[basic]") {
 }
 
 TEST_CASE("StringArg", "[basic]") {
-	StringArg arg{ std::make_unique<FileNameValidator<std::string>>(FileNameValidator<std::string> {}), 'c', "check" };
+	SingleArg<std::string> arg{ std::make_unique<FileNameValidator<std::string>>(FileNameValidator<std::string> {}), 'c', "check" };
 	auto nextArg = std::nullopt;
 	auto usedNextArg = false;
 
@@ -288,7 +288,7 @@ TEST_CASE("StringArg", "[basic]") {
 }
 
 TEST_CASE("MultiBoolArg", "[basic]") {
-	MultiBoolArg arg{ 'c', "check" };
+	MultiArg<bool> arg{ 'c', "check" };
 	auto nextArg = std::nullopt;
 	auto usedNextArg = false;
 
@@ -336,7 +336,7 @@ TEST_CASE("MultiBoolArg", "[basic]") {
 }
 
 TEST_CASE("MultiIntArg", "[basic]") {
-	MultiIntArg arg{ std::make_unique<InRangeValidator<int>>(InRangeValidator<int>{ 0, 10 }), 'c', "check" };
+	MultiArg<int> arg{ std::make_unique<InRangeValidator<int>>(InRangeValidator<int>{ 0, 10 }), 'c', "check" };
 	auto nextArg = std::nullopt;
 	auto usedNextArg = false;
 
@@ -385,7 +385,7 @@ TEST_CASE("MultiIntArg", "[basic]") {
 }
 
 TEST_CASE("MultiStringArg", "[basic]") {
-	MultiStringArg arg{ std::make_unique<FileNameValidator<std::string>>(FileNameValidator<std::string> {}), 'c', "check" };
+	MultiArg<std::string> arg{ std::make_unique<FileNameValidator<std::string>>(FileNameValidator<std::string> {}), 'c', "check" };
 	auto nextArg = std::nullopt;
 	auto usedNextArg = false;
 
@@ -438,15 +438,15 @@ TEST_CASE("ArgParser", "[basic]") {
 
 	EmptyArg help{ 'h', "help", "Get some help" };
 	EmptyArg sleep{ 's', "sleep" };
-	BoolArg lock{ 'l', "lock", "Input 0 or 1 (ex. -l=0)" };
+	SingleArg<bool> lock{ 'l', "lock", "Input 0 or 1 (ex. -l=0)" };
 
-	IntArg warnas{ std::make_unique<InRangeValidator<int>>(InRangeValidator<int>{0, 10}), 'w', "warnas" };
-	IntArg warnings{ std::make_unique<InRangeValidator<int>>(InRangeValidator<int>{0, 10}), 'W', "warnings" };
+	SingleArg<int> warnas{ std::make_unique<InRangeValidator<int>>(InRangeValidator<int>{0, 10}), 'w', "warnas" };
+	SingleArg<int> warnings{ std::make_unique<InRangeValidator<int>>(InRangeValidator<int>{0, 10}), 'W', "warnings" };
 
-	StringArg name{ std::make_unique<FileNameValidator<std::string>>(FileNameValidator<std::string>{}), 'n', "name" };
-	MultiBoolArg authorizes{ 'a', "authorizes" };
-	MultiIntArg codes{ std::make_unique<InRangeValidator<int>>(InRangeValidator<int>{0, 10}), 'c', "codes" };
-	MultiStringArg output{ std::make_unique<FileFormatValidator<std::string>>(FileFormatValidator<std::string>{}), 'o', "output" };
+	SingleArg<std::string> name{ std::make_unique<FileNameValidator<std::string>>(FileNameValidator<std::string>{}), 'n', "name" };
+	MultiArg<bool> authorizes{ 'a', "authorizes" };
+	MultiArg<int> codes{ std::make_unique<InRangeValidator<int>>(InRangeValidator<int>{0, 10}), 'c', "codes" };
+	MultiArg<std::string> output{ std::make_unique<FileFormatValidator<std::string>>(FileFormatValidator<std::string>{}), 'o', "output" };
 
 	parser.Add(&help);
 	parser.Add(&sleep);

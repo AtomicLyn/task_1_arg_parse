@@ -2,6 +2,7 @@
 
 #include "ParseResult.hpp"
 #include "Validators.hpp"
+#include "Helpers.hpp"
 
 namespace args_parse {
 	/**
@@ -87,90 +88,291 @@ namespace args_parse {
 	};
 
 	/**
-	* @brief Класс булевого аргумента
+	* @brief Шаблон класса одиночного аргумента
+	* Аргумент содержит опцию и шаблонный операнд
+	*/
+	template<typename T = Validator<int>>
+	class SingleArg : public AbstractArg {
+		T userClass;
+		std::unique_ptr<Validator<T>> validator;
+		T value; ///< Поле, хранящее значение аргумента в случае успешного парсинга
+	public:
+		SingleArg(std::unique_ptr<Validator<T>> validator, const char option, std::string longOption, std::string description = "");
+
+		/// Геттер для value
+		const T GetValue() const;
+
+		ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
+
+		ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
+	};
+
+	/**
+	* @brief Шаблонный класс булевого аргумента
 	* Аргумент содержит опцию и булевый операнд
 	*/
-	class BoolArg : public AbstractArg {
+	template<>
+	class SingleArg<bool> : public AbstractArg {
 		const BoolValidator validator;
 		bool value = false; ///< Поле, хранящее значение аргумента в случае успешного парсинга
 	public:
-		BoolArg(const char option, std::string longOption, std::string description = "");
-		/// Геттер для value
-		const bool GetValue() const;
-		ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
-		ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
+		SingleArg(const char option, std::string longOption, std::string description = "")
+			: AbstractArg(ArgumentType::Bool, option, longOption, description) {};
+
+		const bool GetValue() const {
+			return value;
+		}
+
+		ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
+			if (auto result = CheckOperand(nextArg, usedNextArg); !result.IsOk()) return result;
+
+			if (!isInteger(operands))
+				return ParseResult::Fail({ "In " + currentArg + " " + (nextArg.has_value() ? nextArg.value() : "") + " : The option is found, but the value is not integer" });
+
+			const auto num = atoi(operands.c_str());
+
+			if (const auto valResult = validator.Check(num); !valResult.IsOk()) return valResult;
+
+			value = num == 1;
+			isDefined = true;
+
+			return ParseResult::Ok();
+		}
+
+		ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
+			if (auto result = CheckLongOperand(nextArg, usedNextArg); !result.IsOk()) return result;
+
+			if (!isInteger(operands))
+				return ParseResult::Fail({ "In " + currentArg + " " + (nextArg.has_value() ? nextArg.value() : "") + " : The option is found, but the value is not integer" });
+
+			const auto num = atoi(operands.c_str());
+
+			if (const auto valResult = validator.Check(num); !valResult.IsOk()) return valResult;
+
+			value = num == 1;
+			isDefined = true;
+
+			return ParseResult::Ok();
+		}
 	};
 
 
 	/**
-	* @brief Класс целочисленного аргумента
+	* @brief Шаблонный класс целочисленного аргумента
 	* Аргумент содержит опцию и целочисленный операнд
 	*/
-	class IntArg : public AbstractArg {
+	template<>
+	class SingleArg<int> : public AbstractArg {
 		std::unique_ptr<Validator<int>> validator;
 		int value = -1; ///< Поле, хранящее значение аргумента в случае успешного парсинга
 	public:
-		IntArg(std::unique_ptr<Validator<int>> validator, const char option, std::string longOption, std::string description = "");
-		/// Геттер для value
-		const int GetValue() const;
-		ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
-		ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
+		SingleArg(std::unique_ptr<Validator<int>> validator, const char option, std::string longOption, std::string description = "")
+			: validator{ std::move(validator) }, AbstractArg(ArgumentType::Int, option, longOption, description) {};
+
+		const int GetValue() const {
+			return value;
+		}
+
+		ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
+			if (auto result = CheckOperand(nextArg, usedNextArg); !result.IsOk()) return result;
+
+			if (!isInteger(operands))
+				return ParseResult::Fail({ "In " + currentArg + " " + (nextArg.has_value() ? nextArg.value() : "") + " : The option is found, but the value is not integer" });
+
+			const auto num = atoi(operands.c_str());
+
+			if (const auto valResult = validator->Check(num); !valResult.IsOk()) return valResult;
+
+			value = num;
+			isDefined = true;
+
+			return ParseResult::Ok();
+		}
+
+		ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
+			if (auto result = CheckLongOperand(nextArg, usedNextArg); !result.IsOk()) return result;
+
+			if (!isInteger(operands))
+				return ParseResult::Fail({ "In " + currentArg + " " + (nextArg.has_value() ? nextArg.value() : "") + " : The option is found, but the value is not integer" });
+
+			const auto num = atoi(operands.c_str());
+
+			if (const auto valResult = validator->Check(num); !valResult.IsOk()) return valResult;
+
+			value = num;
+			isDefined = true;
+
+			return ParseResult::Ok();
+		}
 	};
 
 
 	/**
-	* @brief Класс строкового аргумента
+	* @brief Шаблонный класс строкового аргумента
 	* Аргумент содержит опцию и строковый операнд
 	*/
-	class StringArg : public AbstractArg {
+	template<>
+	class SingleArg<std::string> : public AbstractArg {
 		std::unique_ptr<Validator<std::string>> validator;
 		std::string value; ///< Поле, хранящее значение аргумента в случае успешного парсинга
 	public:
-		StringArg(std::unique_ptr<Validator<std::string>> validator, const char option, std::string longOption, std::string description = "");
-		/// Геттер для value
-		std::string_view GetValue() const;
-		ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
-		ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
+		SingleArg(std::unique_ptr<Validator<std::string>> validator, const char option, std::string longOption, std::string description = "")
+			: validator{ std::move(validator) }, AbstractArg(ArgumentType::String, option, longOption, description) {};
+
+		const std::string GetValue() const {
+			return value;
+		}
+
+		ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
+			if (auto result = CheckOperand(nextArg, usedNextArg); !result.IsOk()) return result;
+			if (const auto valResult = validator->Check(operands); !valResult.IsOk()) return valResult;
+
+			value = operands;
+			isDefined = true;
+
+			return ParseResult::Ok();
+		}
+
+		ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
+			if (auto result = CheckLongOperand(nextArg, usedNextArg); !result.IsOk()) return result;
+			if (const auto valResult = validator->Check(operands); !valResult.IsOk()) return valResult;
+
+			value = operands;
+			isDefined = true;
+
+			return ParseResult::Ok();
+		}
 	};
 
-
 	/**
-	* @brief Класс мультибулевого аргумента
+	* @brief Шаблон класса мультибулевого аргумента
 	* Аргумент содержит опцию и набор булевых операндов
 	*/
-	class MultiBoolArg : public AbstractArg {
-		const BoolValidator validator;
+	template<typename T>
+	class MultiArg : public AbstractArg {
+		const T validator;
 		/// Поле, хранящее значения аргумента в случае успешного парсинга 
 		/// @warning Может быть передано несколько одинаковых аргументов командной строки
-		std::vector<bool> values;
+		std::vector<T> values;
 	public:
-		MultiBoolArg(const char option, std::string longOption, std::string description = "");
+		MultiArg(std::unique_ptr<Validator<T>> validator, const char option, std::string longOption, std::string description = "");
+
 		/// Геттер для values
-		const std::vector<bool>& GetValues() const;
+		const std::vector<T>& GetValues() const;
+
 		/// Количество значений в values
 		const int GetCount() const;
+
 		ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
+
 		ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
+	};
+
+	/**
+	* @brief Шаблонный класс мультибулевого аргумента
+	* Аргумент содержит опцию и набор булевых операндов
+	*/
+	template<>
+	class MultiArg<bool> : public AbstractArg {
+		const BoolValidator validator;
+		std::vector<bool> values;
+	public:
+		MultiArg(const char option, std::string longOption, std::string description = "")
+			: AbstractArg(ArgumentType::MultiBool, option, longOption, description) {};
+
+		const std::vector<bool>& GetValues() const {
+			return values;
+		}
+
+		const int GetCount() const {
+			return values.size();
+		}
+
+		ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
+			if (auto result = CheckOperand(nextArg, usedNextArg); !result.IsOk()) return result;
+
+			if (!isInteger(operands))
+				return ParseResult::Fail({ "In " + currentArg + " " + (nextArg.has_value() ? nextArg.value() : "") + " : The option is found, but the value is not integer" });
+
+			const auto num = atoi(operands.c_str());
+
+			if (const auto valResult = validator.Check(num); !valResult.IsOk()) return valResult;
+
+			values.push_back(num == 1);
+			isDefined = true;
+
+			return ParseResult::Ok();
+
+		}
+
+		ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
+			if (auto result = CheckLongOperand(nextArg, usedNextArg); !result.IsOk()) return result;
+
+			if (!isInteger(operands))
+				return ParseResult::Fail({ "In " + currentArg + " " + (nextArg.has_value() ? nextArg.value() : "") + " : The option is found, but the value is not integer" });
+
+			const auto num = atoi(operands.c_str());
+
+			if (const auto valResult = validator.Check(num); !valResult.IsOk()) return valResult;
+
+			values.push_back(num == 1);
+			isDefined = true;
+
+			return ParseResult::Ok();
+		}
 	};
 
 
 	/**
-	* @brief Класс мультицелочисленного аргумента
+	* @brief Шаблонный класс мультицелочисленного аргумента
 	* Аргумент содержит опцию и набор целочисленных операндов
 	*/
-	class MultiIntArg : public AbstractArg {
+	template<>
+	class MultiArg<int> : public AbstractArg {
 		const std::unique_ptr<Validator<int>> validator;
-		/// Поле, хранящее значения аргумента в случае успешного парсинга 
-		/// @warning Может быть передано несколько одинаковых аргументов командной строки
 		std::vector<int> values;
 	public:
-		MultiIntArg(std::unique_ptr<Validator<int>> validator, const char option, std::string longOption, std::string description = "");
-		/// Геттер для values
-		const std::vector<int>& GetValues() const;
-		/// Количество значений в values
-		const int GetCount() const;
-		ParseResult ParseOperandAndSetDefined(std::optional<std::string> nextArg, bool& usedNextArg) override;
-		ParseResult ParseLongOperandAndSetDefined(std::optional<std::string> nextArg, bool& usedNextArg) override;
+		MultiArg(std::unique_ptr<Validator<int>> validator, const char option, std::string longOption, std::string description = "")
+			: validator{ std::move(validator) }, AbstractArg(ArgumentType::MultiInt, option, longOption, description) {};
+
+		const std::vector<int>& GetValues() const {
+			return values;
+		}
+
+		const int GetCount() const {
+			return values.size();
+		}
+
+		ParseResult ParseOperandAndSetDefined(std::optional<std::string> nextArg, bool& usedNextArg) override {
+			if (auto result = CheckOperand(nextArg, usedNextArg); !result.IsOk()) return result;
+
+			if (!isInteger(operands))
+				return ParseResult::Fail({ "In " + currentArg + " " + (nextArg.has_value() ? nextArg.value() : "") + ": The option is found, but the value is not integer" });
+
+			auto num = atoi(operands.c_str());
+
+			if (const auto valResult = validator->Check(num); !valResult.IsOk()) return valResult;
+
+			values.push_back(num);
+			isDefined = true;
+
+			return ParseResult::Ok();
+		}
+		ParseResult ParseLongOperandAndSetDefined(std::optional<std::string> nextArg, bool& usedNextArg) override {
+			if (auto result = CheckLongOperand(nextArg, usedNextArg); !result.IsOk()) return result;
+
+			if (!isInteger(operands))
+				return ParseResult::Fail({ "In " + currentArg + " " + (nextArg.has_value() ? nextArg.value() : "") + ": The option is found, but the value is not integer" });
+
+			auto num = atoi(operands.c_str());
+
+			if (const auto valResult = validator->Check(num); !valResult.IsOk()) return valResult;
+
+			values.push_back(num);
+			isDefined = true;
+
+			return ParseResult::Ok();
+		}
 	};
 
 
@@ -178,18 +380,39 @@ namespace args_parse {
 	* @brief Класс мультистрокового аргумента
 	* Аргумент содержит опцию и набор строковых операндов
 	*/
-	class MultiStringArg : public AbstractArg {
+	template<>
+	class MultiArg<std::string> : public AbstractArg {
 		const std::unique_ptr<Validator<std::string>> validator;
-		/// Поле, хранящее значения аргумента в случае успешного парсинга 
-		/// @warning Может быть передано несколько одинаковых аргументов командной строки
 		std::vector<std::string> values;
 	public:
-		MultiStringArg(std::unique_ptr<Validator<std::string>> validator, const char option, std::string longOption, std::string description = "");
-		/// Геттер для values
-		const std::vector<std::string>& GetValues() const;
-		/// Количество значений в values
-		const int GetCount() const;
-		ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
-		ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
+		MultiArg(std::unique_ptr<Validator<std::string>> validator, const char option, std::string longOption, std::string description = "")
+			: validator{ std::move(validator) }, AbstractArg(ArgumentType::MultiString, option, longOption, description) {};
+
+		const std::vector<std::string>& GetValues() const {
+			return values;
+		}
+
+		const int GetCount() const {
+			return values.size();
+		}
+
+		ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
+			if (auto result = CheckOperand(nextArg, usedNextArg); !result.IsOk()) return result;
+			if (const auto valResult = validator->Check(operands); !valResult.IsOk()) return valResult;
+
+			values.push_back(operands);
+			isDefined = true;
+
+			return ParseResult::Ok();
+		}
+		ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
+			if (auto result = CheckLongOperand(nextArg, usedNextArg); !result.IsOk()) return result;
+			if (const auto valResult = validator->Check(operands); !valResult.IsOk()) return valResult;
+
+			values.push_back(operands);
+			isDefined = true;
+
+			return ParseResult::Ok();
+		}
 	};
 }

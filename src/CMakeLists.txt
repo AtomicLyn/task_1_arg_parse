@@ -9,6 +9,7 @@ add_library(args_parse STATIC
 	ArgParser.hpp
 	ParseResult.hpp
 	Helpers.hpp
+	UserTypes.hpp
 	Validators.hpp
 )
 
