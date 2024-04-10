@@ -21,11 +21,11 @@ namespace args_parse {
 		const std::string description; ///< Указывает подробное описание аргумента
 		const ArgumentType type; ///< Указывает, каким типом является объект
 
-	protected:		
+	protected:
 		std::string currentArg; ///< Текущая полученная для парсинга строка
 		std::string operands; ///< Хранит остаток строки после предварительного парсинга
 		bool isDefined = false; ///< Указывает, был ли успешно найден аргумент в процессе парсинга
-	
+
 		/// Метод проверки операндов короткого аргумента и сдвига operands
 		/// @param[in] nextArg Следующий аргумент если таковой имеется
 		/// @param[in] usedNextArg Ссылка на булево значение, показывающее, был ли использован следующий аргумент
@@ -34,18 +34,18 @@ namespace args_parse {
 		/// @param[in] usedNextArg Ссылка на булево значение, показывающее, был ли использован следующий аргумент
 		[[nodiscard]] ParseResult CheckLongOperand(std::optional<std::string> nextArg, bool& usedNextArg);
 	public:
-		AbstractArg(ArgumentType type, const char option, const std::string longOption,  std::string description = "");
+		AbstractArg(ArgumentType type, const char option, const std::string longOption, std::string description = "");
 		virtual ~AbstractArg();
 		/// Геттер для option
-		const char GetOption() const; 
+		const char GetOption() const;
 		/// Геттер для longOption
-		std::string_view GetLongOption() const; 
+		std::string_view GetLongOption() const;
 		/// Геттер для description
 		std::string_view GetDescription() const;
 		/// Геттер для type
-		[[nodiscard]] const ArgumentType GetType() const; 
+		[[nodiscard]] const ArgumentType GetType() const;
 		/// Геттер для isDefined
-		[[nodiscard]] const bool IsDefined() const;	
+		[[nodiscard]] const bool IsDefined() const;
 		/**
 		* @brief Метод предварительного парсинга опции аргумента
 		* Выполняет парсинг короткого названия аргумента и сохраняет остраток строки в operands
@@ -73,7 +73,7 @@ namespace args_parse {
 		* @param[in] usedNextArg Ссылка на булево значение, показывающее, был ли использован следующий аргумент
 		*/
 		[[nodiscard]] virtual ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nexArg, bool& usedNextArg) = 0;
-		
+
 	};
 
 
@@ -94,32 +94,32 @@ namespace args_parse {
 	*/
 	template<typename T>
 	class SingleArg : public AbstractArg {
-		UserType<T> value; ///< Поле, хранящее значение аргумента в случае успешного парсинга
+		std::unique_ptr<UserChrono> value; ///< Поле, хранящее значение аргумента в случае успешного парсинга
 	public:
-		SingleArg(UserType<T> userType, const char option, std::string longOption, std::string description = "")
-			: value{ userType }, AbstractArg(ArgumentType::UserType, option, longOption, description) {};
+		SingleArg(std::unique_ptr<UserChrono> userType, const char option, std::string longOption, std::string description = "")
+			: value{ std::move(userType) }, AbstractArg(ArgumentType::UserType, option, longOption, description) {};
 
 		/// Геттер для value
 		const T GetValue() const {
-			return value.Get();
+			return value->Get();
 		}
 
 		ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
-			if (auto result = value.Parse(operands); result.IsOk()) {
-				isDefined = true;
+			if (auto result = CheckOperand(nextArg, usedNextArg); !result.IsOk()) return result;
+			if (auto result = value->Parse(operands); !result.IsOk()) return result;
 
-				return ParseResult::Ok();
-			}
-			else return result;
+			isDefined = true;
+
+			return ParseResult::Ok();
 		}
 
 		ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
-			if (auto result = value.Parse(operands); result.IsOk()) {
-				isDefined = true;
+			if (auto result = CheckOperand(nextArg, usedNextArg); !result.IsOk()) return result;
+			if (auto result = value->Parse(operands); !result.IsOk()) return result;
 
-				return ParseResult::Ok();
-			}
-			else return result;
+			isDefined = true;
+
+			return ParseResult::Ok();
 		}
 	};
 

@@ -41,6 +41,8 @@ int main(int argc, const char **argv)
     FileFormatValidator<std::string> outputValidator{};
     MultiArg<std::string> output{ std::make_unique<FileFormatValidator<std::string>>(outputValidator), 'o', "output" };
 
+    SingleArg<long long> debugSleep(std::make_unique<UserChrono>(UserChrono{}), 'd', "debug-sleep");
+
     parser.Add(&help);
     parser.Add(&fast);
     parser.Add(&sleep);
@@ -52,6 +54,7 @@ int main(int argc, const char **argv)
     parser.Add(&output);
     parser.Add(&codes);
     parser.Add(&authorizes);
+    parser.Add(&debugSleep);
 
     cout << "Try to parse: " << std::endl;
     const auto result = parser.Parse(argc, argv);
@@ -105,6 +108,9 @@ int main(int argc, const char **argv)
                 cout << value << ", ";
             }
             cout << endl;
+        }
+       if (debugSleep.IsDefined()) {
+            cout << "UserType argument: " << debugSleep.GetOption() << "/" << debugSleep.GetLongOption() << " " << debugSleep.GetValue() << endl;
         }
     }
     else

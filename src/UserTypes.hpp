@@ -15,17 +15,38 @@ namespace args_parse {
 	};
 
 	class UserChrono : UserType<long long> {
-		//static const std::string strExpr = "^[0-9]+([s]|[ms]|[us]|[ns])$";
+		const std::string strExpr = "^[0-9]+(s|ms|us|ns)$";
 		std::chrono::microseconds us;	
 	public:
 		ParseResult Parse(std::string_view operand) override {
-			/// TODO: логика парсинга
 			std::string input{ operand };
+
+			if (!std::regex_match(input, std::regex(strExpr))) 
+				return ParseResult::Fail({ "In " + std::string(operand) + " : operand is not chrono literal (" + strExpr + ")" });
+
 			std::stringstream ss{ input };
-			int value;
+
+			long long value;
 			std::string unit;
 
 			ss >> value >> unit;
+
+			if (unit == "s") {
+				auto seconds = std::chrono::seconds(value);
+				us = std::chrono::microseconds(seconds);
+			}
+			else if (unit == "ms") {
+				auto milliseconds = std::chrono::milliseconds(value);
+				us = std::chrono::microseconds(milliseconds);
+			}
+			else if (unit == "us") {
+				us = std::chrono::microseconds(us);
+			}
+			else if (unit == "ns") {
+				auto nanoseconds = std::chrono::milliseconds(value);
+				us = std::chrono::microseconds(nanoseconds);
+			}
+			else return ParseResult::Fail({ "In " + std::string(operand) + " : operand is not found in chrono literals (" + strExpr + ")" });
 
 			return ParseResult::Ok();
 		}

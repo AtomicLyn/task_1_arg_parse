@@ -34,7 +34,7 @@ namespace args_parse {
 	/// @brief Валидатор String значений для названий файлов
 	template<typename T = std::string>
 	class FileNameValidator : public Validator<T> {
-		static const std::string strExpr = "^[a-z0-9-_]+[.][a-z]+$";
+		const std::string strExpr = "^[a-z0-9-_]+[.][a-z]+$";
 	public:
 		ParseResult Check(const T str) const override {
 			if (!std::regex_match(str, std::regex(strExpr))) return ParseResult::Fail({ "In " + str + ": string is does not match | " + strExpr + " |" });
@@ -45,7 +45,7 @@ namespace args_parse {
 	/// @brief Валидатор String значений для форматов файлов
 	template<typename T = std::string>
 	class FileFormatValidator : public Validator<T> {
-		static const std::string strExpr = "^[*]+[.][a-z]+$";
+		const std::string strExpr = "^[*]+[.][a-z]+$";
 	public:
 		ParseResult Check(const T str) const override {
 			if (!std::regex_match(str, std::regex(strExpr))) return ParseResult::Fail({ "In " + str + ": string is does not match | "+ strExpr + " |"});
