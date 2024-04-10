@@ -151,7 +151,7 @@ ParseResult BoolArg::ParseLongOperandAndSetDefined(const std::optional<std::stri
 }
 
 
-IntArg::IntArg(std::unique_ptr<IntValidator> validator, const char option, std::string longOption, std::string description)
+IntArg::IntArg(std::unique_ptr<Validator<int>> validator, const char option, std::string longOption, std::string description)
 	: validator{ std::move(validator) }, Arg(ArgumentType::Int, option, longOption, description) {};
 
 const int IntArg::GetValue() const {
@@ -191,7 +191,7 @@ ParseResult IntArg::ParseLongOperandAndSetDefined(const std::optional<std::strin
 }
 
 
-StringArg::StringArg(std::unique_ptr<StringValidator> validator, const char option, std::string longOption, std::string description)
+StringArg::StringArg(std::unique_ptr<Validator<std::string>> validator, const char option, std::string longOption, std::string description)
 	: validator{ std::move(validator) }, Arg(ArgumentType::String, option, longOption, description) {};
 
 std::string_view StringArg::GetValue() const {
@@ -264,7 +264,7 @@ ParseResult MultiBoolArg::ParseLongOperandAndSetDefined(const std::optional<std:
 }
 
 
-MultiIntArg::MultiIntArg(std::unique_ptr<IntValidator> validator, const char option, std::string longOption, std::string description)
+MultiIntArg::MultiIntArg(std::unique_ptr<Validator<int>> validator, const char option, std::string longOption, std::string description)
 	: validator{ std::move(validator) }, Arg(ArgumentType::MultiInt, option, longOption, description) {};
 
 const std::vector<int>& MultiIntArg::GetValues() const {
@@ -308,7 +308,7 @@ ParseResult MultiIntArg::ParseLongOperandAndSetDefined(const std::optional<std::
 }
 
 
-MultiStringArg::MultiStringArg(std::unique_ptr<StringValidator> validator, const char option, std::string longOption, std::string description)
+MultiStringArg::MultiStringArg(std::unique_ptr<Validator<std::string>> validator, const char option, std::string longOption, std::string description)
 	: validator{ std::move(validator) }, Arg(ArgumentType::MultiString, option, longOption, description) {};
 
 const std::vector<std::string>& MultiStringArg::GetValues() const {

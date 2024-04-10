@@ -24,22 +24,22 @@ int main(int argc, const char **argv)
     EmptyArg megafast{ 'm', "megafast", "Gotta go megafast" };
     BoolArg lock{ 'l', "lock", "Input 0 or 1 (ex. -l=0)" };
 
-    IntInRangeValidator warnasValidator{ 0, 100 };
-    IntArg warnas{ std::make_unique<IntInRangeValidator>(warnasValidator), 'w', "warnas", "Input integer value (ex. -w=10)" };
+    InRangeValidator<int> warnasValidator{ 0, 100 };
+    IntArg warnas{ std::make_unique<InRangeValidator<int>>(warnasValidator), 'w', "warnas", "Input integer value (ex. -w=10)" };
 
-    IntInRangeValidator warningsValidator{ 0,100 };
-    IntArg warnings{ std::make_unique<IntInRangeValidator>(warningsValidator), 'W', "warnings", "Input integer value (ex. -W=10)"};
+    InRangeValidator warningsValidator{ 0,100 };
+    IntArg warnings{ std::make_unique<InRangeValidator<int>>(warningsValidator), 'W', "warnings", "Input integer value (ex. -W=10)"};
 
-    StringFileNameValidator nameValidator{};
-    StringArg name{ std::make_unique<StringFileNameValidator>(nameValidator), 'n', "name", "Input string value (ex. -n=o.txt)" };
+    FileNameValidator<std::string> nameValidator{};
+    StringArg name{ std::make_unique<FileNameValidator<std::string>>(nameValidator), 'n', "name", "Input string value (ex. -n=o.txt)" };
 
     MultiBoolArg authorizes{ 'a', "authorizes" };
 
-    IntInRangeValidator codesValidator{ 0, 1000 };
-    MultiIntArg codes{ std::make_unique<IntInRangeValidator>(IntInRangeValidator{0, 100}), 'c', "codes" };
+    InRangeValidator<int> codesValidator{ 0, 1000 };
+    MultiIntArg codes{ std::make_unique<InRangeValidator<int>>(InRangeValidator{0, 100}), 'c', "codes" };
 
-    StringFileFormatValidator outputValidator{};
-    MultiStringArg output{ std::make_unique<StringFileFormatValidator>(outputValidator), 'o', "output" };
+    FileFormatValidator<std::string> outputValidator{};
+    MultiStringArg output{ std::make_unique<FileFormatValidator<std::string>>(outputValidator), 'o', "output" };
 
     parser.Add(&help);
     parser.Add(&fast);

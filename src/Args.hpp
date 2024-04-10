@@ -108,10 +108,10 @@ namespace args_parse {
 	* Аргумент содержит опцию и целочисленный операнд
 	*/
 	class IntArg : public Arg {
-		std::unique_ptr<IntValidator> validator;
+		std::unique_ptr<Validator<int>> validator;
 		int value = -1; ///< Поле, хранящее значение аргумента в случае успешного парсинга
 	public:
-		IntArg(std::unique_ptr<IntValidator> validator, const char option, std::string longOption, std::string description = "");
+		IntArg(std::unique_ptr<Validator<int>> validator, const char option, std::string longOption, std::string description = "");
 		/// Геттер для value
 		const int GetValue() const;
 		ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
@@ -124,10 +124,10 @@ namespace args_parse {
 	* Аргумент содержит опцию и строковый операнд
 	*/
 	class StringArg : public Arg {
-		std::unique_ptr<StringValidator> validator;
+		std::unique_ptr<Validator<std::string>> validator;
 		std::string value; ///< Поле, хранящее значение аргумента в случае успешного парсинга
 	public:
-		StringArg(std::unique_ptr<StringValidator> validator, const char option, std::string longOption, std::string description = "");
+		StringArg(std::unique_ptr<Validator<std::string>> validator, const char option, std::string longOption, std::string description = "");
 		/// Геттер для value
 		std::string_view GetValue() const;
 		ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
@@ -160,12 +160,12 @@ namespace args_parse {
 	* Аргумент содержит опцию и набор целочисленных операндов
 	*/
 	class MultiIntArg : public Arg {
-		const std::unique_ptr<IntValidator> validator;
+		const std::unique_ptr<Validator<int>> validator;
 		/// Поле, хранящее значения аргумента в случае успешного парсинга 
 		/// @warning Может быть передано несколько одинаковых аргументов командной строки
 		std::vector<int> values;
 	public:
-		MultiIntArg(std::unique_ptr<IntValidator> validator, const char option, std::string longOption, std::string description = "");
+		MultiIntArg(std::unique_ptr<Validator<int>> validator, const char option, std::string longOption, std::string description = "");
 		/// Геттер для values
 		const std::vector<int>& GetValues() const;
 		/// Количество значений в values
@@ -180,12 +180,12 @@ namespace args_parse {
 	* Аргумент содержит опцию и набор строковых операндов
 	*/
 	class MultiStringArg : public Arg {
-		const std::unique_ptr<StringValidator> validator;
+		const std::unique_ptr<Validator<std::string>> validator;
 		/// Поле, хранящее значения аргумента в случае успешного парсинга 
 		/// @warning Может быть передано несколько одинаковых аргументов командной строки
 		std::vector<std::string> values;
 	public:
-		MultiStringArg(std::unique_ptr<StringValidator> validator, const char option, std::string longOption, std::string description = "");
+		MultiStringArg(std::unique_ptr<Validator<std::string>> validator, const char option, std::string longOption, std::string description = "");
 		/// Геттер для values
 		const std::vector<std::string>& GetValues() const;
 		/// Количество значений в values

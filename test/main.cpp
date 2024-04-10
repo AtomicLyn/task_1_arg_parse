@@ -8,7 +8,7 @@ using namespace args_parse;
 
 TEST_CASE("IntValidator", "[basic]") {
 	auto min = 0, max = 10;
-	IntInRangeValidator rangeValidator{ min, max };
+	InRangeValidator<int> rangeValidator{ min, max };
 
 	SECTION("Current value") {
 		auto num = 5;
@@ -42,8 +42,8 @@ TEST_CASE("IntValidator", "[basic]") {
 }
 
 TEST_CASE("StringValidator", "[basic]") {
-	StringFileNameValidator fileNameValidator;
-	StringFileFormatValidator fileFormatValidator;
+	FileNameValidator<std::string> fileNameValidator;
+	FileFormatValidator fileFormatValidator;
 
 	SECTION("Current string filename") {
 		auto str = "file-2.txt";
@@ -196,7 +196,7 @@ TEST_CASE("BoolArg", "[basic]") {
 }
 
 TEST_CASE("IntArg", "[basic]") {
-	IntArg arg{ std::make_unique<IntInRangeValidator>(IntInRangeValidator{ 0, 10 }), 'c', "check" };
+	IntArg arg{ std::make_unique<InRangeValidator<int>>(InRangeValidator<int>{ 0, 10 }), 'c', "check" };
 	auto nextArg = std::nullopt;
 	auto usedNextArg = false;
 
@@ -242,7 +242,7 @@ TEST_CASE("IntArg", "[basic]") {
 }
 
 TEST_CASE("StringArg", "[basic]") {
-	StringArg arg{ std::make_unique<StringFileNameValidator>(StringFileNameValidator {}), 'c', "check" };
+	StringArg arg{ std::make_unique<FileNameValidator<std::string>>(FileNameValidator<std::string> {}), 'c', "check" };
 	auto nextArg = std::nullopt;
 	auto usedNextArg = false;
 
@@ -336,7 +336,7 @@ TEST_CASE("MultiBoolArg", "[basic]") {
 }
 
 TEST_CASE("MultiIntArg", "[basic]") {
-	MultiIntArg arg{ std::make_unique<IntInRangeValidator>(IntInRangeValidator{ 0, 10 }), 'c', "check" };
+	MultiIntArg arg{ std::make_unique<InRangeValidator<int>>(InRangeValidator<int>{ 0, 10 }), 'c', "check" };
 	auto nextArg = std::nullopt;
 	auto usedNextArg = false;
 
@@ -385,7 +385,7 @@ TEST_CASE("MultiIntArg", "[basic]") {
 }
 
 TEST_CASE("MultiStringArg", "[basic]") {
-	MultiStringArg arg{ std::make_unique<StringFileNameValidator>(StringFileNameValidator {}), 'c', "check" };
+	MultiStringArg arg{ std::make_unique<FileNameValidator<std::string>>(FileNameValidator<std::string> {}), 'c', "check" };
 	auto nextArg = std::nullopt;
 	auto usedNextArg = false;
 
@@ -440,13 +440,13 @@ TEST_CASE("ArgParser", "[basic]") {
 	EmptyArg sleep{ 's', "sleep" };
 	BoolArg lock{ 'l', "lock", "Input 0 or 1 (ex. -l=0)" };
 
-	IntArg warnas{ std::make_unique<IntInRangeValidator>(IntInRangeValidator{0, 10}), 'w', "warnas" };
-	IntArg warnings{ std::make_unique<IntInRangeValidator>(IntInRangeValidator{0, 10}), 'W', "warnings" };
+	IntArg warnas{ std::make_unique<InRangeValidator<int>>(InRangeValidator<int>{0, 10}), 'w', "warnas" };
+	IntArg warnings{ std::make_unique<InRangeValidator<int>>(InRangeValidator<int>{0, 10}), 'W', "warnings" };
 
-	StringArg name{ std::make_unique<StringFileNameValidator>(StringFileNameValidator{}), 'n', "name" };
+	StringArg name{ std::make_unique<FileNameValidator<std::string>>(FileNameValidator<std::string>{}), 'n', "name" };
 	MultiBoolArg authorizes{ 'a', "authorizes" };
-	MultiIntArg codes{ std::make_unique<IntInRangeValidator>(IntInRangeValidator{0, 10}), 'c', "codes" };
-	MultiStringArg output{ std::make_unique<StringFileFormatValidator>(StringFileFormatValidator{}), 'o', "output" };
+	MultiIntArg codes{ std::make_unique<InRangeValidator<int>>(InRangeValidator<int>{0, 10}), 'c', "codes" };
+	MultiStringArg output{ std::make_unique<FileFormatValidator<std::string>>(FileFormatValidator<std::string>{}), 'o', "output" };
 
 	parser.Add(&help);
 	parser.Add(&sleep);
