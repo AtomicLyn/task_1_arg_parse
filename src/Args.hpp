@@ -13,7 +13,7 @@ namespace args_parse {
 	* @brief Базовый абстрактный класс для всех аргументов
 	* Частично реализует общий функционал всех дочерних классов
 	*/
-	class Arg {
+	class AbstractArg {
 		const char option; ///< Указывает короткое название аргумента
 		const std::string longOption; ///< Указывает полное название аргумента
 		const std::string description; ///< Указывает подробное описание аргумента
@@ -32,8 +32,8 @@ namespace args_parse {
 		/// @param[in] usedNextArg Ссылка на булево значение, показывающее, был ли использован следующий аргумент
 		[[nodiscard]] ParseResult CheckLongOperand(std::optional<std::string> nextArg, bool& usedNextArg);
 	public:
-		Arg(ArgumentType type, const char option, const std::string longOption,  std::string description = "");
-		virtual ~Arg();
+		AbstractArg(ArgumentType type, const char option, const std::string longOption,  std::string description = "");
+		virtual ~AbstractArg();
 		/// Геттер для option
 		const char GetOption() const; 
 		/// Геттер для longOption
@@ -79,19 +79,18 @@ namespace args_parse {
 	* @brief Класс пустого аргумента
 	* Аргумент не содержит ничего, кроме опции
 	*/
-	class EmptyArg : public Arg {
+	class EmptyArg : public AbstractArg {
 	public:
 		EmptyArg(const char option, std::string longOption, std::string description = "");
 		ParseResult ParseOperandAndSetDefined(std::optional<std::string> nextArg, bool& usedNextArg) override;
 		ParseResult ParseLongOperandAndSetDefined(std::optional<std::string> nextArg, bool& usedNextArg) override;
 	};
 
-
 	/**
 	* @brief Класс булевого аргумента
 	* Аргумент содержит опцию и булевый операнд
 	*/
-	class BoolArg : public Arg {
+	class BoolArg : public AbstractArg {
 		const BoolValidator validator;
 		bool value = false; ///< Поле, хранящее значение аргумента в случае успешного парсинга
 	public:
@@ -107,7 +106,7 @@ namespace args_parse {
 	* @brief Класс целочисленного аргумента
 	* Аргумент содержит опцию и целочисленный операнд
 	*/
-	class IntArg : public Arg {
+	class IntArg : public AbstractArg {
 		std::unique_ptr<Validator<int>> validator;
 		int value = -1; ///< Поле, хранящее значение аргумента в случае успешного парсинга
 	public:
@@ -123,7 +122,7 @@ namespace args_parse {
 	* @brief Класс строкового аргумента
 	* Аргумент содержит опцию и строковый операнд
 	*/
-	class StringArg : public Arg {
+	class StringArg : public AbstractArg {
 		std::unique_ptr<Validator<std::string>> validator;
 		std::string value; ///< Поле, хранящее значение аргумента в случае успешного парсинга
 	public:
@@ -139,7 +138,7 @@ namespace args_parse {
 	* @brief Класс мультибулевого аргумента
 	* Аргумент содержит опцию и набор булевых операндов
 	*/
-	class MultiBoolArg : public Arg {
+	class MultiBoolArg : public AbstractArg {
 		const BoolValidator validator;
 		/// Поле, хранящее значения аргумента в случае успешного парсинга 
 		/// @warning Может быть передано несколько одинаковых аргументов командной строки
@@ -159,7 +158,7 @@ namespace args_parse {
 	* @brief Класс мультицелочисленного аргумента
 	* Аргумент содержит опцию и набор целочисленных операндов
 	*/
-	class MultiIntArg : public Arg {
+	class MultiIntArg : public AbstractArg {
 		const std::unique_ptr<Validator<int>> validator;
 		/// Поле, хранящее значения аргумента в случае успешного парсинга 
 		/// @warning Может быть передано несколько одинаковых аргументов командной строки
@@ -179,7 +178,7 @@ namespace args_parse {
 	* @brief Класс мультистрокового аргумента
 	* Аргумент содержит опцию и набор строковых операндов
 	*/
-	class MultiStringArg : public Arg {
+	class MultiStringArg : public AbstractArg {
 		const std::unique_ptr<Validator<std::string>> validator;
 		/// Поле, хранящее значения аргумента в случае успешного парсинга 
 		/// @warning Может быть передано несколько одинаковых аргументов командной строки

@@ -37,7 +37,7 @@ namespace args_parse {
 		const std::string strExpr = "^[a-z0-9-_]+[.][a-z]+$";
 	public:
 		const ParseResult Check(const T str) const override {
-			if (!std::regex_match(str, std::regex(strExpr))) return ParseResult::Fail({ "In " + str + ": string is does not match |" + strExpr + "|" });
+			if (!std::regex_match(str, std::regex(strExpr))) return ParseResult::Fail({ "In " + str + ": string is does not match | " + strExpr + " |" });
 			return ParseResult::Ok();
 		}
 	};
@@ -48,7 +48,7 @@ namespace args_parse {
 		const std::string strExpr = "^[*]+[.][a-z]+$";
 	public:
 		const ParseResult Check(const T str) const override {
-			if (!std::regex_match(str, std::regex(strExpr))) return ParseResult::Fail({ "In " + str + ": string is does not match |"+ strExpr + "|"});
+			if (!std::regex_match(str, std::regex(strExpr))) return ParseResult::Fail({ "In " + str + ": string is does not match | "+ strExpr + " |"});
 			return ParseResult::Ok();
 		}
 	};

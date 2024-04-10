@@ -9,7 +9,7 @@ using std::pair;
 using std::vector;
 using std::shared_ptr;
 
-void ArgParser::Add(Arg* argument) {
+void ArgParser::Add(AbstractArg* argument) {
 	arguments.push_back(argument);
 }
 
@@ -63,7 +63,7 @@ ParseResult ArgParser::Parse(const int argc, const char** argv) {
 				string_view argumentWithoutDash{ string_view{currentArgument}.substr(2) };
 
 				/// Обработка частично встретившихся названий аргументов
-				vector<pair<Arg*, int>> argMatches;
+				vector<pair<AbstractArg*, int>> argMatches;
 
 				for (const auto& argument : arguments) {
 
@@ -77,12 +77,12 @@ ParseResult ArgParser::Parse(const int argc, const char** argv) {
 
 				/// Были найдены совпадения
 				if (argMatches.size() > 0) {
-					auto compFun = [](const pair<Arg*, int>& l, const pair<Arg*, int>& r) { return l.second < r.second; };
+					auto compFun = [](const pair<AbstractArg*, int>& l, const pair<AbstractArg*, int>& r) { return l.second < r.second; };
 
 					/// Аргумент с максимальным совпадением символов
 					auto maxMatch = std::max_element(argMatches.begin(), argMatches.end(), compFun);
 
-					auto condFun = [&](const pair<Arg*, int>& el) { return el.second == maxMatch->second; };
+					auto condFun = [&](const pair<AbstractArg*, int>& el) { return el.second == maxMatch->second; };
 
 					/// Количество аргументов с максимальным совпадением символов
 					auto maxMatchCount = std::count_if(argMatches.begin(), argMatches.end(), condFun);

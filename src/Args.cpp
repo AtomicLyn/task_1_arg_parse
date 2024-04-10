@@ -3,7 +3,7 @@
 
 using namespace args_parse;
 
-ParseResult Arg::CheckOperand(std::optional<std::string> nextArg, bool& usedNextArg) {
+ParseResult AbstractArg::CheckOperand(std::optional<std::string> nextArg, bool& usedNextArg) {
 	if (operands.empty() && !nextArg.has_value()) return ParseResult::Fail({ "In " + currentArg + " : An operand was expected" });
 	if (operands[0] == '=' && operands.size() < 2) return ParseResult::Fail({ "In " + currentArg + " : Symbol '='  was found, but there is no value" });
 
@@ -17,7 +17,7 @@ ParseResult Arg::CheckOperand(std::optional<std::string> nextArg, bool& usedNext
 	return ParseResult::Ok();
 }
 
-ParseResult Arg::CheckLongOperand(std::optional<std::string> nextArg, bool& usedNextArg) {
+ParseResult AbstractArg::CheckLongOperand(std::optional<std::string> nextArg, bool& usedNextArg) {
 	if (!operands.empty()) {
 		if (operands[0] != '=')
 			return ParseResult::Fail({ "In " + currentArg + " : Symbol '=' or space between option and operand was not found" });
@@ -36,7 +36,7 @@ ParseResult Arg::CheckLongOperand(std::optional<std::string> nextArg, bool& used
 	return ParseResult::Ok();
 }
 
-ParseResult Arg::ParseOption(std::string_view argWithoutDash) {
+ParseResult AbstractArg::ParseOption(std::string_view argWithoutDash) {
 	currentArg = argWithoutDash;
 
 	if (currentArg.find(option) != 0) return ParseResult::Fail();
@@ -47,7 +47,7 @@ ParseResult Arg::ParseOption(std::string_view argWithoutDash) {
 	return ParseResult::Ok();
 }
 
-const std::pair<ParseResult, int> Arg::ParseLongOption(std::string_view argWithoutDash) {
+const std::pair<ParseResult, int> AbstractArg::ParseLongOption(std::string_view argWithoutDash) {
 	currentArg = argWithoutDash;
 
 	if (currentArg.find(longOption[0]) != 0) return { ParseResult::Fail(), 0 };
@@ -64,33 +64,34 @@ const std::pair<ParseResult, int> Arg::ParseLongOption(std::string_view argWitho
 	return { ParseResult::Ok(), matches };
 }
 
-Arg::Arg(ArgumentType type, const char option, std::string longOption, std::string description)
+AbstractArg::AbstractArg(ArgumentType type, const char option, std::string longOption, std::string description)
 	: type{ type }, option{ option }, longOption{ longOption }, description{ description }, operands("") { }
 
-Arg::~Arg() = default;
+AbstractArg::~AbstractArg() = default;
 
-const char Arg::GetOption() const {
+const char AbstractArg::GetOption() const {
 	return option;
 }
 
-std::string_view Arg::GetLongOption() const {
+std::string_view AbstractArg::GetLongOption() const {
 	return longOption;
 }
 
-std::string_view Arg::GetDescription() const {
+std::string_view AbstractArg::GetDescription() const {
 	return description;
 }
 
-const ArgumentType Arg::GetType() const {
+const ArgumentType AbstractArg::GetType() const {
 	return type;
 }
 
-const bool Arg::IsDefined() const {
+const bool AbstractArg::IsDefined() const {
 	return isDefined;
 }
 
 
-EmptyArg::EmptyArg(const char option, std::string longOption, std::string description) : Arg(ArgumentType::Empty, option, longOption, description) {};
+EmptyArg::EmptyArg(const char option, std::string longOption, std::string description) 
+	: AbstractArg(ArgumentType::Empty, option, longOption, description) {};
 
 ParseResult EmptyArg::ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) {
 	if (!operands.empty())
@@ -112,7 +113,7 @@ ParseResult EmptyArg::ParseLongOperandAndSetDefined(const std::optional<std::str
 
 
 BoolArg::BoolArg(const char option, std::string longOption, std::string description)
-	: Arg(ArgumentType::Bool, option, longOption, description) {};
+	: AbstractArg(ArgumentType::Bool, option, longOption, description) {};
 
 const bool BoolArg::GetValue() const {
 	return value;
@@ -152,7 +153,7 @@ ParseResult BoolArg::ParseLongOperandAndSetDefined(const std::optional<std::stri
 
 
 IntArg::IntArg(std::unique_ptr<Validator<int>> validator, const char option, std::string longOption, std::string description)
-	: validator{ std::move(validator) }, Arg(ArgumentType::Int, option, longOption, description) {};
+	: validator{ std::move(validator) }, AbstractArg(ArgumentType::Int, option, longOption, description) {};
 
 const int IntArg::GetValue() const {
 	return value;
@@ -192,7 +193,7 @@ ParseResult IntArg::ParseLongOperandAndSetDefined(const std::optional<std::strin
 
 
 StringArg::StringArg(std::unique_ptr<Validator<std::string>> validator, const char option, std::string longOption, std::string description)
-	: validator{ std::move(validator) }, Arg(ArgumentType::String, option, longOption, description) {};
+	: validator{ std::move(validator) }, AbstractArg(ArgumentType::String, option, longOption, description) {};
 
 std::string_view StringArg::GetValue() const {
 	return value;
@@ -220,7 +221,7 @@ ParseResult StringArg::ParseLongOperandAndSetDefined(const std::optional<std::st
 
 
 MultiBoolArg::MultiBoolArg(const char option, std::string longOption, std::string description)
-	: Arg(ArgumentType::MultiBool, option, longOption, description) {};
+	: AbstractArg(ArgumentType::MultiBool, option, longOption, description) {};
 
 const std::vector<bool>& MultiBoolArg::GetValues() const {
 	return values;
@@ -265,7 +266,7 @@ ParseResult MultiBoolArg::ParseLongOperandAndSetDefined(const std::optional<std:
 
 
 MultiIntArg::MultiIntArg(std::unique_ptr<Validator<int>> validator, const char option, std::string longOption, std::string description)
-	: validator{ std::move(validator) }, Arg(ArgumentType::MultiInt, option, longOption, description) {};
+	: validator{ std::move(validator) }, AbstractArg(ArgumentType::MultiInt, option, longOption, description) {};
 
 const std::vector<int>& MultiIntArg::GetValues() const {
 	return values;
@@ -309,7 +310,7 @@ ParseResult MultiIntArg::ParseLongOperandAndSetDefined(const std::optional<std::
 
 
 MultiStringArg::MultiStringArg(std::unique_ptr<Validator<std::string>> validator, const char option, std::string longOption, std::string description)
-	: validator{ std::move(validator) }, Arg(ArgumentType::MultiString, option, longOption, description) {};
+	: validator{ std::move(validator) }, AbstractArg(ArgumentType::MultiString, option, longOption, description) {};
 
 const std::vector<std::string>& MultiStringArg::GetValues() const {
 	return values;
