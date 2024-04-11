@@ -129,7 +129,7 @@ namespace args_parse {
 	*/
 	template<>
 	class SingleArg<bool> : public AbstractArg {
-		const BoolValidator validator;
+		const BoolValidator validator; //< Поле, хранящее валидатор значений аргумента
 		bool value = false; ///< Поле, хранящее значение аргумента в случае успешного парсинга
 	public:
 		SingleArg(const char option, std::string longOption, std::string description = "")
@@ -142,10 +142,10 @@ namespace args_parse {
 		ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
 			if (auto result = CheckOperand(nextArg, usedNextArg); !result.IsOk()) return result;
 
-			if (!isInteger(operands))
+			if (!IsInteger(operands))
 				return ParseResult::Fail({ "In " + currentArg + " " + (nextArg.has_value() ? nextArg.value() : "") + " : The option is found, but the value is not integer" });
 
-			const auto num = atoi(operands.c_str());
+			const auto num = std::stoi(operands);
 
 			if (const auto valResult = validator.Check(num); !valResult.IsOk()) return valResult;
 
@@ -158,10 +158,10 @@ namespace args_parse {
 		ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
 			if (auto result = CheckLongOperand(nextArg, usedNextArg); !result.IsOk()) return result;
 
-			if (!isInteger(operands))
+			if (!IsInteger(operands))
 				return ParseResult::Fail({ "In " + currentArg + " " + (nextArg.has_value() ? nextArg.value() : "") + " : The option is found, but the value is not integer" });
 
-			const auto num = atoi(operands.c_str());
+			const auto num = std::stoi(operands);
 
 			if (const auto valResult = validator.Check(num); !valResult.IsOk()) return valResult;
 
@@ -179,7 +179,7 @@ namespace args_parse {
 	*/
 	template<>
 	class SingleArg<int> : public AbstractArg {
-		std::unique_ptr<Validator<int>> validator;
+		std::unique_ptr<Validator<int>> validator; //< Поле, хранящее валидатор значений аргумента
 		int value = -1; ///< Поле, хранящее значение аргумента в случае успешного парсинга
 	public:
 		SingleArg(std::unique_ptr<Validator<int>> validator, const char option, std::string longOption, std::string description = "")
@@ -192,10 +192,10 @@ namespace args_parse {
 		ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
 			if (auto result = CheckOperand(nextArg, usedNextArg); !result.IsOk()) return result;
 
-			if (!isInteger(operands))
+			if (!IsInteger(operands))
 				return ParseResult::Fail({ "In " + currentArg + " " + (nextArg.has_value() ? nextArg.value() : "") + " : The option is found, but the value is not integer" });
 
-			const auto num = atoi(operands.c_str());
+			const auto num = std::stoi(operands);
 
 			if (const auto valResult = validator->Check(num); !valResult.IsOk()) return valResult;
 
@@ -208,10 +208,60 @@ namespace args_parse {
 		ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
 			if (auto result = CheckLongOperand(nextArg, usedNextArg); !result.IsOk()) return result;
 
-			if (!isInteger(operands))
+			if (!IsInteger(operands))
 				return ParseResult::Fail({ "In " + currentArg + " " + (nextArg.has_value() ? nextArg.value() : "") + " : The option is found, but the value is not integer" });
 
-			const auto num = atoi(operands.c_str());
+			const auto num = std::stoi(operands);
+
+			if (const auto valResult = validator->Check(num); !valResult.IsOk()) return valResult;
+
+			value = num;
+			isDefined = true;
+
+			return ParseResult::Ok();
+		}
+	};
+
+
+	/**
+	* @brief Шаблонный класс вещественного аргумента
+	* Аргумент содержит опцию и вещественнй операнд
+	*/
+	template<>
+	class SingleArg<float> : public AbstractArg {
+		std::unique_ptr<Validator<float>> validator; //< Поле, хранящее валидатор значений аргумента
+		float value = -1; ///< Поле, хранящее значение аргумента в случае успешного парсинга
+	public:
+		SingleArg(std::unique_ptr<Validator<float>> validator, const char option, std::string longOption, std::string description = "")
+			: validator{ std::move(validator) }, AbstractArg(ArgumentType::Int, option, longOption, description) {};
+
+		float GetValue() const {
+			return value;
+		}
+
+		ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
+			if (auto result = CheckOperand(nextArg, usedNextArg); !result.IsOk()) return result;
+
+			if (!IsFloat(operands))
+				return ParseResult::Fail({ "In " + currentArg + " " + (nextArg.has_value() ? nextArg.value() : "") + " : The option is found, but the value is not float" });
+
+			const auto num = std::stof(operands);
+
+			if (const auto valResult = validator->Check(num); !valResult.IsOk()) return valResult;
+
+			value = num;
+			isDefined = true;
+
+			return ParseResult::Ok();
+		}
+
+		ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
+			if (auto result = CheckLongOperand(nextArg, usedNextArg); !result.IsOk()) return result;
+
+			if (!IsFloat(operands))
+				return ParseResult::Fail({ "In " + currentArg + " " + (nextArg.has_value() ? nextArg.value() : "") + " : The option is found, but the value is not float" });
+
+			const auto num = std::stof(operands);
 
 			if (const auto valResult = validator->Check(num); !valResult.IsOk()) return valResult;
 
@@ -229,7 +279,7 @@ namespace args_parse {
 	*/
 	template<>
 	class SingleArg<std::string> : public AbstractArg {
-		std::unique_ptr<Validator<std::string>> validator;
+		std::unique_ptr<Validator<std::string>> validator; //< Поле, хранящее валидатор значений аргумента
 		std::string value; ///< Поле, хранящее значение аргумента в случае успешного парсинга
 	public:
 		SingleArg(std::unique_ptr<Validator<std::string>> validator, const char option, std::string longOption, std::string description = "")
@@ -318,7 +368,7 @@ namespace args_parse {
 	*/
 	template<>
 	class MultiArg<bool> : public AbstractArg {
-		const BoolValidator validator;
+		const BoolValidator validator; //< Поле, хранящее валидатор значений аргумента
 		std::vector<bool> values;
 	public:
 		MultiArg(const char option, std::string longOption, std::string description = "")
@@ -335,10 +385,10 @@ namespace args_parse {
 		ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
 			if (auto result = CheckOperand(nextArg, usedNextArg); !result.IsOk()) return result;
 
-			if (!isInteger(operands))
+			if (!IsInteger(operands))
 				return ParseResult::Fail({ "In " + currentArg + " " + (nextArg.has_value() ? nextArg.value() : "") + " : The option is found, but the value is not integer" });
 
-			const auto num = atoi(operands.c_str());
+			const auto num = std::stoi(operands);
 
 			if (const auto valResult = validator.Check(num); !valResult.IsOk()) return valResult;
 
@@ -352,10 +402,10 @@ namespace args_parse {
 		ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
 			if (auto result = CheckLongOperand(nextArg, usedNextArg); !result.IsOk()) return result;
 
-			if (!isInteger(operands))
+			if (!IsInteger(operands))
 				return ParseResult::Fail({ "In " + currentArg + " " + (nextArg.has_value() ? nextArg.value() : "") + " : The option is found, but the value is not integer" });
 
-			const auto num = atoi(operands.c_str());
+			const auto num = std::stoi(operands);
 
 			if (const auto valResult = validator.Check(num); !valResult.IsOk()) return valResult;
 
@@ -373,7 +423,9 @@ namespace args_parse {
 	*/
 	template<>
 	class MultiArg<int> : public AbstractArg {
-		const std::unique_ptr<Validator<int>> validator;
+		const std::unique_ptr<Validator<int>> validator; //< Поле, хранящее валидатор значений аргумента
+		/// Поле, хранящее значения аргумента в случае успешного парсинга 
+		/// @warning Может быть передано несколько одинаковых аргументов командной строки
 		std::vector<int> values;
 	public:
 		MultiArg(std::unique_ptr<Validator<int>> validator, const char option, std::string longOption, std::string description = "")
@@ -390,10 +442,10 @@ namespace args_parse {
 		ParseResult ParseOperandAndSetDefined(std::optional<std::string> nextArg, bool& usedNextArg) override {
 			if (auto result = CheckOperand(nextArg, usedNextArg); !result.IsOk()) return result;
 
-			if (!isInteger(operands))
+			if (!IsInteger(operands))
 				return ParseResult::Fail({ "In " + currentArg + " " + (nextArg.has_value() ? nextArg.value() : "") + ": The option is found, but the value is not integer" });
 
-			auto num = atoi(operands.c_str());
+			auto num = std::stoi(operands);
 
 			if (const auto valResult = validator->Check(num); !valResult.IsOk()) return valResult;
 
@@ -405,10 +457,65 @@ namespace args_parse {
 		ParseResult ParseLongOperandAndSetDefined(std::optional<std::string> nextArg, bool& usedNextArg) override {
 			if (auto result = CheckLongOperand(nextArg, usedNextArg); !result.IsOk()) return result;
 
-			if (!isInteger(operands))
+			if (!IsInteger(operands))
 				return ParseResult::Fail({ "In " + currentArg + " " + (nextArg.has_value() ? nextArg.value() : "") + ": The option is found, but the value is not integer" });
 
-			auto num = atoi(operands.c_str());
+			auto num = std::stoi(operands);
+
+			if (const auto valResult = validator->Check(num); !valResult.IsOk()) return valResult;
+
+			values.push_back(num);
+			isDefined = true;
+
+			return ParseResult::Ok();
+		}
+	};
+
+
+	/**
+	* @brief Шаблонный класс мультивещественного аргумента
+	* Аргумент содержит опцию и набор вещественных операндов
+	*/
+	template<>
+	class MultiArg<float> : public AbstractArg {
+		const std::unique_ptr<Validator<float>> validator; //< Поле, хранящее валидатор значений аргумента
+		/// Поле, хранящее значения аргумента в случае успешного парсинга 
+		/// @warning Может быть передано несколько одинаковых аргументов командной строки
+		std::vector<float> values;
+	public:
+		MultiArg(std::unique_ptr<Validator<float>> validator, const char option, std::string longOption, std::string description = "")
+			: validator{ std::move(validator) }, AbstractArg(ArgumentType::MultiInt, option, longOption, description) {};
+
+		const std::vector<float>& GetValues() const {
+			return values;
+		}
+
+		int GetCount() const {
+			return values.size();
+		}
+
+		ParseResult ParseOperandAndSetDefined(std::optional<std::string> nextArg, bool& usedNextArg) override {
+			if (auto result = CheckOperand(nextArg, usedNextArg); !result.IsOk()) return result;
+
+			if (!IsFloat(operands))
+				return ParseResult::Fail({ "In " + currentArg + " " + (nextArg.has_value() ? nextArg.value() : "") + ": The option is found, but the value is not float" });
+
+			auto num = std::stof(operands);
+
+			if (const auto valResult = validator->Check(num); !valResult.IsOk()) return valResult;
+
+			values.push_back(num);
+			isDefined = true;
+
+			return ParseResult::Ok();
+		}
+		ParseResult ParseLongOperandAndSetDefined(std::optional<std::string> nextArg, bool& usedNextArg) override {
+			if (auto result = CheckLongOperand(nextArg, usedNextArg); !result.IsOk()) return result;
+
+			if (!IsFloat(operands))
+				return ParseResult::Fail({ "In " + currentArg + " " + (nextArg.has_value() ? nextArg.value() : "") + ": The option is found, but the value is not float" });
+
+			auto num = std::stof(operands);
 
 			if (const auto valResult = validator->Check(num); !valResult.IsOk()) return valResult;
 
@@ -426,7 +533,9 @@ namespace args_parse {
 	*/
 	template<>
 	class MultiArg<std::string> : public AbstractArg {
-		const std::unique_ptr<Validator<std::string>> validator;
+		const std::unique_ptr<Validator<std::string>> validator; //< Поле, хранящее валидатор значений аргумента
+		/// Поле, хранящее значения аргумента в случае успешного парсинга 
+		/// @warning Может быть передано несколько одинаковых аргументов командной строки
 		std::vector<std::string> values;
 	public:
 		MultiArg(std::unique_ptr<Validator<std::string>> validator, const char option, std::string longOption, std::string description = "")

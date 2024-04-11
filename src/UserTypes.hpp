@@ -7,6 +7,10 @@
 
 namespace args_parse {
 
+	/**
+	* @brief Пользовательский тип времени
+	* Хранит значение микросекунд, переданных из аргумента
+	*/
 	class UserChrono {
 		std::chrono::microseconds us;	
 	public:
@@ -15,6 +19,12 @@ namespace args_parse {
 		std::chrono::microseconds GetMicroseconds() const { return us; }
 	};
 
+	/**
+	* @brief Шаблонный метод парсинга пользовательских типов
+	* Выполняет полный парсинг операнда, переданного из аргумента
+	* @param[in] userChrono ссылка на объект, хранящийся в SingleArg<T>
+	* @param[in] operand строка операнда для парсинга
+	*/
 	template<typename T>
 	std::enable_if_t<std::is_same_v<T, UserChrono>, ParseResult>
 	ParseUserType(T& userChrono, std::string_view operand) {
@@ -22,7 +32,7 @@ namespace args_parse {
 		std::string input{ operand };
 
 		if (!std::regex_match(input, std::regex(strExpr)))
-			return ParseResult::Fail({ "In " + std::string(operand) + " : operand is not chrono literal (" + strExpr + ")" });
+			return ParseResult::Fail({ "In " + std::string(operand) + " : operand is not chrono literal ( " + strExpr + " )" });
 
 		std::stringstream ss{ input };
 
@@ -60,7 +70,7 @@ namespace args_parse {
 			auto nanoseconds = std::chrono::milliseconds(value);
 			us = std::chrono::microseconds(nanoseconds);
 		}
-		else return ParseResult::Fail({ "In " + std::string(operand) + " : operand is not found in chrono literals (" + strExpr + ")" });
+		else return ParseResult::Fail({ "In " + std::string(operand) + " : operand is not found in chrono literals ( " + strExpr + " )" });
 
 		userChrono = UserChrono{ us };
 

@@ -30,19 +30,24 @@ int main(int argc, const char** argv)
 	InRangeValidator warningsValidator{ 0,100 };
 	SingleArg<int> warnings{ std::make_unique<InRangeValidator<int>>(warningsValidator), 'W', "warnings", "Input integer value (ex. -W=10)" };
 
+	InRangeValidator fractionValidator{ 0.f,10.f };
+	SingleArg<float> fraction{ std::make_unique<InRangeValidator<float>>(fractionValidator), 'F', "fraction" };
+
 	FileNameValidator<std::string> nameValidator{};
 	SingleArg<std::string> name{ std::make_unique<FileNameValidator<std::string>>(nameValidator), 'n', "name", "Input string value (ex. -n=o.txt)" };
 
 	MultiArg<bool> authorizes{ 'a', "authorizes" };
 
 	InRangeValidator<int> codesValidator{ 0, 1000 };
-	MultiArg<int> codes{ std::make_unique<InRangeValidator<int>>(InRangeValidator{0, 100}), 'c', "codes" };
+	MultiArg<int> codes{ std::make_unique<InRangeValidator<int>>(codesValidator), 'c', "codes" };
+
+	InRangeValidator<float> pricesValidator{ 0.f, 10000.f };
+	MultiArg<float> prices{ std::make_unique<InRangeValidator<float>>(pricesValidator), 'p', "prices" };
 
 	FileFormatValidator<std::string> outputValidator{};
 	MultiArg<std::string> output{ std::make_unique<FileFormatValidator<std::string>>(outputValidator), 'o', "output" };
 
 	SingleArg<UserChrono> debugSleep{ 'd', "debug-sleep" };
-
 	MultiArg<UserChrono> skipTimes{ 'S', "skip-times" };
 
 	parser.Add(&help);
@@ -50,12 +55,15 @@ int main(int argc, const char** argv)
 	parser.Add(&sleep);
 	parser.Add(&megafast);
 	parser.Add(&lock);
-	parser.Add(&warnings);
 	parser.Add(&warnas);
+	parser.Add(&warnings);
+	parser.Add(&fraction);
 	parser.Add(&name);
-	parser.Add(&output);
-	parser.Add(&codes);
+
 	parser.Add(&authorizes);
+	parser.Add(&codes);
+	parser.Add(&prices);
+	parser.Add(&output);
 	parser.Add(&debugSleep);
 	parser.Add(&skipTimes);
 
@@ -82,18 +90,21 @@ int main(int argc, const char** argv)
 		if (lock.IsDefined()) {
 			cout << "Bool argument: " << boolalpha << lock.GetOption() << "/" << lock.GetLongOption() << " " << lock.GetValue() << endl;
 		}
+		if (warnas.IsDefined()) {
+			cout << "Int argument: " << warnas.GetOption() << "/" << warnas.GetLongOption() << " " << warnas.GetValue() << endl;
+		}
 		if (warnings.IsDefined()) {
 			cout << "Int argument: " << warnings.GetOption() << "/" << warnings.GetLongOption() << " " << warnings.GetValue() << endl;
 		}
-		if (warnas.IsDefined()) {
-			cout << "Int argument: " << warnas.GetOption() << "/" << warnas.GetLongOption() << " " << warnas.GetValue() << endl;
+		if (fraction.IsDefined()) {
+			cout << "Float argument: " << fraction.GetOption() << "/" << fraction.GetLongOption() << " " << fraction.GetValue() << endl;
 		}
 		if (name.IsDefined()) {
 			cout << "String argument: " << name.GetOption() << "/" << name.GetLongOption() << " " << name.GetValue() << endl;
 		}
-		if (output.IsDefined()) {
-			cout << "MultiString argument: " << output.GetOption() << "/" << output.GetLongOption() << " ";
-			for (auto value : output.GetValues()) {
+		if (authorizes.IsDefined()) {
+			cout << "MultiBool argument: " << authorizes.GetOption() << "/" << authorizes.GetLongOption() << " ";
+			for (auto value : authorizes.GetValues()) {
 				cout << value << ", ";
 			}
 			cout << endl;
@@ -105,9 +116,16 @@ int main(int argc, const char** argv)
 			}
 			cout << endl;
 		}
-		if (authorizes.IsDefined()) {
-			cout << "MultiBool argument: " << authorizes.GetOption() << "/" << authorizes.GetLongOption() << " ";
-			for (auto value : authorizes.GetValues()) {
+		if (prices.IsDefined()) {
+			cout << "MultiFloat argument: " << prices.GetOption() << "/" << prices.GetLongOption() << " ";
+			for (auto value : prices.GetValues()) {
+				cout << value << ", ";
+			}
+			cout << endl;
+		}
+		if (output.IsDefined()) {
+			cout << "MultiString argument: " << output.GetOption() << "/" << output.GetLongOption() << " ";
+			for (auto value : output.GetValues()) {
 				cout << value << ", ";
 			}
 			cout << endl;
