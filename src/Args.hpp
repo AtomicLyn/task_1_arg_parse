@@ -94,19 +94,19 @@ namespace args_parse {
 	*/
 	template<typename T>
 	class SingleArg : public AbstractArg {
-		std::unique_ptr<UserChrono> value; ///< Поле, хранящее значение аргумента в случае успешного парсинга
+		T value; ///< Поле, хранящее значение аргумента в случае успешного парсинга
 	public:
-		SingleArg(std::unique_ptr<UserChrono> userType, const char option, std::string longOption, std::string description = "")
-			: value{ std::move(userType) }, AbstractArg(ArgumentType::UserType, option, longOption, description) {};
+		SingleArg(const char option, std::string longOption, std::string description = "")
+			: AbstractArg(ArgumentType::UserType, option, longOption, description) {};
 
 		/// Геттер для value
-		const T GetValue() const {
-			return value->Get();
+		const T& GetValue() const {
+			return value;
 		}
 
 		ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
 			if (auto result = CheckOperand(nextArg, usedNextArg); !result.IsOk()) return result;
-			if (auto result = value->Parse(operands); !result.IsOk()) return result;
+			if (auto result = ParseUserType(value, operands); !result.IsOk()) return result;
 
 			isDefined = true;
 
@@ -114,8 +114,8 @@ namespace args_parse {
 		}
 
 		ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
-			if (auto result = CheckOperand(nextArg, usedNextArg); !result.IsOk()) return result;
-			if (auto result = value->Parse(operands); !result.IsOk()) return result;
+			if (auto result = CheckLongOperand(nextArg, usedNextArg); !result.IsOk()) return result;
+			if (auto result = ParseUserType(value, operands); !result.IsOk()) return result;
 
 			isDefined = true;
 
@@ -135,7 +135,7 @@ namespace args_parse {
 		SingleArg(const char option, std::string longOption, std::string description = "")
 			: AbstractArg(ArgumentType::Bool, option, longOption, description) {};
 
-		const bool GetValue() const {
+		bool GetValue() const {
 			return value;
 		}
 
@@ -185,7 +185,7 @@ namespace args_parse {
 		SingleArg(std::unique_ptr<Validator<int>> validator, const char option, std::string longOption, std::string description = "")
 			: validator{ std::move(validator) }, AbstractArg(ArgumentType::Int, option, longOption, description) {};
 
-		const int GetValue() const {
+		int GetValue() const {
 			return value;
 		}
 
@@ -235,7 +235,7 @@ namespace args_parse {
 		SingleArg(std::unique_ptr<Validator<std::string>> validator, const char option, std::string longOption, std::string description = "")
 			: validator{ std::move(validator) }, AbstractArg(ArgumentType::String, option, longOption, description) {};
 
-		const std::string GetValue() const {
+		std::string_view GetValue() const {
 			return value;
 		}
 
@@ -266,22 +266,50 @@ namespace args_parse {
 	*/
 	template<typename T>
 	class MultiArg : public AbstractArg {
-		const T validator;
 		/// Поле, хранящее значения аргумента в случае успешного парсинга 
 		/// @warning Может быть передано несколько одинаковых аргументов командной строки
 		std::vector<T> values;
 	public:
-		MultiArg(std::unique_ptr<Validator<T>> validator, const char option, std::string longOption, std::string description = "");
+		MultiArg(const char option, std::string longOption, std::string description = "")
+			: AbstractArg(ArgumentType::UserType, option, longOption, description) {};
 
 		/// Геттер для values
-		const std::vector<T>& GetValues() const;
+		const std::vector<T>& GetValues() const {
+			return values;
+		}
 
 		/// Количество значений в values
-		const int GetCount() const;
+		int GetCount() const {
+			return values.size();
+		}
 
-		ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
+		ParseResult ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
+			if (auto result = CheckOperand(nextArg, usedNextArg); !result.IsOk()) return result;
 
-		ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override;
+			T value;
+
+			if (auto result = ParseUserType(value, operands); !result.IsOk()) return result;
+
+			values.push_back(value);
+
+			isDefined = true;
+
+			return ParseResult::Ok();
+		}
+
+		ParseResult ParseLongOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) override {
+			if (auto result = CheckLongOperand(nextArg, usedNextArg); !result.IsOk()) return result;
+
+			T value;
+
+			if (auto result = ParseUserType(value, operands); !result.IsOk()) return result;
+
+			values.push_back(value);
+
+			isDefined = true;
+
+			return ParseResult::Ok();
+		}
 	};
 
 	/**
@@ -300,7 +328,7 @@ namespace args_parse {
 			return values;
 		}
 
-		const int GetCount() const {
+		int GetCount() const {
 			return values.size();
 		}
 
@@ -355,7 +383,7 @@ namespace args_parse {
 			return values;
 		}
 
-		const int GetCount() const {
+		int GetCount() const {
 			return values.size();
 		}
 
@@ -408,7 +436,7 @@ namespace args_parse {
 			return values;
 		}
 
-		const int GetCount() const {
+		int GetCount() const {
 			return values.size();
 		}
 
