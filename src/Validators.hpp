@@ -8,6 +8,7 @@ namespace args_parse {
 	template<typename T>
 	class Validator {
 	public:
+		virtual ~Validator() = default;
 		[[nodiscard]] virtual ParseResult Check(const T value) const = 0;
 	};
 
