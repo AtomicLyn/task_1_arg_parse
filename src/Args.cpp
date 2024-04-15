@@ -91,7 +91,7 @@ const bool AbstractArg::IsDefined() const {
 
 
 EmptyArg::EmptyArg(const char option, std::string longOption, std::string description) 
-	: AbstractArg(ArgumentType::Empty, option, longOption, description) {};
+	: AbstractArg(ArgumentType::Empty, option, std::move(longOption), std::move(description)) {};
 
 ParseResult EmptyArg::ParseOperandAndSetDefined(const std::optional<std::string> nextArg, bool& usedNextArg) {
 	if (!operands.empty())

@@ -3,7 +3,6 @@
 #include "ParseResult.hpp"
 #include <chrono>
 #include <regex>
-#include <sstream>
 
 namespace args_parse {
 
@@ -25,21 +24,17 @@ namespace args_parse {
 	* @param[in] userChrono ссылка на объект, хранящийся в SingleArg<T>
 	* @param[in] operand строка операнда для парсинга
 	*/
-	template<typename T>
-	std::enable_if_t<std::is_same_v<T, UserChrono>, ParseResult>
-	ParseUserType(T& userChrono, std::string_view operand) {
-		const std::string strExpr = "^[0-9]+(d|h|m|s|ms|us|ns)$";
+	inline ParseResult ParseUserType(UserChrono& userChrono, std::string_view operand) {
+		static const std::string strExpr = "^[0-9]+(d|h|m|s|ms|us|ns)$";
+		static const std::regex reg{ strExpr };
 		std::string input{ operand };
 
-		if (!std::regex_match(input, std::regex(strExpr)))
+		std::smatch matches;
+		if (!std::regex_search(input, matches, reg))
 			return ParseResult::Fail({ "In " + std::string(operand) + " : operand is not chrono literal ( " + strExpr + " )" });
 
-		std::stringstream ss{ input };
-
-		long long value;
-		std::string unit;
-
-		ss >> value >> unit;
+		long long value = std::stoll(matches[0]);
+		std::string unit = matches[1];
 
 		std::chrono::microseconds us;
 
