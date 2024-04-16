@@ -28,6 +28,9 @@ int main(int argc, const char** argv) {
 	else {
 		ScanPool pool{ sourcePath.GetValue(), poolSize.GetValue(), debugSleep.GetValue().GetMicroseconds() };
 
-		pool.Start();
+		auto mainDirectory = pool.StartAndGetDirectory();
+
+		std::cout << "Read: " << mainDirectory.GetPath() << std::endl << std::endl;
+		mainDirectory.Show();
 	}
 }

@@ -3,10 +3,6 @@
 
 using namespace scan_dir;
 
-Directory& Directory::AddAndGet(std::filesystem::path path) {
-	return directories.emplace_back(path);
-}
-
 void Directory::Show(const int whitespace) {
 	for (auto& directory : directories) {
 		std::cout << std::string(whitespace, ' ') << directory.path.filename() << "(thread: " << threadId << ")/" << std::endl;

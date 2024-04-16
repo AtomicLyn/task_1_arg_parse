@@ -5,6 +5,8 @@ project(ArgParser)
 add_library(scan_dir STATIC 
 	Directory.hpp
 	Directory.cpp
+	ScanPool.hpp
+	ScanPool.cpp
 )
 
 target_include_directories(scan_dir PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
