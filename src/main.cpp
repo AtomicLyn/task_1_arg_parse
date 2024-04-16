@@ -16,7 +16,6 @@ int main(int argc, const char** argv)
 	}
 	cout << endl << endl;
 
-
 	ArgParser parser;
 	EmptyArg help{ 'h', "help", "Get some help" };
 	EmptyArg fast{ 'f', "fast", "Gotta go fast (ex. -f)" };
@@ -25,27 +24,27 @@ int main(int argc, const char** argv)
 	SingleArg<bool> lock{ 'l', "lock", "Input 0 or 1 (ex. -l=0)" };
 
 	InRangeValidator<int> warnasValidator{ 0, 100 };
-	SingleArg<int> warnas{ std::make_unique<InRangeValidator<int>>(warnasValidator), 'w', "warnas", "Input integer value (ex. -w=10)" };
+	SingleArg<int> warnas{ warnasValidator, 'w', "warnas", "Input integer value (ex. -w=10)" };
 
 	InRangeValidator warningsValidator{ 0,100 };
-	SingleArg<int> warnings{ std::make_unique<InRangeValidator<int>>(warningsValidator), 'W', "warnings", "Input integer value (ex. -W=10)" };
+	SingleArg<int> warnings{ warningsValidator, 'W', "warnings", "Input integer value (ex. -W=10)" };
 
 	InRangeValidator fractionValidator{ 0.f,10.f };
-	SingleArg<float> fraction{ std::make_unique<InRangeValidator<float>>(fractionValidator), 'F', "fraction" };
+	SingleArg<float> fraction{ fractionValidator, 'F', "fraction" };
 
 	FileNameValidator<std::string> nameValidator{};
-	SingleArg<std::string> name{ std::make_unique<FileNameValidator<std::string>>(nameValidator), 'n', "name", "Input string value (ex. -n=o.txt)" };
+	SingleArg<std::string> name{ nameValidator, 'n', "name", "Input string value (ex. -n=o.txt)" };
 
 	MultiArg<bool> authorizes{ 'a', "authorizes" };
 
 	InRangeValidator<int> codesValidator{ 0, 1000 };
-	MultiArg<int> codes{ std::make_unique<InRangeValidator<int>>(codesValidator), 'c', "codes" };
+	MultiArg<int> codes{ codesValidator, 'c', "codes" };
 
 	InRangeValidator<float> pricesValidator{ 0.f, 10000.f };
-	MultiArg<float> prices{ std::make_unique<InRangeValidator<float>>(pricesValidator), 'p', "prices" };
+	MultiArg<float> prices{ pricesValidator, 'p', "prices" };
 
 	FileFormatValidator<std::string> outputValidator{};
-	MultiArg<std::string> output{ std::make_unique<FileFormatValidator<std::string>>(outputValidator), 'o', "output" };
+	MultiArg<std::string> output{ outputValidator, 'o', "output" };
 
 	SingleArg<UserChrono> debugSleep{ 'd', "debug-sleep" };
 	MultiArg<UserChrono> skipTimes{ 'S', "skip-times" };

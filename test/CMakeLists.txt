@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.8)
 
 project(args_parse_test_app LANGUAGES CXX)
 

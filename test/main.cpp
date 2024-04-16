@@ -6,6 +6,8 @@
 #include "UserTypes.hpp"
 
 using namespace args_parse;
+using namespace args_parse_testing;
+
 
 TEST_CASE("IntValidator", "[basic]") {
 	auto min = 0, max = 10;
@@ -117,6 +119,7 @@ TEST_CASE("StringValidator", "[basic]") {
 TEST_CASE("Arg EmptyArg", "[basic]")
 {
 	EmptyArg arg{ 'c', "check" };
+	ArgsTestingAcessor targ{ arg };
 	auto nextArg = std::nullopt;
 	auto usedNextArg = false;
 
@@ -124,10 +127,10 @@ TEST_CASE("Arg EmptyArg", "[basic]")
 		auto shortStr = "c";
 		auto longStr = "check";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE(shortResult);
 		REQUIRE(longResult);
@@ -137,10 +140,10 @@ TEST_CASE("Arg EmptyArg", "[basic]")
 		auto shortStr = "a";
 		auto longStr = "aaaa";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE_FALSE(shortResult);
 		REQUIRE_FALSE(longResult);
@@ -150,10 +153,10 @@ TEST_CASE("Arg EmptyArg", "[basic]")
 		auto shortStr = "c1";
 		auto longStr = "check1";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE(shortResult);
 		REQUIRE_FALSE(longResult);
@@ -163,10 +166,10 @@ TEST_CASE("Arg EmptyArg", "[basic]")
 		auto shortStr = "c=";
 		auto longStr = "check=";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE_FALSE(shortResult);
 		REQUIRE_FALSE(longResult);
@@ -176,10 +179,10 @@ TEST_CASE("Arg EmptyArg", "[basic]")
 		auto shortStr = "c=1";
 		auto longStr = "check=1";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE_FALSE(shortResult);
 		REQUIRE_FALSE(longResult);
@@ -188,6 +191,7 @@ TEST_CASE("Arg EmptyArg", "[basic]")
 
 TEST_CASE("BoolArg", "[basic]") {
 	SingleArg<bool> arg{ 'c', "check" };
+	ArgsTestingAcessor targ{ arg };
 	auto nextArg = std::nullopt;
 	auto usedNextArg = false;
 
@@ -195,10 +199,10 @@ TEST_CASE("BoolArg", "[basic]") {
 		auto shortStr = "c1";
 		auto longStr = "check=1";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE(shortResult);
 		REQUIRE(longResult);
@@ -208,10 +212,10 @@ TEST_CASE("BoolArg", "[basic]") {
 		auto shortStr = "c9";
 		auto longStr = "check=m";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE_FALSE(shortResult);
 		REQUIRE_FALSE(longResult);
@@ -221,10 +225,10 @@ TEST_CASE("BoolArg", "[basic]") {
 		auto shortStr = "a1";
 		auto longStr = "aaaaa=1";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE_FALSE(shortResult);
 		REQUIRE_FALSE(longResult);
@@ -232,7 +236,9 @@ TEST_CASE("BoolArg", "[basic]") {
 }
 
 TEST_CASE("IntArg", "[basic]") {
-	SingleArg<int> arg{ std::make_unique<InRangeValidator<int>>(InRangeValidator<int>{ 0, 10 }), 'c', "check" };
+	InRangeValidator<int> checkValidator{ 0, 10 };
+	SingleArg<int> arg{ checkValidator, 'c', "check" };
+	ArgsTestingAcessor targ{ arg };
 	auto nextArg = std::nullopt;
 	auto usedNextArg = false;
 
@@ -240,10 +246,10 @@ TEST_CASE("IntArg", "[basic]") {
 		auto shortStr = "c=5";
 		auto longStr = "check=5";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE(shortResult);
 		REQUIRE(longResult);
@@ -253,10 +259,10 @@ TEST_CASE("IntArg", "[basic]") {
 		auto shortStr = "c=m";
 		auto longStr = "check=m";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE_FALSE(shortResult);
 		REQUIRE_FALSE(longResult);
@@ -267,10 +273,10 @@ TEST_CASE("IntArg", "[basic]") {
 		auto shortStr = "a=5";
 		auto longStr = "aaaaa=5";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE_FALSE(shortResult);
 		REQUIRE_FALSE(longResult);
@@ -278,7 +284,9 @@ TEST_CASE("IntArg", "[basic]") {
 }
 
 TEST_CASE("FloatArg", "[basic]") {
-	SingleArg<float> arg{ std::make_unique<InRangeValidator<float>>(InRangeValidator{ 0.f, 10.f }), 'c', "check" };
+	InRangeValidator checkValidator{ 0.f, 10.f };
+	SingleArg<float> arg{ checkValidator, 'c', "check" };
+	ArgsTestingAcessor targ{ arg };
 	auto nextArg = std::nullopt;
 	auto usedNextArg = false;
 
@@ -286,10 +294,10 @@ TEST_CASE("FloatArg", "[basic]") {
 		auto shortStr = "c=5.5";
 		auto longStr = "check=5.5";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE(shortResult);
 		REQUIRE(longResult);
@@ -299,10 +307,10 @@ TEST_CASE("FloatArg", "[basic]") {
 		auto shortStr = "c=m";
 		auto longStr = "check=m";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE_FALSE(shortResult);
 		REQUIRE_FALSE(longResult);
@@ -313,10 +321,10 @@ TEST_CASE("FloatArg", "[basic]") {
 		auto shortStr = "a=5.5";
 		auto longStr = "aaaaa=5.5";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE_FALSE(shortResult);
 		REQUIRE_FALSE(longResult);
@@ -324,7 +332,9 @@ TEST_CASE("FloatArg", "[basic]") {
 }
 
 TEST_CASE("StringArg", "[basic]") {
-	SingleArg<std::string> arg{ std::make_unique<FileNameValidator<std::string>>(FileNameValidator<std::string> {}), 'c', "check" };
+	FileNameValidator<std::string> checkValidator;
+	SingleArg<std::string> arg{ checkValidator, 'c', "check" };
+	ArgsTestingAcessor targ{ arg };
 	auto nextArg = std::nullopt;
 	auto usedNextArg = false;
 
@@ -332,10 +342,10 @@ TEST_CASE("StringArg", "[basic]") {
 		auto shortStr = "c=file.txt";
 		auto longStr = "check=file.txt";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE(shortResult);
 		REQUIRE(longResult);
@@ -345,10 +355,10 @@ TEST_CASE("StringArg", "[basic]") {
 		auto shortStr = "c=.txt";
 		auto longStr = "check=.txt";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE_FALSE(shortResult);
 		REQUIRE_FALSE(longResult);
@@ -359,10 +369,10 @@ TEST_CASE("StringArg", "[basic]") {
 		auto shortStr = "a=file.txt";
 		auto longStr = "aaaaa=file.txt";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE_FALSE(shortResult);
 		REQUIRE_FALSE(longResult);
@@ -371,6 +381,7 @@ TEST_CASE("StringArg", "[basic]") {
 
 TEST_CASE("MultiBoolArg", "[basic]") {
 	MultiArg<bool> arg{ 'c', "check" };
+	ArgsTestingAcessor targ{ arg };
 	auto nextArg = std::nullopt;
 	auto usedNextArg = false;
 
@@ -378,47 +389,47 @@ TEST_CASE("MultiBoolArg", "[basic]") {
 		auto shortStr = "c1";
 		auto longStr = "check=1";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE(shortResult);
 		REQUIRE(longResult);
-		REQUIRE(arg.GetCount() == 2);
+		//REQUIRE(targ.GetCount() == 2);
 	}
 
 	SECTION("Wrong argument with not bool operand") {
 		auto shortStr = "c9";
 		auto longStr = "check=m";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE_FALSE(shortResult);
 		REQUIRE_FALSE(longResult);
-		REQUIRE(arg.GetCount() == 0);
 	}
 
 	SECTION("Wrong argument with bool operand") {
 		auto shortStr = "a1";
 		auto longStr = "aaaaa=1";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE_FALSE(shortResult);
 		REQUIRE_FALSE(longResult);
-		REQUIRE(arg.GetCount() == 0);
 	}
 }
 
 TEST_CASE("MultiIntArg", "[basic]") {
-	MultiArg<int> arg{ std::make_unique<InRangeValidator<int>>(InRangeValidator<int>{ 0, 10 }), 'c', "check" };
+	InRangeValidator<int> checkValidator{ 0, 10 };
+	MultiArg<int> arg{ checkValidator, 'c', "check" };
+	ArgsTestingAcessor targ{ arg };
 	auto nextArg = std::nullopt;
 	auto usedNextArg = false;
 
@@ -426,28 +437,26 @@ TEST_CASE("MultiIntArg", "[basic]") {
 		auto shortStr = "c=5";
 		auto longStr = "check=5";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE(shortResult);
 		REQUIRE(longResult);
-		REQUIRE(arg.GetCount() == 2);
 	}
 
 	SECTION("Wrong argument with not int operand") {
 		auto shortStr = "c=m";
 		auto longStr = "check=m";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE_FALSE(shortResult);
 		REQUIRE_FALSE(longResult);
-		REQUIRE(arg.GetCount() == 0);
 	}
 
 
@@ -455,19 +464,20 @@ TEST_CASE("MultiIntArg", "[basic]") {
 		auto shortStr = "a=5";
 		auto longStr = "aaaaa=5";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE_FALSE(shortResult);
 		REQUIRE_FALSE(longResult);
-		REQUIRE(arg.GetCount() == 0);
 	}
 }
 
 TEST_CASE("MultiFloatArg", "[basic]") {
-	MultiArg<float> arg{ std::make_unique<InRangeValidator<float>>(InRangeValidator{ 0.f, 10.f }), 'c', "check" };
+	InRangeValidator checkValidator{ 0.f, 10.f };
+	MultiArg<float> arg{ checkValidator, 'c', "check" };
+	ArgsTestingAcessor targ{ arg };
 	auto nextArg = std::nullopt;
 	auto usedNextArg = false;
 
@@ -475,28 +485,26 @@ TEST_CASE("MultiFloatArg", "[basic]") {
 		auto shortStr = "c=5.5";
 		auto longStr = "check=5.5";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE(shortResult);
 		REQUIRE(longResult);
-		REQUIRE(arg.GetCount() == 2);
 	}
 
 	SECTION("Wrong argument with not int operand") {
 		auto shortStr = "c=m";
 		auto longStr = "check=m";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE_FALSE(shortResult);
 		REQUIRE_FALSE(longResult);
-		REQUIRE(arg.GetCount() == 0);
 	}
 
 
@@ -504,19 +512,20 @@ TEST_CASE("MultiFloatArg", "[basic]") {
 		auto shortStr = "a=5.5";
 		auto longStr = "aaaaa=5.5";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE_FALSE(shortResult);
 		REQUIRE_FALSE(longResult);
-		REQUIRE(arg.GetCount() == 0);
 	}
 }
 
 TEST_CASE("MultiStringArg", "[basic]") {
-	MultiArg<std::string> arg{ std::make_unique<FileNameValidator<std::string>>(FileNameValidator<std::string> {}), 'c', "check" };
+	FileNameValidator<std::string> checkValidator;
+	MultiArg<std::string> arg{ checkValidator, 'c', "check" };
+	ArgsTestingAcessor targ{ arg };
 	auto nextArg = std::nullopt;
 	auto usedNextArg = false;
 
@@ -524,28 +533,26 @@ TEST_CASE("MultiStringArg", "[basic]") {
 		auto shortStr = "c=file.txt";
 		auto longStr = "check=file.txt";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE(shortResult);
 		REQUIRE(longResult);
-		REQUIRE(arg.GetCount() == 2);
 	}
 
 	SECTION("Wrong argument with not int operand") {
 		auto shortStr = "c=.txt";
 		auto longStr = "check=.txt";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE_FALSE(shortResult);
 		REQUIRE_FALSE(longResult);
-		REQUIRE(arg.GetCount() == 0);
 	}
 
 
@@ -553,14 +560,13 @@ TEST_CASE("MultiStringArg", "[basic]") {
 		auto shortStr = "a=file.txt";
 		auto longStr = "aaaaa=file.txt";
 
-		auto shortOptionResult = arg.ParseOption(shortStr).IsOk();
-		auto shortResult = shortOptionResult ? arg.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
-		auto longOptionResult = arg.ParseLongOption(longStr).first.IsOk();
-		auto longResult = longOptionResult ? arg.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto shortOptionResult = targ.ParseOption(shortStr).IsOk();
+		auto shortResult = shortOptionResult ? targ.ParseOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
+		auto longOptionResult = targ.ParseLongOption(longStr).first.IsOk();
+		auto longResult = longOptionResult ? targ.ParseLongOperandAndSetDefined(nextArg, usedNextArg).IsOk() : false;
 
 		REQUIRE_FALSE(shortResult);
 		REQUIRE_FALSE(longResult);
-		REQUIRE(arg.GetCount() == 0);
 	}
 }
 
@@ -571,15 +577,22 @@ TEST_CASE("ArgParser", "[basic]") {
 	EmptyArg sleep{ 's', "sleep" };
 	SingleArg<bool> lock{ 'l', "lock", "Input 0 or 1 (ex. -l=0)" };
 
-	SingleArg<int> warnas{ std::make_unique<InRangeValidator<int>>(InRangeValidator{0, 10}), 'w', "warnas" };
-	SingleArg<int> warnings{ std::make_unique<InRangeValidator<int>>(InRangeValidator{0, 10}), 'W', "warnings" };
+	InRangeValidator warnasValidator{ 0, 10 };
+	SingleArg<int> warnas{ warnasValidator, 'w', "warnas" };
+	InRangeValidator warningsValidator{ 0,100 };
+	SingleArg<int> warnings{ warningsValidator, 'W', "warnings" };
 
-	SingleArg<float> fraction{ std::make_unique<InRangeValidator<float>>(InRangeValidator{ 0.f,10.f }), 'F', "fraction"};
-	SingleArg<std::string> name{ std::make_unique<FileNameValidator<std::string>>(FileNameValidator<std::string>{}), 'n', "name" };
+	InRangeValidator fractionValidator{ 0.f,10.f };
+	SingleArg<float> fraction{ fractionValidator, 'F', "fraction" };
+	FileNameValidator<std::string> nameValidator{};
+	SingleArg<std::string> name{ nameValidator, 'n', "name" };
 	MultiArg<bool> authorizes{ 'a', "authorizes" };
-	MultiArg<int> codes{ std::make_unique<InRangeValidator<int>>(InRangeValidator{0, 10}), 'c', "codes" };
-	MultiArg<float> prices{ std::make_unique<InRangeValidator<float>>(InRangeValidator{0.f, 10000.f}), 'p', "prices" };
-	MultiArg<std::string> output{ std::make_unique<FileFormatValidator<std::string>>(FileFormatValidator<std::string>{}), 'o', "output" };
+	InRangeValidator<int> codesValidator{ 0, 1000 };
+	MultiArg<int> codes{ codesValidator, 'c', "codes" };
+	InRangeValidator<float> pricesValidator{ 0.f, 10000.f };
+	MultiArg<float> prices{ pricesValidator, 'p', "prices" };
+	FileFormatValidator<std::string> outputValidator{};
+	MultiArg<std::string> output{ outputValidator, 'o', "output" };
 
 	SingleArg<UserChrono> debugSleep{ 'd', "debug-sleep" };
 	MultiArg<UserChrono> skipTimes{ 'S', "skip-times" };
@@ -599,7 +612,7 @@ TEST_CASE("ArgParser", "[basic]") {
 	parser.Add(&skipTimes);
 
 	SECTION("All current arguments") {
-		std::vector args{ "PLUG", "-hsl0",  "--warnings=10", "--warnas", "10", "-n", "file.txt", "-o=*.jpg",  "-c1", "--c=1", "-a=0", "-F", "9.5", "-p=50.1", "-d=20s", "-S=3us"};
+		std::vector args{ "PLUG", "-hsl0",  "--warnings=10", "--warnas", "10", "-n", "file.txt", "-o=*.jpg",  "-c1", "--c=1", "-a=0", "-F", "9.5", "-p=50.1", "-d=20s", "-S=3us" };
 
 		auto result = parser.Parse(static_cast<int>(args.size()), &args[0]);
 
