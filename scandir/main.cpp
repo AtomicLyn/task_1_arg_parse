@@ -28,7 +28,6 @@ int main(int argc, const char** argv) {
 	else {
 		ScanPool pool{ sourcePath.GetValue(), poolSize.GetValue(), debugSleep.GetValue().GetMicroseconds() };
 
-		// TODO
-		int t = 0;
+		pool.Start();
 	}
 }
