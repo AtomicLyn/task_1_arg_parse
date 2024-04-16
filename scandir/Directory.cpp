@@ -10,10 +10,10 @@ Directory& Directory::AddAndGet() {
 void Directory::Show(const int whitespace) {
 	std::cout << " ";
 	for (auto& directory : directories) {
-		std::cout << std::setw(whitespace) << directory.filepath << std::endl;
+		std::cout << std::setw(whitespace) << "thread: " << threadId << " | " << directory.filepath.parent_path() << "/" << std::endl;
 		directory.Show(whitespace + 1);
 	}
 	for (const auto& filename : filenames) {
-		std::cout << std::setw(whitespace) << filename << std::endl;
+		std::cout << std::setw(whitespace) << "thread: " << threadId << " | " << filename << std::endl;
 	}
 }
