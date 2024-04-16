@@ -126,12 +126,12 @@ namespace args_parse {
 		}
 	public:
 		SingleArg(const char option, std::string longOption, std::string description = "")
-			: value{}, AbstractArg{ ArgumentType::NotEmpty, option, std::move(longOption), std::move(description) } {};
+			: value{}, AbstractArg{ ArgumentType::NotEmpty, option, std::move(longOption), std::move(description) } {}
 
 		SingleArg(std::reference_wrapper<Validator<T>> vvalidator, const char option, std::string longOption, std::string description = "")
 			: SingleArg{ option, std::move(longOption), std::move(description) } {
 			validator = vvalidator;
-		};
+		}
 
 		/// Геттер для value
 		const T& GetValue() const {
@@ -183,12 +183,12 @@ namespace args_parse {
 		}
 	public:
 		MultiArg(const char option, std::string longOption, std::string description = "")
-			: AbstractArg(ArgumentType::NotEmpty, option, std::move(longOption), std::move(description)) {};
+			: AbstractArg(ArgumentType::NotEmpty, option, std::move(longOption), std::move(description)) {}
 
 		MultiArg(std::reference_wrapper <Validator<T>> vvalidator, const char option, std::string longOption, std::string description = "")
 			: AbstractArg(ArgumentType::NotEmpty, option, std::move(longOption), std::move(description)) {
 			validator = vvalidator;
-		};
+		}
 
 		/// Геттер для values
 		const std::vector<T>& GetValues() const {

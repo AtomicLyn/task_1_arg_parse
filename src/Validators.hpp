@@ -53,5 +53,4 @@ namespace args_parse {
 			return ParseResult::Ok();
 		}
 	};
-
 }
