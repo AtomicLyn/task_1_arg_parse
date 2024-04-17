@@ -24,9 +24,9 @@ int main(int argc, const char** argv) {
 	if (auto result = parser.Parse(argc, argv); !result.IsOk())	std::cout << "Parse error: " << result.GetError().Message;
 	if (help.IsDefined()) std::cout << parser.GetHelp() << std::endl;
 
-	if (!sourcePath.IsDefined()) std::cout << "source-path is not defined";
-	else if (!poolSize.IsDefined()) std::cout << "pool-size is not defined";
-	else if (!debugSleep.IsDefined()) std::cout << "debug-sleep is not defined";
+	if (!sourcePath.IsDefined()) std::cout << sourcePath.GetLongOption() << " is not defined";
+	else if (!poolSize.IsDefined()) std::cout << poolSize.GetLongOption() << " is not defined";
+	else if (!debugSleep.IsDefined()) std::cout << debugSleep.GetLongOption() << " is not defined";
 	else {
 		ScanPool pool{ sourcePath.GetValue(), poolSize.GetValue(), debugSleep.GetValue().GetMicroseconds() };
 
