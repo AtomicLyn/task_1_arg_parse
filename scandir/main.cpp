@@ -12,7 +12,7 @@ int main(int argc, const char** argv) {
 
 	EmptyArg help{ 'h', "help" };
 	SingleArg<std::string> sourcePath{ 's', "source-path", "The path for the directory where the multithreaded crawl will be performed (ex. -s=C:\\folder)"};
-	InRangeValidator<int> poolSizeValidator{ 1, 8 };
+	InRangeValidator<int> poolSizeValidator{ 1, 24 };
 	SingleArg<int> poolSize{ poolSizeValidator, 'p', "pool-size", "Thread pool size for multithreaded traversal (ex. -p=4)"};
 	SingleArg<UserChrono> debugSleep{ 'd', "debug-sleep", "Time in <chrono_literals> to freeze the first thread (ex. -d=100ms)"};
 
@@ -21,7 +21,7 @@ int main(int argc, const char** argv) {
 	parser.Add(&poolSize);
 	parser.Add(&debugSleep);
 
-	if (auto result = parser.Parse(argc, argv); !result.IsOk())	std::cout << "Parse error: " << result.GetError().Message;
+	if (auto result = parser.Parse(argc, argv); !result.IsOk())	std::cout << "Parse error: " << result.GetError().Message << std::endl;
 	if (help.IsDefined()) std::cout << parser.GetHelp() << std::endl;
 
 	if (!sourcePath.IsDefined()) std::cout << sourcePath.GetLongOption() << " is not defined";
