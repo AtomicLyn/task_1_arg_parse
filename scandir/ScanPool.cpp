@@ -85,7 +85,6 @@ const Directory& ScanPool::StartAndGetDirectory() {
 	/// Завершение всех потоков
 	isDone = true;
 	tasksCV.notify_all();
-	for (auto& thread : threads) thread.join();
 
 	return mainDirectory;
 }
