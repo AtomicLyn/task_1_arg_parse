@@ -28,6 +28,11 @@ namespace args_parse {
 		const std::string description; ///< Указывает подробное описание аргумента
 		const ArgumentType type; ///< Указывает, каким типом является объект
 
+		/**
+		* @brief Метод предварительного парсинга опции аргумента
+		* Выполняет парсинг короткого названия аргумента и сохраняет остраток строки в operands
+		* @param[in] argWithoutDash входной аргумент из строки
+		*/
 		[[nodiscard]] ParseResult ParseOption(std::string_view argWithoutDash);
 		/**
 		* @brief Метод предварительного парсинга длинной опции аргумента
@@ -62,11 +67,7 @@ namespace args_parse {
 		/// Метод проверки операндов длинного аргумента и сдвига operands
 		/// @param[in] usedNextArg Ссылка на булево значение, показывающее, был ли использован следующий аргумент
 		[[nodiscard]] ParseResult CheckLongOperand(std::optional<std::string> nextArg, bool& usedNextArg);
-		/**
-		* @brief Метод предварительного парсинга опции аргумента
-		* Выполняет парсинг короткого названия аргумента и сохраняет остраток строки в operands
-		* @param[in] argWithoutDash входной аргумент из строки
-		*/
+		
 	public:
 		AbstractArg(ArgumentType type, const char option, const std::string longOption, std::string description = "");
 		virtual ~AbstractArg();
@@ -202,7 +203,7 @@ namespace args_parse {
 	};
 
 	namespace args_parse_testing {
-
+		/// @brief Отладочный класс для доступа к приватным членам AbstractArg при юнит-тестировании
 		class ArgsTestingAcessor {
 			AbstractArg& arg;
 		public:
